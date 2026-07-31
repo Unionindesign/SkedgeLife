@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "SkedgeLife",
+    "slug": "skedgelife",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.skedgelife.app"
+    },
+    "android": {
+      "package": "com.skedgelife.app"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
