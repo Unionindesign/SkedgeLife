@@ -53,6 +53,37 @@ SkedgeLife gives small-business instructors (yoga, fitness, and beyond) an inexp
 - As a student, I want a one-tap "Contact" action that opens email/message, so I can ask about rates or private sessions without hunting for an address.
 - As a student, I want to follow an instructor so I get notified of schedule changes, without a public feed or scrolling timeline (per SkedgeLife's no-feed principle).
 
+## Epic 8: Video Library (Free & Premium)
+
+Added 2026-08-22, from a phone/UX interview with Michelle Scutti — she asked for a space to host video content on her page, a gap this epic and Epics 9-11 close. See `docs/plans/2026-08-22-video-content-and-live-streaming.md` for the full plan and hosting research.
+
+- As an instructor, I want to upload video content (short practices, full classes) to my page, so students can practice with me outside of live scheduled classes.
+- As an instructor, I want to mark some videos as free (public) and others as premium (paid/members-only), so I can offer a taste of my teaching while monetizing deeper content.
+- As a student, I want to browse an instructor's video library from their profile, so I can practice with them anytime, not just during scheduled classes.
+- Free videos should be browsable and embeddable on the instructor's public web page (NextJS SSR), not just inside the app — see `docs/plans/2026-08-01-nextjs-ssr-web-architecture.md`.
+
+## Epic 9: Marketing Blasts (New Content Notifications)
+
+- As an instructor, I want to send a one-off email or push notification to my followers when I publish new video content, so they don't have to check my page manually.
+  - Distinct from Epic 7's schedule-change notifications: this is a paid, promotional broadcast rather than a free transactional one.
+- As a student, I want to receive these blasts only from instructors I follow, consistent with SkedgeLife's no-feed, opt-in model — no broadcast to non-followers.
+- Open question: should blast frequency be capped (e.g., N per month) to avoid follower fatigue, even for paying instructors?
+
+## Epic 10: Live / Streaming Lessons
+
+- As an instructor, I want to host a live-streamed class that students can join in real time, so I can teach remote students the same way I teach a studio class.
+  - Paid instructor feature, not included in the free tier, due to real-time infrastructure cost.
+- As a student, I want to join an instructor's live class for free, even under a paying instructor, so live streaming grows the instructor's reach rather than gatekeeping students.
+- As an instructor, I want my live sessions optionally recorded and added to my video library automatically, so a single live class becomes reusable content.
+- Open question: does "join live" mean watch-only (broadcast), or does the instructor want to see/interact with participants (video conferencing)? These are very different builds technically and in cost — see the video plan doc's research section.
+- Open question: is this an app-only feature for v1, or should a watch-only broadcast also be embeddable on the public web page like a video-library clip? Currently a soft lean toward app-only, not decided.
+
+## Epic 11: Video Series ("Courses", non-LMS)
+
+- As an instructor, I want to group related videos into an ordered series (e.g., a 6-week beginner program), so I can offer structured, teacher-designed content beyond one-off videos.
+- Explicitly out of scope for v1: quizzes, certificates, progress tracking, drip-scheduling, discussion forums — the traditional LMS feature set. SkedgeLife is not trying to become a full LMS; series are an ordered grouping of video content unless research shows more is needed.
+- Open question: how much of the LMS feature set (progress tracking especially) is expected before series content feels credible against competitors (Peloton Digital, Alo Moves, Glo, etc.)? Needs dedicated market research before scoping further.
+
 ## Open questions for later refinement
 
 - Should schedule cards support studios where SkedgeLife *does* own the booking flow (vs. link-out only), and how do the two states look different to the student?
