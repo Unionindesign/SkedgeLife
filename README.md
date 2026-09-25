@@ -47,9 +47,6 @@ I can fix things from the error text without needing to run it myself.
 - No auth, no student "follow" graph, no push notifications.
 - No sequence-to-class linking UI (the `SequenceClassLink` type exists, but
   nothing in the UI creates or displays that relationship yet).
-- Fonts (Arvo, Great Vibes) referenced in the `classic-yoga` skin are not
-  actually loaded yet — would need `expo-font` + `@expo-google-fonts/arvo`
-  and `@expo-google-fonts/great-vibes` wired up in `App.tsx`.
 - No app icon/splash image (removed from `app.json` to avoid a missing-file
   build error) — add real branding assets when ready.
 - Only 10 seed poses — the real pose library (40–60+) is a separate content

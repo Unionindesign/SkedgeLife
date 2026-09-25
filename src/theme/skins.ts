@@ -1,10 +1,9 @@
 // Skin definitions for instructor mini-sites.
 //
 // "classic-yoga" carries forward the palette from Michelle's 2017 site as a
-// candidate first pre-built skin (see wild-rose-yoga-content-asset-reference.md
-// -> "Candidate first skin: Classic Yoga"). Fonts referenced here (Arvo,
-// Great Vibes) are Google Fonts and need to be loaded via expo-font /
-// @expo-google-fonts before use — not wired up yet in this skeleton.
+// candidate first pre-built skin (see docs/reference/WILD-R~1.MD
+// -> "Candidate first skin: Classic Yoga"). Font names here must match the
+// keys passed to useFonts() in App.tsx.
 
 import { SkinId } from "../types";
 
@@ -19,9 +18,10 @@ export interface Skin {
     badgeBackground: string;
     background: string;
   };
+  // Omit a font to use the platform system font.
   fonts: {
-    heading: string; // display/heading font family name
-    accent: string; // cursive/script accent font family name
+    heading?: string; // display/heading font family name
+    accent?: string; // cursive/script accent font family name
   };
 }
 
@@ -53,9 +53,6 @@ export const skins: Record<SkinId, Skin> = {
       badgeBackground: "#e5e5e5",
       background: "#ffffff",
     },
-    fonts: {
-      heading: "System",
-      accent: "System",
-    },
+    fonts: {},
   },
 };
