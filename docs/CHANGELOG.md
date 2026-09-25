@@ -12,6 +12,14 @@ A short entry for each working session. Newest first. Decision rationale goes in
   - Default skin now uses the platform system font instead of the string `"System"`.
   - Removed stale "not yet verified" notes from the README and profile screen.
   - App icon/splash (#3) left open: no brand assets yet.
+  - Merged as PR #75.
+- Branch `feature/expo-sdk-upgrade` (#76):
+  - Upgraded Expo SDK 51 → 57 one version at a time: React Native 0.74 → 0.86, React 18 → 19, Reanimated 3 → 4. The app now runs in the current Expo Go on iOS.
+  - React Navigation 6 → 7; removed the unused `@react-navigation/native-stack`.
+  - Added `expo-asset`, `react-native-worklets`, and `babel-preset-expo` as direct dependencies; removed the explicit Reanimated Babel plugin (the Expo preset adds it).
+  - `tsconfig.json`: dropped `baseUrl` (deprecated in TypeScript 6); the `@/` alias still works.
+  - `app.json`: removed the top-level `splash` key, which SDK 56+ rejects.
+  - README: replaced the stale "never been run" intro; added phone preview steps for WSL2 + Expo Go.
 
 ## 2026-08-23 — `e95da1f`
 
