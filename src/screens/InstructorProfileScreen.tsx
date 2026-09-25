@@ -9,11 +9,6 @@ import {
   seedGallery,
 } from "../data/seedInstructor";
 
-// NOTE on images: this skeleton was hand-written without `npm install`
-// (see project README), so these `require()` calls reference real files
-// already copied into assets/instructor-seed/, but haven't been verified
-// against a running Metro bundler. If a path errors, double check it
-// against the actual filenames in assets/instructor-seed/.
 const logo = require("../../assets/instructor-seed/logo-MichelleRose.png");
 const headshot = require("../../assets/instructor-seed/bio-sqSmile.png");
 const galleryImages: Record<string, any> = {
@@ -24,6 +19,11 @@ const galleryImages: Record<string, any> = {
 
 export default function InstructorProfileScreen() {
   const skin = skins[seedInstructor.skin];
+  // Custom fonts load as a single weight; a bold fontWeight makes Android fall back to the system font.
+  const headingFont = skin.fonts.heading ? { fontFamily: skin.fonts.heading, fontWeight: "normal" as const } : null;
+  const accentFont = skin.fonts.accent
+    ? { fontFamily: skin.fonts.accent, fontWeight: "normal" as const, fontSize: 34 }
+    : null;
 
   return (
     <ScrollView style={{ backgroundColor: skin.colors.background }} contentContainerStyle={styles.container}>
@@ -33,17 +33,17 @@ export default function InstructorProfileScreen() {
 
       <View style={styles.section}>
         <Image source={headshot} style={styles.headshot} />
-        <Text style={[styles.name, { color: skin.colors.headingText }]}>{seedInstructor.displayName}</Text>
+        <Text style={[styles.name, { color: skin.colors.headingText }, accentFont]}>{seedInstructor.displayName}</Text>
         {seedInstructor.bioShort ? <Text style={styles.bioShort}>{seedInstructor.bioShort}</Text> : null}
       </View>
 
       <View style={[styles.card, { backgroundColor: skin.colors.cardBackground }]}>
-        <Text style={styles.sectionTitle}>Bio</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Bio</Text>
         <Text style={styles.bodyText}>{seedInstructor.bioLong}</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Specialties</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Specialties</Text>
         <View style={styles.tagRow}>
           {seedInstructor.specialties.map((s) => (
             <View key={s} style={[styles.tag, { backgroundColor: skin.colors.accent }]}>
@@ -54,7 +54,7 @@ export default function InstructorProfileScreen() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Certifications</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Certifications</Text>
         {seedInstructor.certifications.map((c) => (
           <Text key={c} style={styles.bodyText}>
             • {c}
@@ -63,7 +63,7 @@ export default function InstructorProfileScreen() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Services</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Services</Text>
         {seedServiceModalities.map((m) => (
           <View key={m.id} style={{ marginBottom: 10 }}>
             <Text style={styles.serviceTitle}>{m.title}</Text>
@@ -73,7 +73,7 @@ export default function InstructorProfileScreen() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Privates</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Privates</Text>
         {seedPrivateSessionTypes.map((p) => (
           <View key={p.id} style={{ marginBottom: 10 }}>
             <Text style={styles.serviceTitle}>{p.title}</Text>
@@ -83,7 +83,7 @@ export default function InstructorProfileScreen() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Testimonials</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Testimonials</Text>
         {seedTestimonials.map((t) => (
           <View key={t.id} style={{ marginBottom: 14 }}>
             <Text style={styles.bodyText}>&ldquo;{t.quote}&rdquo;</Text>
@@ -96,7 +96,7 @@ export default function InstructorProfileScreen() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Gallery</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Gallery</Text>
         <View style={styles.galleryRow}>
           {seedGallery.map((g) => (
             <Image key={g.id} source={galleryImages[g.url]} style={styles.galleryImage} />
@@ -105,7 +105,7 @@ export default function InstructorProfileScreen() {
       </View>
 
       <View style={[styles.section, styles.contactSection]}>
-        <Text style={styles.sectionTitle}>Contact</Text>
+        <Text style={[styles.sectionTitle, headingFont]}>Contact</Text>
         <Text style={styles.bodyText} onPress={() => Linking.openURL(`mailto:${seedInstructor.contact.email}`)}>
           {seedInstructor.contact.email}
         </Text>

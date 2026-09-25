@@ -6,7 +6,12 @@ A short entry for each working session. Newest first. Decision rationale goes in
 
 - Added this changelog.
 - GitHub setup (no repo files changed): created 18 milestones (Foundation phases, Epics 1-11, two extra features), a lean label set (`area:*`, `priority:now/next/later`, `status:blocked`, `research`), and 74 triaged issues.
-- Started branch `feature/stabilize-skeleton` for issues #1-4.
+- Branch `feature/stabilize-skeleton`:
+  - Confirmed `npm install`, `npm run typecheck`, and Android/web bundling all pass with no code changes (#1, #4).
+  - Loaded the `classic-yoga` fonts (Arvo, Great Vibes) in `App.tsx` and applied them to the profile screen: Arvo on section headings, Great Vibes on the instructor name (#2).
+  - Default skin now uses the platform system font instead of the string `"System"`.
+  - Removed stale "not yet verified" notes from the README and profile screen.
+  - App icon/splash (#3) left open: no brand assets yet.
 
 ## 2026-08-23 — `e95da1f`
 
