@@ -12,13 +12,14 @@ const PROFILE_PAGE_SELECT = `
   gallery_images (*)
 ` as const;
 
+export type ProfileLookup = { handle: string } | { id: string };
+
 // Everything shown on a profile page, in one request. Returns null when no
-// profile has this handle.
-export async function getProfilePage(client: SkedgeLifeClient, handle: string) {
-  const { data, error } = await client
-    .from("profiles")
-    .select(PROFILE_PAGE_SELECT)
-    .eq("handle", handle)
+// profile matches.
+export async function getProfilePage(client: SkedgeLifeClient, lookup: ProfileLookup) {
+  const base = client.from("profiles").select(PROFILE_PAGE_SELECT);
+  const filtered = "id" in lookup ? base.eq("id", lookup.id) : base.eq("handle", lookup.handle);
+  const { data, error } = await filtered
     .order("sort_order", { referencedTable: "schedule_entries" })
     .order("sort_order", { referencedTable: "schedule_entries.schedule_times" })
     .order("sort_order", { referencedTable: "service_modalities" })
@@ -32,3 +33,10 @@ export async function getProfilePage(client: SkedgeLifeClient, handle: string) {
 }
 
 export type ProfilePage = NonNullable<Awaited<ReturnType<typeof getProfilePage>>>;
+
+// Checks format, reserved words, and whether the handle is taken.
+export async function isHandleAvailable(client: SkedgeLifeClient, handle: string) {
+  const { data, error } = await client.rpc("is_handle_available", { h: handle });
+  if (error) throw error;
+  return data;
+}

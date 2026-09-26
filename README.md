@@ -8,9 +8,9 @@ Instructors pick a **skin**, a pre-built color and font pairing, so their page f
 
 ## What works today
 
-The mobile app (Expo + React Native) has three tabs. The profile and schedule load from Supabase, seeded with a real instructor's profile. Sign-in isn't built yet, so the app always shows that profile.
+The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, handle, email, and password (or log in), and the three tabs show your own profile. Editing your profile from the app is next; locally, a seeded account shows what a full instructor profile looks like (see `docs/dev/supabase.md`).
 
-- **Profile**: the instructor's mini-site. Bio, specialties, certifications, services, private sessions, testimonials, photo gallery, and contact links, styled with the Classic Yoga skin.
+- **Profile**: your mini-site. Bio, specialties, certifications, services, private sessions, testimonials, photo gallery, and contact links, styled with your skin. Empty sections stay hidden.
 - **Schedule**: class times grouped by studio, with links out to each studio's booking page.
 - **Sequence Builder**: plan a class by dragging poses into order, setting durations and sides, and adding a quote and playlist link. Export the result as a printable PDF card.
 
