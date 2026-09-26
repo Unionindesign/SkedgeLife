@@ -1,72 +1,78 @@
-# SkedgeLife (mobile app skeleton)
+# SkedgeLife
 
-Expo SDK 57 + TypeScript React Native app.
+SkedgeLife gives independent instructors (yoga teachers to start, and later trainers, massage therapists, tutors and others) a simple, good-looking mini-site they can set up from their phone in minutes, not months. Add a photo, write a short bio, post your schedule, and you're live.
 
-## Setup (run in WSL2)
+Students follow the instructors they like and get notified when something changes. There's no feed and no endless scrolling, just the people you chose to follow.
+
+Instructors pick a **skin**, a pre-built color and font pairing, so their page feels like their own brand without any design work. The first skin, *Classic Yoga*, is based on a real instructor's site.
+
+## What works today
+
+The mobile app (Expo + React Native) has three tabs, all running on seed data from a real instructor profile. There's no backend yet.
+
+- **Profile**: the instructor's mini-site. Bio, specialties, certifications, services, private sessions, testimonials, photo gallery, and contact links, styled with the Classic Yoga skin.
+- **Schedule**: class times grouped by studio, with links out to each studio's booking page.
+- **Sequence Builder**: plan a class by dragging poses into order, setting durations and sides, and adding a quote and playlist link. Export the result as a printable PDF card.
+
+## In the works
+
+Work is tracked as [GitHub milestones](https://github.com/Unionindesign/SkedgeLife/milestones) and [issues](https://github.com/Unionindesign/SkedgeLife/issues). Roughly in order:
+
+- **Accounts and a real backend**, so instructors can edit their own page from their phone.
+- **Public web pages** at `skedgelife.com/i/<name>`, so an instructor's mini-site is shareable and searchable without the app.
+- **Follow and notifications**: students follow instructors and hear about schedule changes.
+- **Free student pages**: a basic page with one photo and a short bio.
+- **A paid instructor tier** (via Stripe): full photo gallery, payments, marketing blasts to followers.
+- **Video**: free and premium video libraries, video series, and eventually live-streamed classes.
+- **More skins**, informed by research into which professions want this.
+
+The thinking behind all of this lives in [`docs/`](docs/) (see below).
+
+## Getting started
+
+You'll need Node 20+ and npm. Development happens in WSL2 on Windows; see [`docs/dev/wsl.md`](docs/dev/wsl.md) for the quirks.
 
 ```bash
-cd ~/Projects/SkedgeLife
+git clone git@github.com:Unionindesign/SkedgeLife.git
+cd SkedgeLife
 npm install
 npm run typecheck
 ```
 
-## Previewing
+### Run it on your phone
 
-**On your phone (Expo Go):**
+1. Install **Expo Go** from the App Store or Play Store.
+2. Start the dev server:
+   ```bash
+   npx expo start --tunnel
+   ```
+   (`--tunnel` is needed on WSL2; the WSL notes explain why.)
+3. Scan the QR code: on iPhone with the Camera app, on Android from inside Expo Go.
 
-1. Install Expo Go from the App Store or Play Store. It only runs projects on
-   the latest Expo SDK, so keep this project current.
-2. Run `npx expo start --tunnel`. The tunnel is needed because WSL2 sits
-   behind its own network, so the phone can't reach it directly. On first
-   run, accept the prompt to install `@expo/ngrok`.
-3. Scan the QR code with the iPhone Camera app (or from inside Expo Go on
-   Android). Saved changes reload on the phone. Shake it for the dev menu.
+Saved changes reload on the phone automatically. Shake the phone to open the developer menu. No Mac or Xcode needed.
 
-No Xcode or Mac is needed for Expo Go.
+### Run it in a browser
 
-**In a browser:** `npx expo start --web`.
+```bash
+npx expo start --web
+```
 
-## What's actually implemented
-
-- **Instructor Profile screen** — bio, specialties, certifications, services,
-  privates, testimonials, gallery, contact — all populated from real seed
-  content (Michelle Scutti's 2017 Wild Rose Yoga site), styled with the
-  "Classic Yoga" skin colors (maroon/teal). See `src/data/seedInstructor.ts`.
-- **Schedule screen** — renders studio/time cards from seed data, with a link
-  out to the external studio booking page and an empty state for "no public
-  classes right now."
-- **Sequence Builder screen** — drag-to-reorder pose list
-  (`react-native-draggable-flatlist`), inline duration/side editing, a
-  quote + Spotify playlist URL field, and a working PDF export button
-  (`expo-print` + `expo-sharing`) that generates a printable sequence card.
-- **Shared types** (`src/types/index.ts`) matching the data model sketched in
-  the product ideation doc: `Pose`, `Sequence`, `SequenceItem`,
-  `SequenceClassLink`, plus `Instructor`/`ScheduleEntry`/`ServiceModality`/etc.
-  for the mini-site content.
-- **Skin system stub** (`src/theme/skins.ts`) with one real skin,
-  `classic-yoga`, carrying forward the 2017 site's palette as the first
-  pre-built skin option, and a generic `default` skin.
-
-## What's explicitly NOT implemented (next steps)
-
-- No backend/API or database — everything is static seed data in
-  `src/data/`. Swapping seed data for real API calls is the next big step.
-- No auth, no student "follow" graph, no push notifications.
-- No sequence-to-class linking UI (the `SequenceClassLink` type exists, but
-  nothing in the UI creates or displays that relationship yet).
-- No app icon/splash image (removed from `app.json` to avoid a missing-file
-  build error) — add real branding assets when ready.
-- Only 10 seed poses — the real pose library (40–60+) is a separate content
-  workstream per the ideation doc.
-
-## Where things live
+## Project layout
 
 ```
-App.tsx                        entry point
-src/navigation/RootNavigator.tsx   bottom tab nav (Profile / Schedule / Sequences)
-src/screens/                   the three screens above
-src/data/                      seed content (instructor + poses)
-src/theme/skins.ts             skin/color definitions
-src/types/index.ts             shared TS types
-assets/instructor-seed/        real photos/logo copied from the michelle-scutti repo
+App.tsx                           entry point; loads skin fonts
+src/navigation/RootNavigator.tsx  bottom tabs: Profile / Schedule / Sequence Builder
+src/screens/                      the three screens
+src/data/                         seed content (instructor profile, poses)
+src/theme/skins.ts                skin colors and fonts
+src/types/index.ts                shared data types
+assets/instructor-seed/           seed photos and logo
 ```
+
+## Docs
+
+- [`docs/plans/`](docs/plans/): plans of approach, one dated file per topic. Start with the general plan.
+- [`docs/DECISIONS.md`](docs/DECISIONS.md): decisions made so far, and why.
+- [`docs/CHANGELOG.md`](docs/CHANGELOG.md): what changed, session by session.
+- [`docs/reference/`](docs/reference/): user stories (epics) and the seed-content reference.
+- [`docs/dev/`](docs/dev/): development environment notes.

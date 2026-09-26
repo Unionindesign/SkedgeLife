@@ -2,6 +2,12 @@
 
 A short entry for each working session. Newest first. Decision rationale goes in `docs/DECISIONS.md`; this file just records what changed.
 
+## 2026-09-26
+
+- PR #77 (Expo SDK 51 → 57) merged.
+- Rewrote the README around what SkedgeLife is, what works today, what's in the works, and how to run it.
+- Added `docs/dev/wsl.md` with WSL2 quirks: phone preview needs `--tunnel`, Windows Node on the PATH, files arriving as executable, 8.3 filenames, `gh` without sudo.
+
 ## 2026-09-24
 
 - Added this changelog.
