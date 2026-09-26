@@ -15,7 +15,7 @@ A short entry for each working session. Newest first. Decision rationale goes in
   - First migration: `profiles` (one per account; handle format and reserved-words checks; `teaches` marker; `plan` not user-editable), created automatically on sign-up. Content tables for schedule entries and times, services, private sessions, testimonials, and gallery. Row-level security everywhere: public read, owner-only writes.
   - `supabase/seed.sql` with Michelle's profile and a local login.
   - Generated database types in `packages/types`; `npm run db:start|stop|reset|types` scripts; `docs/dev/supabase.md`.
-  - `docs/dev/wsl.md`: Docker runs inside WSL, not Docker Desktop (keep Desktop closed); Windows tools like DBeaver reach WSL services via `localhost`.
+  - `docs/dev/wsl.md`: Docker runs inside WSL, not Docker Desktop (keep Desktop closed); Windows tools like DBeaver reach WSL services via `localhost`; Expo can print an unreachable Docker bridge address; React Native DevTools needs `libnss3`.
 - Added #82: create the hosted Supabase project once the local backend work is done.
 
 ## 2026-09-24
