@@ -83,5 +83,6 @@ The backend runs locally in Docker for now: `npm run db:start`. See [`docs/dev/s
 - [`docs/plans/`](docs/plans/): plans of approach, one dated file per topic. Start with the general plan.
 - [`docs/DECISIONS.md`](docs/DECISIONS.md): decisions made so far, and why.
 - [`docs/CHANGELOG.md`](docs/CHANGELOG.md): what changed, session by session.
+- [`docs/TODO.md`](docs/TODO.md): things that need a person: accounts, decisions, follow-ups.
 - [`docs/reference/`](docs/reference/): user stories (epics) and the seed-content reference.
 - [`docs/dev/`](docs/dev/): development environment notes.

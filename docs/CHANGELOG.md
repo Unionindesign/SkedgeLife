@@ -17,6 +17,8 @@ A short entry for each working session. Newest first. Decision rationale goes in
   - Generated database types in `packages/types`; `npm run db:start|stop|reset|types` scripts; `docs/dev/supabase.md`.
   - `docs/dev/wsl.md`: Docker runs inside WSL, not Docker Desktop (keep Desktop closed); Windows tools like DBeaver reach WSL services via `localhost`; Expo can print an unreachable Docker bridge address; React Native DevTools needs `libnss3`.
 - Added #82: create the hosted Supabase project once the local backend work is done.
+- Added `docs/TODO.md`: a running list of things that need a person (accounts, decisions, follow-ups), linked to issues.
+- #81 and #83 merged into their stacked base branches rather than `main`; a catch-up PR from `feature/monorepo` brings that work to `main`.
 
 ## 2026-09-24
 
