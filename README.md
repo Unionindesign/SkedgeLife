@@ -70,12 +70,13 @@ apps/
     assets/            seed photos and logo
   web/                 Next.js public pages (placeholder until the web phase)
 packages/
-  types/               shared data types (@skedgelife/types)
+  types/               shared data types, incl. generated database types (@skedgelife/types)
   skins/               skin colors and fonts (@skedgelife/skins)
+supabase/              local Supabase: config, SQL migrations, seed data
 docs/                  plans, decisions, changelog, dev notes
 ```
 
-Supabase config (`supabase/`) and the shared data client (`packages/data`) arrive with the backend work.
+The backend runs locally in Docker for now: `npm run db:start`. See [`docs/dev/supabase.md`](docs/dev/supabase.md). The shared data client (`packages/data`) comes next, when the app switches from seed files to the database.
 
 ## Docs
 
