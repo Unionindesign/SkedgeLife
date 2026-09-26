@@ -6,7 +6,10 @@ import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { seedPoses } from "../data/seedPoses";
 import { SequenceItem, Pose } from "@skedgelife/types";
-import { seedInstructor } from "../data/seedInstructor";
+import { useProfile } from "../data/ProfileProvider";
+
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 // Minimal working sequence builder: drag-reorder a list of poses, edit
 // duration/side inline, attach a quote + playlist link at the sequence
@@ -28,6 +31,8 @@ function buildInitialItems(): SequenceItem[] {
 }
 
 export default function SequenceBuilderScreen() {
+  const { state } = useProfile();
+  const authorName = state.status === "ready" ? state.profile.display_name : "";
   const [items, setItems] = useState<SequenceItem[]>(buildInitialItems());
   const [title, setTitle] = useState("Untitled Sequence");
   const [quote, setQuote] = useState("");
@@ -58,7 +63,7 @@ export default function SequenceBuilderScreen() {
         const pose = poseById[it.poseId];
         return `<tr>
           <td>${i + 1}</td>
-          <td>${pose?.nameEn ?? "?"}${pose?.nameSanskrit ? ` (${pose.nameSanskrit})` : ""}</td>
+          <td>${escapeHtml(pose?.nameEn ?? "?")}${pose?.nameSanskrit ? ` (${escapeHtml(pose.nameSanskrit)})` : ""}</td>
           <td>${it.durationSec}s</td>
           <td>${it.side}</td>
         </tr>`;
@@ -68,10 +73,10 @@ export default function SequenceBuilderScreen() {
     const html = `
       <html>
         <body style="font-family: -apple-system, sans-serif; padding: 24px;">
-          <h1>${title}</h1>
-          <p><em>${seedInstructor.displayName}</em></p>
-          ${quote ? `<p style="font-style: italic;">"${quote}"</p>` : ""}
-          ${playlistUrl ? `<p>Playlist: ${playlistUrl}</p>` : ""}
+          <h1>${escapeHtml(title)}</h1>
+          ${authorName ? `<p><em>${escapeHtml(authorName)}</em></p>` : ""}
+          ${quote ? `<p style="font-style: italic;">"${escapeHtml(quote)}"</p>` : ""}
+          ${playlistUrl ? `<p>Playlist: ${escapeHtml(playlistUrl)}</p>` : ""}
           <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="6">
             <thead><tr><th>#</th><th>Pose</th><th>Duration</th><th>Side</th></tr></thead>
             <tbody>${rowsHtml}</tbody>

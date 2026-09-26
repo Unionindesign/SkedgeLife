@@ -1,0 +1,11 @@
+{
+  "name": "@skedgelife/data",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@skedgelife/types": "*",
+    "@supabase/supabase-js": "^2.109.0"
+  }
+}

@@ -1,24 +1,19 @@
 import React from "react";
 import { View, Text, Image, ScrollView, StyleSheet, Linking } from "react-native";
-import { skins } from "@skedgelife/skins";
-import {
-  seedInstructor,
-  seedServiceModalities,
-  seedPrivateSessionTypes,
-  seedTestimonials,
-  seedGallery,
-} from "../data/seedInstructor";
-
-const logo = require("../../assets/instructor-seed/logo-MichelleRose.png");
-const headshot = require("../../assets/instructor-seed/bio-sqSmile.png");
-const galleryImages: Record<string, any> = {
-  "instructor-seed/gal-headStand.png": require("../../assets/instructor-seed/gal-headStand.png"),
-  "instructor-seed/CamelGroup.jpeg": require("../../assets/instructor-seed/CamelGroup.jpeg"),
-  "instructor-seed/gal-treePool.png": require("../../assets/instructor-seed/gal-treePool.png"),
-};
+import { getSkin } from "@skedgelife/skins";
+import { useProfile } from "../data/ProfileProvider";
+import ProfileStatus from "../components/ProfileStatus";
+import { imageSource } from "../lib/images";
 
 export default function InstructorProfileScreen() {
-  const skin = skins[seedInstructor.skin];
+  const { state, reload } = useProfile();
+  if (state.status === "error") return <ProfileStatus status="error" message={state.message} onRetry={reload} />;
+  if (state.status !== "ready") return <ProfileStatus status={state.status} />;
+
+  const profile = state.profile;
+  const skin = getSkin(profile.skin);
+  const logo = imageSource(profile.logo_url);
+  const headshot = imageSource(profile.avatar_url);
   // Custom fonts load as a single weight; a bold fontWeight makes Android fall back to the system font.
   const headingFont = skin.fonts.heading ? { fontFamily: skin.fonts.heading, fontWeight: "normal" as const } : null;
   const accentFont = skin.fonts.accent
@@ -28,24 +23,26 @@ export default function InstructorProfileScreen() {
   return (
     <ScrollView style={{ backgroundColor: skin.colors.background }} contentContainerStyle={styles.container}>
       <View style={[styles.header, { backgroundColor: skin.colors.header }]}>
-        <Image source={logo} style={styles.logo} resizeMode="contain" />
+        {logo ? <Image source={logo} style={styles.logo} resizeMode="contain" /> : null}
       </View>
 
       <View style={styles.section}>
-        <Image source={headshot} style={styles.headshot} />
-        <Text style={[styles.name, { color: skin.colors.headingText }, accentFont]}>{seedInstructor.displayName}</Text>
-        {seedInstructor.bioShort ? <Text style={styles.bioShort}>{seedInstructor.bioShort}</Text> : null}
+        {headshot ? <Image source={headshot} style={styles.headshot} /> : null}
+        <Text style={[styles.name, { color: skin.colors.headingText }, accentFont]}>{profile.display_name}</Text>
+        {profile.bio_short ? <Text style={styles.bioShort}>{profile.bio_short}</Text> : null}
       </View>
 
-      <View style={[styles.card, { backgroundColor: skin.colors.cardBackground }]}>
-        <Text style={[styles.sectionTitle, headingFont]}>Bio</Text>
-        <Text style={styles.bodyText}>{seedInstructor.bioLong}</Text>
-      </View>
+      {profile.bio_long ? (
+        <View style={[styles.card, { backgroundColor: skin.colors.cardBackground }]}>
+          <Text style={[styles.sectionTitle, headingFont]}>Bio</Text>
+          <Text style={styles.bodyText}>{profile.bio_long}</Text>
+        </View>
+      ) : null}
 
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, headingFont]}>Specialties</Text>
         <View style={styles.tagRow}>
-          {seedInstructor.specialties.map((s) => (
+          {profile.specialties.map((s) => (
             <View key={s} style={[styles.tag, { backgroundColor: skin.colors.accent }]}>
               <Text style={styles.tagText}>{s}</Text>
             </View>
@@ -55,7 +52,7 @@ export default function InstructorProfileScreen() {
 
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, headingFont]}>Certifications</Text>
-        {seedInstructor.certifications.map((c) => (
+        {profile.certifications.map((c) => (
           <Text key={c} style={styles.bodyText}>
             • {c}
           </Text>
@@ -64,7 +61,7 @@ export default function InstructorProfileScreen() {
 
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, headingFont]}>Services</Text>
-        {seedServiceModalities.map((m) => (
+        {profile.service_modalities.map((m) => (
           <View key={m.id} style={{ marginBottom: 10 }}>
             <Text style={styles.serviceTitle}>{m.title}</Text>
             <Text style={styles.bodyText}>{m.description}</Text>
@@ -74,7 +71,7 @@ export default function InstructorProfileScreen() {
 
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, headingFont]}>Privates</Text>
-        {seedPrivateSessionTypes.map((p) => (
+        {profile.private_session_types.map((p) => (
           <View key={p.id} style={{ marginBottom: 10 }}>
             <Text style={styles.serviceTitle}>{p.title}</Text>
             <Text style={styles.bodyText}>{p.description}</Text>
@@ -84,12 +81,12 @@ export default function InstructorProfileScreen() {
 
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, headingFont]}>Testimonials</Text>
-        {seedTestimonials.map((t) => (
+        {profile.testimonials.map((t) => (
           <View key={t.id} style={{ marginBottom: 14 }}>
             <Text style={styles.bodyText}>&ldquo;{t.quote}&rdquo;</Text>
             <Text style={styles.testimonialAuthor}>
-              — {t.authorName}
-              {t.authorLocation ? `, ${t.authorLocation}` : ""}
+              — {t.author_name}
+              {t.author_location ? `, ${t.author_location}` : ""}
             </Text>
           </View>
         ))}
@@ -98,21 +95,22 @@ export default function InstructorProfileScreen() {
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, headingFont]}>Gallery</Text>
         <View style={styles.galleryRow}>
-          {seedGallery.map((g) => (
-            <Image key={g.id} source={galleryImages[g.url]} style={styles.galleryImage} />
-          ))}
+          {profile.gallery_images.map((g) => {
+            const source = imageSource(g.url);
+            return source ? <Image key={g.id} source={source} style={styles.galleryImage} /> : null;
+          })}
         </View>
       </View>
 
       <View style={[styles.section, styles.contactSection]}>
         <Text style={[styles.sectionTitle, headingFont]}>Contact</Text>
-        <Text style={styles.bodyText} onPress={() => Linking.openURL(`mailto:${seedInstructor.contact.email}`)}>
-          {seedInstructor.contact.email}
-        </Text>
-        {seedInstructor.contact.phone ? <Text style={styles.bodyText}>{seedInstructor.contact.phone}</Text> : null}
-        {seedInstructor.contact.instagramHandle ? (
-          <Text style={styles.bodyText}>{seedInstructor.contact.instagramHandle}</Text>
+        {profile.contact_email ? (
+          <Text style={styles.bodyText} onPress={() => Linking.openURL(`mailto:${profile.contact_email}`)}>
+            {profile.contact_email}
+          </Text>
         ) : null}
+        {profile.contact_phone ? <Text style={styles.bodyText}>{profile.contact_phone}</Text> : null}
+        {profile.instagram_handle ? <Text style={styles.bodyText}>{profile.instagram_handle}</Text> : null}
       </View>
     </ScrollView>
   );
