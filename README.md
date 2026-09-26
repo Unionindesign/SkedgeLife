@@ -1,23 +1,30 @@
 # SkedgeLife (mobile app skeleton)
 
-Expo + TypeScript React Native app. This skeleton was hand-written in a sandboxed
-environment that could not reach the npm registry (network allowlist blocked it),
-so **none of this has been run or type-checked yet** — treat it as a solid
-starting point to `npm install` and iterate on in your real dev environment (WSL2).
+Expo SDK 57 + TypeScript React Native app.
 
 ## Setup (run in WSL2)
 
 ```bash
-cd ~/Projects/SkedgeLife   # wherever you unzip this
+cd ~/Projects/SkedgeLife
 npm install
-npx expo start
+npm run typecheck
 ```
 
-Then press `a`/`i`/`w` in the terminal (Android / iOS / web) or scan the QR
-code with Expo Go on your phone.
+## Previewing
 
-If `npm install` or the Metro bundler surfaces errors, paste them back to me —
-I can fix things from the error text without needing to run it myself.
+**On your phone (Expo Go):**
+
+1. Install Expo Go from the App Store or Play Store. It only runs projects on
+   the latest Expo SDK, so keep this project current.
+2. Run `npx expo start --tunnel`. The tunnel is needed because WSL2 sits
+   behind its own network, so the phone can't reach it directly. On first
+   run, accept the prompt to install `@expo/ngrok`.
+3. Scan the QR code with the iPhone Camera app (or from inside Expo Go on
+   Android). Saved changes reload on the phone. Shake it for the dev menu.
+
+No Xcode or Mac is needed for Expo Go.
+
+**In a browser:** `npx expo start --web`.
 
 ## What's actually implemented
 
