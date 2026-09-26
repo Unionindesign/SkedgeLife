@@ -8,9 +8,9 @@ Clone into your Linux home (e.g. `~/Projects/SkedgeLife`), not under `/mnt/c/...
 
 ## Your phone can't reach the dev server directly
 
-WSL2 runs behind its own virtual network, so a phone on the same Wi-Fi can't reach WSL's IP address. Plain `npx expo start` gives a QR code the phone can't open.
+WSL2 runs behind its own virtual network, so a phone on the same Wi-Fi can't reach WSL's IP address. Plain `npm start` gives a QR code the phone can't open.
 
-**What works:** `npx expo start --tunnel`. It routes through an ngrok tunnel. On first run it asks to install `@expo/ngrok`; say yes. The tunnel adds a little reload latency.
+**What works:** `npm start -- --tunnel` from the repo root. It routes through an ngrok tunnel. On first run it asks to install `@expo/ngrok`; say yes. The tunnel adds a little reload latency.
 
 **Faster alternative (not yet tried here):** WSL "mirrored" networking, which puts WSL on the same network as Windows. Create `C:\Users\<you>\.wslconfig` with:
 
@@ -19,7 +19,7 @@ WSL2 runs behind its own virtual network, so a phone on the same Wi-Fi can't rea
 networkingMode=mirrored
 ```
 
-Then run `wsl --shutdown` from PowerShell, reopen WSL, and allow inbound TCP on port 8081 in Windows Firewall. Plain `npx expo start` should then work over Wi-Fi. There's no `.wslconfig` on this machine yet.
+Then run `wsl --shutdown` from PowerShell, reopen WSL, and allow inbound TCP on port 8081 in Windows Firewall. Plain `npm start` should then work over Wi-Fi. There's no `.wslconfig` on this machine yet.
 
 ## Windows `node` and `npm` are on the WSL PATH
 

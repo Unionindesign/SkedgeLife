@@ -4,7 +4,7 @@
 // on day one. This is a small seed set (10) to exercise the Sequence
 // Builder UI; expand via the real pose library workstream later.
 
-import { Pose } from "../types";
+import { Pose } from "@skedgelife/types";
 
 export const seedPoses: Pose[] = [
   { id: "pose-mountain", nameEn: "Mountain Pose", nameSanskrit: "Tadasana", category: "standing", defaultDurationSec: 20 },
