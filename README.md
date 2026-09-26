@@ -8,7 +8,7 @@ Instructors pick a **skin**, a pre-built color and font pairing, so their page f
 
 ## What works today
 
-The mobile app (Expo + React Native) has three tabs, all running on seed data from a real instructor profile. There's no backend yet.
+The mobile app (Expo + React Native) has three tabs. The profile and schedule load from Supabase, seeded with a real instructor's profile. Sign-in isn't built yet, so the app always shows that profile.
 
 - **Profile**: the instructor's mini-site. Bio, specialties, certifications, services, private sessions, testimonials, photo gallery, and contact links, styled with the Classic Yoga skin.
 - **Schedule**: class times grouped by studio, with links out to each studio's booking page.
@@ -30,14 +30,18 @@ The thinking behind all of this lives in [`docs/`](docs/) (see below).
 
 ## Getting started
 
-You'll need Node 20+ and npm. Development happens in WSL2 on Windows; see [`docs/dev/wsl.md`](docs/dev/wsl.md) for the quirks.
+You'll need Node 20+, npm, and Docker (for the local database). Development happens in WSL2 on Windows; see [`docs/dev/wsl.md`](docs/dev/wsl.md) for the quirks.
 
 ```bash
 git clone git@github.com:Unionindesign/SkedgeLife.git
 cd SkedgeLife
 npm install
+cp apps/mobile/.env.example apps/mobile/.env   # points the app at the local database
+npm run db:start                                # local Supabase with seed data
 npm run typecheck
 ```
+
+The app reads its data from Supabase. To use the hosted project instead of the local one (needed for the phone), see [`docs/dev/supabase.md`](docs/dev/supabase.md).
 
 ### Run it on your phone
 
@@ -66,17 +70,19 @@ apps/
   mobile/              Expo app (entry: index.ts -> App.tsx)
     src/navigation/    bottom tabs: Profile / Schedule / Sequence Builder
     src/screens/       the three screens
-    src/data/          seed content (instructor profile, poses)
+    src/data/          profile loading (ProfileProvider) and seed poses
+    src/lib/           Supabase client, bundled-image lookup
     assets/            seed photos and logo
   web/                 Next.js public pages (placeholder until the web phase)
 packages/
+  data/                shared Supabase queries (@skedgelife/data)
   types/               shared data types, incl. generated database types (@skedgelife/types)
   skins/               skin colors and fonts (@skedgelife/skins)
 supabase/              local Supabase: config, SQL migrations, seed data
-docs/                  plans, decisions, changelog, dev notes
+docs/                  plans, decisions, changelog, TODO, dev notes
 ```
 
-The backend runs locally in Docker for now: `npm run db:start`. See [`docs/dev/supabase.md`](docs/dev/supabase.md). The shared data client (`packages/data`) comes next, when the app switches from seed files to the database.
+The backend runs locally in Docker: `npm run db:start`. See [`docs/dev/supabase.md`](docs/dev/supabase.md).
 
 ## Docs
 

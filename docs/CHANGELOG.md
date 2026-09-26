@@ -18,7 +18,14 @@ A short entry for each working session. Newest first. Decision rationale goes in
   - `docs/dev/wsl.md`: Docker runs inside WSL, not Docker Desktop (keep Desktop closed); Windows tools like DBeaver reach WSL services via `localhost`; Expo can print an unreachable Docker bridge address; React Native DevTools needs `libnss3`.
 - Added #82: create the hosted Supabase project once the local backend work is done.
 - Added `docs/TODO.md`: a running list of things that need a person (accounts, decisions, follow-ups), linked to issues.
-- #81 and #83 merged into their stacked base branches rather than `main`; a catch-up PR from `feature/monorepo` brings that work to `main`.
+- #81 and #83 merged into their stacked base branches rather than `main`; catch-up PR #84 brought that work to `main`.
+- Hosted Supabase project created (`wiizhsznblwkiuzkchzw`), not linked yet.
+- Branch `feature/app-reads-supabase` (#8, #9):
+  - New `packages/data` with `getProfilePage()`: one typed request for a profile and all its page content.
+  - The app loads the profile once (`ProfileProvider`) and the Profile and Schedule screens render from it, with loading, error (with "Try again"), and not-found states. The Sequence Builder takes the author name from it.
+  - Supabase settings come from `apps/mobile/.env` (`.env.example` committed with local defaults; `.env` files now gitignored).
+  - Removed the TypeScript seed file and the hand-written profile types (replaced by `supabase/seed.sql` and the generated database types). Added `getSkin()` for skins stored as text.
+  - The PDF sequence card now HTML-escapes the title, quote, playlist, author, and pose names.
 
 ## 2026-09-24
 

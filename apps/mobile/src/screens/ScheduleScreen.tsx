@@ -1,12 +1,20 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, Pressable, Linking } from "react-native";
-import { seedSchedule, seedInstructor } from "../data/seedInstructor";
-import { skins } from "@skedgelife/skins";
+import { getSkin } from "@skedgelife/skins";
+import { useProfile } from "../data/ProfileProvider";
+import ProfileStatus from "../components/ProfileStatus";
+
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export default function ScheduleScreen() {
-  const skin = skins[seedInstructor.skin];
+  const { state, reload } = useProfile();
+  if (state.status === "error") return <ProfileStatus status="error" message={state.message} onRetry={reload} />;
+  if (state.status !== "ready") return <ProfileStatus status={state.status} />;
 
-  if (seedSchedule.length === 0) {
+  const { schedule_entries: entries } = state.profile;
+  const skin = getSkin(state.profile.skin);
+
+  if (entries.length === 0) {
     return (
       <View style={styles.emptyState}>
         <Text style={styles.emptyText}>No public classes available at this time.</Text>
@@ -16,17 +24,17 @@ export default function ScheduleScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {seedSchedule.map((entry) => (
+      {entries.map((entry) => (
         <View key={entry.id} style={[styles.card, { borderColor: skin.colors.accent }]}>
-          <Text style={styles.venueName}>{entry.venueName}</Text>
-          {entry.times.map((t, i) => (
-            <Text key={i} style={styles.timeLine}>
-              <Text style={styles.day}>{t.day}: </Text>
+          <Text style={styles.venueName}>{entry.venue_name}</Text>
+          {entry.schedule_times.map((t) => (
+            <Text key={t.id} style={styles.timeLine}>
+              <Text style={styles.day}>{DAY_NAMES[t.day_of_week]}: </Text>
               {t.label}
             </Text>
           ))}
-          {entry.bookingUrl ? (
-            <Pressable onPress={() => Linking.openURL(entry.bookingUrl!)}>
+          {entry.booking_url ? (
+            <Pressable onPress={() => Linking.openURL(entry.booking_url!)}>
               <Text style={[styles.link, { color: skin.colors.accent }]}>View studio →</Text>
             </Pressable>
           ) : null}

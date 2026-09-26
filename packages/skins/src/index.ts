@@ -56,3 +56,8 @@ export const skins: Record<SkinId, Skin> = {
     fonts: {},
   },
 };
+
+// Skins are stored as text in the database; unknown values fall back to the default.
+export function getSkin(id: string | null | undefined): Skin {
+  return (id && skins[id as SkinId]) || skins.default;
+}

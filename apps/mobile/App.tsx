@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import { Arvo_700Bold } from "@expo-google-fonts/arvo/700Bold";
 import { GreatVibes_400Regular } from "@expo-google-fonts/great-vibes/400Regular";
 import RootNavigator from "./src/navigation/RootNavigator";
+import { DEMO_HANDLE, ProfileProvider } from "./src/data/ProfileProvider";
 
 export default function App() {
   // Keys must match the font names in packages/skins.
@@ -19,9 +20,9 @@ export default function App() {
   }
 
   return (
-    <>
+    <ProfileProvider handle={DEMO_HANDLE}>
       <RootNavigator />
       <StatusBar style="auto" />
-    </>
+    </ProfileProvider>
   );
 }

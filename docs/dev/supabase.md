@@ -1,6 +1,18 @@
 # Local Supabase
 
-The backend runs locally in Docker via the Supabase CLI, which is a dev dependency, so there's nothing to install globally. There's no hosted project yet (tracked in #82).
+The backend runs locally in Docker via the Supabase CLI, which is a dev dependency, so there's nothing to install globally. The hosted project is `wiizhsznblwkiuzkchzw` (https://wiizhsznblwkiuzkchzw.supabase.co); linking it is tracked in #82.
+
+## Pointing the app at a database
+
+The mobile app reads its Supabase URL and key from `apps/mobile/.env`, which isn't committed:
+
+```bash
+cp apps/mobile/.env.example apps/mobile/.env
+```
+
+The example file points at the local stack, which works for `npm run web` on the laptop. Your phone can't reach `127.0.0.1`, so for Expo Go, set `apps/mobile/.env` to the hosted project instead: its URL, plus the **publishable** key from the dashboard (Project Settings → API Keys). Never use the secret key in the app. Restart `npm start` after changing `.env`.
+
+Until sign-in exists (#10), the app always shows the profile with handle `michellescutti` (`DEMO_HANDLE` in `apps/mobile/src/data/ProfileProvider.tsx`).
 
 ## Everyday commands
 
