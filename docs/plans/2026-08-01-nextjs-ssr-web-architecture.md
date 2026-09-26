@@ -19,18 +19,18 @@ This mirrors what Epic 6 in `SKEDGE~1.MD` already implied ("rebuilt fresh in Nex
 
 ## Shared backend, not shared frontend
 
-Both apps should consume the **same API** from Phase 1 of the general plan (the backend/data model phase). The data model in `src/types/index.ts` (`Instructor`, `ScheduleEntry`, `ServiceModality`, `Testimonial`, `GalleryImage`, plus the new `StudentProfile` question) is the shared contract both apps read from and, where editing lives in the web app too, write to.
+Both apps should consume the **same backend** from Phase 1 of the general plan: Supabase (decided 2026-09-26). The data model (one `profiles` table for every account, plus schedule, services, testimonials, gallery) lives in `packages/types` and is the shared contract both apps read from and, where editing lives in the web app too, write to.
 
 What is *not* shared: actual rendering code. React Native views and NextJS/DOM components aren't portable 1:1. Two options, worth deciding before Phase 3 starts:
 1. **Shared skin tokens only** — colors, fonts, spacing, section order live in a shared package (e.g. `packages/skins`); each platform has its own templates that consume those tokens. Skin *definitions* are shared, skin *rendering* is not.
 2. **Web-only skins** — skins are a web-only concept (mini-sites are always viewed via the NextJS app, even by students using the native app to get there), and the RN app never renders a skin itself, just links out to the hosted page. Simpler, but means the app doesn't preview skins natively.
 
-Leaning toward option 2 for v1 given how `skins.ts` is scoped today (color/font pairing, not full layout templates) — but flag this as the first thing to confirm before building the NextJS side, since it changes how much of `src/theme/skins.ts` is reusable vs. web-app-only.
+**Decided 2026-09-26: option 1.** Skin tokens live in `packages/skins` and both apps render them their own way, so the phone app can preview a skin natively. See `docs/DECISIONS.md`.
 
 ## Routing & hosting
 
-- Domain is **skedgelife.com** (already owned — decided 2026-08-22, see `docs/DECISIONS.md`). Slug-based routes off this single domain (e.g. `skedgelife.com/i/<slug>`), rather than per-instructor subdomains, at least for v1 — subdomains add DNS/cert complexity for an early-stage product. Revisit if custom domains become a paid-tier feature later (see Monetization section of the general plan).
-- **Decided 2026-08-22:** slugs are split by role — `/i/<slug>` for instructors, `/u/<slug>` for students — to keep tier/role obvious from the URL and avoid collisions. Paid instructors (and free instructors likely to convert to paid) get priority for handle reservation over students. The exact reservation/priority mechanism (e.g. what happens if a student claims a handle an instructor later wants) is still open — see `docs/DECISIONS.md`.
+- Domain is **skedgelife.com** (already owned — decided 2026-08-22, see `docs/DECISIONS.md`). Routes are handle-based off this single domain rather than per-user subdomains, since subdomains add DNS/cert complexity for an early-stage product.
+- **Decided 2026-09-26 (replaces the 2026-08-22 `/i/` vs `/u/` split):** one namespace, `skedgelife.com/<handle>`, first come first served, with a reserved-words list. The paid perk is a custom domain pointing at the profile's site, not priority over other users' handles. See `docs/DECISIONS.md`.
 
 ## The page builder (Feature 5)
 
@@ -58,9 +58,8 @@ Separate deploy pipelines are the natural default: Vercel (or similar) for the N
 
 ## Open questions
 
-- Shared skin tokens vs. web-only skins (see above) — blocks how much of `src/theme/skins.ts` carries forward.
-- Custom domains as a future paid-tier feature (ties into the Monetization section of the general plan) — not needed for v1 but worth keeping the routing design from precluding it later.
+- How custom domains get wired up (DNS verification, TLS) when they ship as a paid feature.
 - Whether watch-only live streaming eventually belongs on the web too (see Video content section above) — currently scoped as app-only, deliberately left open.
-- Handle-priority mechanism for the `/i/` vs `/u/` slug split — see `docs/DECISIONS.md`.
+- Inactive-handle reclaim policy — see `docs/DECISIONS.md`.
 
-Resolved: monorepo vs. separate repos, the slug namespace split, and the page-builder's mobile-first scope — see `docs/DECISIONS.md`.
+Resolved: monorepo vs. separate repos, handles, shared skin tokens, and the page-builder's mobile-first scope — see `docs/DECISIONS.md`.

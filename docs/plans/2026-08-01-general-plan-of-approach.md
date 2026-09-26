@@ -48,7 +48,7 @@ This directly shapes the page-builder work in Feature 5 below: SkedgeLife's buil
 **State: Not started — new scope, not yet reflected in `docs/reference/SKEDGE~1.MD`.**
 - Concept surfaced in planning conversation (2026-08-01), not yet an epic doc: students get a basic, free "MySpace-style" page of their own — one profile photo, a short bio, presumably basic contact — using the same skin system as instructors but a stripped-down field set.
 - Needs a simple, form-driven page builder (field-by-field editing against a fixed layout, not a freeform drag-and-drop canvas) — reuses pieces of the `Instructor` content model (bio, photo, contact) but scoped down per the free-tier limits in the Monetization section below.
-- **Decided 2026-08-22:** `StudentProfile` is a separate type from `Instructor`, not a permissions-limited view of it — see `docs/DECISIONS.md` for rationale. Instructors get an analogous free/basic version of their page too (see Monetization section) — the page builder here likely serves both, not just students.
+- **Decided 2026-09-26 (replaces the 2026-08-22 separate-`StudentProfile` decision):** there is one profile type for every account. Teaching features are sections a profile turns on, and the free page described here is simply every profile's default. See `docs/DECISIONS.md`.
 - **Decided 2026-08-23:** the page builder is **mobile-first** — quick, short-form entry (photo, bio, contact, add/update schedule) meant to be finishable on a phone in one sitting. A browser-based builder should still exist, but stays equally lean, not a general-purpose site-builder competitor. See "Product philosophy" above and `docs/DECISIONS.md`.
 - This should get its own epics-style doc (mirroring the format of `SKEDGE~1.MD`) before implementation — it's new scope, not yet broken into user stories.
 
@@ -70,11 +70,10 @@ This directly shapes the page-builder work in Feature 5 below: SkedgeLife's buil
 
 Not yet spec'd; rough shape from the 2026-08-01 planning conversation, to be refined into its own doc once the business model firms up:
 
-**Decided 2026-08-22** (see `docs/DECISIONS.md`): the paid tier applies to **instructors only**. Students always get their basic free page at no cost — never paywalled. Instructors themselves have both a free/basic tier (reduced feature set, mirrors the student page) and a paid tier; nothing here paywalls a student's access to content, only an instructor's ability to offer more.
+**Decided 2026-09-26** (replaces the 2026-08-22 instructors-only decision; see `docs/DECISIONS.md`): one profile type for everyone, and a free/paid **plan** that anyone can be on. The free page is never paywalled, and nobody is charged to view or join someone else's content.
 
-- **Free (everyone):** one profile photo, basic bio/contact, a limited skin selection (page builder from Feature 5) — this is the instructor's *and* the student's default page. Students can join any instructor's live class for free even if the instructor is on a paid plan (Epic 10).
-- **Paid (instructors only):** full photo gallery (Epic 5), payment processing for bookings, scheduling for large groups (workshops/retreats — beyond the current single-instructor `ScheduleEntry` model), sending invites/blasts to followers (beyond the simple schedule-change notifications in Epic 7), premium video content (Epic 8), and offering live/streaming lessons at all (Epic 10 — the feature itself is gated to paying instructors, not per-student access).
-- **New open question surfaced by this decision:** is the hard "student" vs. "instructor" role split even the right long-term model, or should it become more like a single "user" identity with instructor capabilities layered on via upgrade? Not resolved — worth revisiting before Phase 1 locks the schema into two separate role tables. See `docs/DECISIONS.md`.
+- **Free (everyone):** one profile photo, basic bio/contact, interests, follows, light scheduling and small-group events, a limited skin selection (page builder from Feature 5). Anyone can join a live class for free, even when the host is on the paid plan (Epic 10).
+- **Paid (anyone):** a hosted website on top of the profile with a custom domain, full photo gallery (Epic 5), payment processing for bookings, scheduling for large groups (workshops/retreats), invites/blasts to followers (beyond the schedule-change notifications in Epic 7), premium video content (Epic 8), and hosting live/streaming lessons (Epic 10).
 - **Decided 2026-08-23:** payment provider is **Stripe** — the account owner's brother has extensive hands-on Stripe/payments experience and will lead this workstream. See `docs/DECISIONS.md`. Payment processing still implies a billing/subscription layer that doesn't exist anywhere in the current data model — this is its own workstream, not a checkbox inside another phase.
 
 ## Market Research — Target Professions
@@ -94,7 +93,7 @@ This list is a placeholder for scoping conversations, not the output of actual r
 The dependency shape is: **backend/auth unlocks everything else** (instructor editing, student follow/notify, persistence), so it's the natural next big step regardless of which feature gets polished first cosmetically. Market research (above) isn't a phase — it should run continuously alongside Phases 0-2 since it can reshape Feature 5 and profession-specific skin work before much gets built.
 
 1. **Phase 0 — Stabilize the skeleton.** `npm install` + run in WSL2, load the `classic-yoga` fonts, add real app icon/splash, confirm typecheck passes. Low-risk, unblocks everything else being demoable.
-2. **Phase 1 — Backend & data model.** Stand up the actual database/API described in `src/types/index.ts`'s comments (poses, sequences, sequence_items, sequence_class_link, instructor/schedule/service tables), plus the new `StudentProfile` question from Feature 5. Swap screens from static seed imports to API calls. This is the highest-leverage unblock.
+2. **Phase 1 — Backend & data model.** Stand up Supabase (decided 2026-09-26) with the data model sketched in `src/types/index.ts` (profiles, poses, sequences, sequence_items, sequence_class_link, schedule/service tables), using one `profiles` table for every account. Swap screens from static seed imports to API calls. This is the highest-leverage unblock.
 3. **Phase 2 — Instructor auth + self-serve editing.** Instructor accounts, and editing UI for profile/bio/certs/services/testimonials/gallery/schedule/skin — turning the currently read-only screens into the actual authoring tool instructors need.
 4. **Phase 3 — Public web presence (NextJS SSR).** Stand up the separate NextJS app for public-facing, crawlable mini-site pages (instructor sites + student free-tier pages) per `docs/plans/2026-08-01-nextjs-ssr-web-architecture.md`. Build the lean, browser-based page builder here as the secondary surface — the mobile app (Phase 2) is the primary, quick-entry editing experience; see "Product philosophy" above.
 5. **Phase 4 — Skins.** Design and build a handful of additional skins beyond `classic-yoga`/`default` — ideally informed by the market research above rather than guessed, since a "skin" is largely a proxy for "does this feel right for my profession."
@@ -119,7 +118,7 @@ These need product decisions before the relevant phase can be scoped in detail �
 
 - Stripe also needs to support instructor payouts (not just student→instructor charges) — confirm this is in scope for the brother-led Stripe workstream, not just charging.
 
-Resolved 2026-08-22: `StudentProfile` type, tier scope — see `docs/DECISIONS.md`. Resolved 2026-08-23: payment provider, page-builder mobile-first scope — see `docs/DECISIONS.md`.
+Resolved 2026-08-22: `StudentProfile` type, tier scope — see `docs/DECISIONS.md`. Resolved 2026-08-23: payment provider, page-builder mobile-first scope — see `docs/DECISIONS.md`. Resolved 2026-09-26: backend (Supabase), one profile type (replaces the separate `StudentProfile` and instructors-only tier), handles, monorepo layout — see `docs/DECISIONS.md`.
 
 ## Open questions from the 2026-08-22 Michelle Scutti interview
 

@@ -19,10 +19,10 @@ The mobile app (Expo + React Native) has three tabs, all running on seed data fr
 Work is tracked as [GitHub milestones](https://github.com/Unionindesign/SkedgeLife/milestones) and [issues](https://github.com/Unionindesign/SkedgeLife/issues). Roughly in order:
 
 - **Accounts and a real backend**, so instructors can edit their own page from their phone.
-- **Public web pages** at `skedgelife.com/i/<name>`, so an instructor's mini-site is shareable and searchable without the app.
-- **Follow and notifications**: students follow instructors and hear about schedule changes.
-- **Free student pages**: a basic page with one photo and a short bio.
-- **A paid instructor tier** (via Stripe): full photo gallery, payments, marketing blasts to followers.
+- **Public web pages** at `skedgelife.com/<handle>`, so anyone's page is shareable and searchable without the app.
+- **Follow and notifications**: follow the people you like and hear about schedule changes.
+- **A free page for everyone**: one photo, a short bio, interests, and simple small-group events. Teaching features turn on when you need them.
+- **A paid plan** (via Stripe), open to anyone: a hosted website with your own domain, full photo gallery, payments, and marketing blasts to followers.
 - **Video**: free and premium video libraries, video series, and eventually live-streamed classes.
 - **More skins**, informed by research into which professions want this.
 
