@@ -21,6 +21,18 @@ networkingMode=mirrored
 
 Then run `wsl --shutdown` from PowerShell, reopen WSL, and allow inbound TCP on port 8081 in Windows Firewall. Plain `npm start` should then work over Wi-Fi. There's no `.wslconfig` on this machine yet.
 
+## Docker runs inside WSL, not Docker Desktop
+
+Local Supabase uses a Docker engine installed directly in WSL Ubuntu (a systemd service), not Docker Desktop. Docker Desktop is installed on this machine too (`docker context ls` shows a `desktop-linux` context), but nothing uses it.
+
+- Supabase's containers won't appear in Docker Desktop's window. Use `docker ps` in WSL.
+- Keep Docker Desktop closed while working on SkedgeLife. With its WSL integration on, it can take over the `docker` command and the ports, and Supabase may start in the wrong engine or fail on ports already in use.
+- Only the backend runs in Docker. The Expo dev server (`npm start`) is a normal Node process in WSL.
+
+## Reaching WSL services from Windows
+
+WSL2 forwards `localhost` from Windows to WSL by default, so Windows tools can reach local services directly. For example, DBeaver connects to the local database at `localhost:54322` (user and password `postgres`). If a connection starts timing out after sleep or a network change, run `wsl --shutdown` in PowerShell, reopen WSL, and restart the service.
+
 ## Windows `node` and `npm` are on the WSL PATH
 
 WSL appends the Windows PATH, so `/mnt/c/Program Files/nodejs/` (Windows Node and npm) sits behind the Linux Node that nvm installs:
