@@ -42,9 +42,9 @@ npm run typecheck
 ### Run it on your phone
 
 1. Install **Expo Go** from the App Store or Play Store.
-2. Start the dev server:
+2. Start the dev server from the repo root:
    ```bash
-   npx expo start --tunnel
+   npm start -- --tunnel
    ```
    (`--tunnel` is needed on WSL2; the WSL notes explain why.)
 3. Scan the QR code: on iPhone with the Camera app, on Android from inside Expo Go.
@@ -54,20 +54,28 @@ Saved changes reload on the phone automatically. Shake the phone to open the dev
 ### Run it in a browser
 
 ```bash
-npx expo start --web
+npm run web
 ```
 
 ## Project layout
 
+An npm workspaces monorepo. Run `npm install` once at the root.
+
 ```
-App.tsx                           entry point; loads skin fonts
-src/navigation/RootNavigator.tsx  bottom tabs: Profile / Schedule / Sequence Builder
-src/screens/                      the three screens
-src/data/                         seed content (instructor profile, poses)
-src/theme/skins.ts                skin colors and fonts
-src/types/index.ts                shared data types
-assets/instructor-seed/           seed photos and logo
+apps/
+  mobile/              Expo app (entry: index.ts -> App.tsx)
+    src/navigation/    bottom tabs: Profile / Schedule / Sequence Builder
+    src/screens/       the three screens
+    src/data/          seed content (instructor profile, poses)
+    assets/            seed photos and logo
+  web/                 Next.js public pages (placeholder until the web phase)
+packages/
+  types/               shared data types (@skedgelife/types)
+  skins/               skin colors and fonts (@skedgelife/skins)
+docs/                  plans, decisions, changelog, dev notes
 ```
+
+Supabase config (`supabase/`) and the shared data client (`packages/data`) arrive with the backend work.
 
 ## Docs
 

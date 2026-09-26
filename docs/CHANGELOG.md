@@ -8,6 +8,8 @@ A short entry for each working session. Newest first. Decision rationale goes in
 - Rewrote the README around what SkedgeLife is, what works today, what's in the works, and how to run it.
 - Added `docs/dev/wsl.md` with WSL2 quirks: phone preview needs `--tunnel`, Windows Node on the PATH, files arriving as executable, 8.3 filenames, `gh` without sudo.
 - Decisions (`docs/DECISIONS.md`): Supabase backend; one profile type for every account, with a free/paid plan open to anyone (replaces separate `StudentProfile` and instructors-only paid tier); single handle namespace with custom domains as the paid perk (replaces `/i/` vs `/u/`); monorepo layout. Plan docs and README updated to match.
+- GitHub: closed #69 and #16 as resolved, retitled issues for the one-profile model, renamed the "Student Free-Tier" milestone to "Free Profile Pages & Page Builder", added #79 (monorepo) and #80 (custom domains).
+- Branch `feature/monorepo` (#79): moved the Expo app to `apps/mobile` (history kept), extracted `packages/types` and `packages/skins`, added an `apps/web` placeholder and an npm workspaces root. The app now starts from `apps/mobile/index.ts`. Run `npm start` / `npm run web` from the root.
 
 ## 2026-09-24
 

@@ -14,7 +14,7 @@ import {
   PrivateSessionType,
   Testimonial,
   GalleryImage,
-} from "../types";
+} from "@skedgelife/types";
 
 export const seedInstructor: Instructor = {
   id: "instructor-seed-1",

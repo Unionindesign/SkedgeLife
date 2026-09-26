@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { seedPoses } from "../data/seedPoses";
-import { SequenceItem, Pose } from "../types";
+import { SequenceItem, Pose } from "@skedgelife/types";
 import { seedInstructor } from "../data/seedInstructor";
 
 // Minimal working sequence builder: drag-reorder a list of poses, edit
