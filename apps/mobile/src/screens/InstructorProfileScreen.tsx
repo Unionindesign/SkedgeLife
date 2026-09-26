@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, ScrollView, StyleSheet, Linking } from "react-native";
+import { View, Text, Image, ScrollView, StyleSheet, Linking, type TextStyle, type ViewStyle } from "react-native";
 import { getSkin } from "@skedgelife/skins";
 import { useProfile } from "../data/ProfileProvider";
 import ProfileStatus from "../components/ProfileStatus";
@@ -20,6 +20,17 @@ export default function InstructorProfileScreen() {
     ? { fontFamily: skin.fonts.accent, fontWeight: "normal" as const, fontSize: 34 }
     : null;
 
+  const gallery = profile.gallery_images.flatMap((g) => {
+    const source = imageSource(g.url);
+    return source ? [{ id: g.id, source }] : [];
+  });
+  const hasContact = Boolean(profile.contact_email || profile.contact_phone || profile.instagram_handle);
+  const hasContent =
+    Boolean(profile.bio_short || profile.bio_long) ||
+    profile.specialties.length + profile.certifications.length + profile.service_modalities.length +
+      profile.private_session_types.length + profile.testimonials.length + gallery.length > 0 ||
+    hasContact;
+
   return (
     <ScrollView style={{ backgroundColor: skin.colors.background }} contentContainerStyle={styles.container}>
       <View style={[styles.header, { backgroundColor: skin.colors.header }]}>
@@ -39,80 +50,109 @@ export default function InstructorProfileScreen() {
         </View>
       ) : null}
 
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, headingFont]}>Specialties</Text>
-        <View style={styles.tagRow}>
-          {profile.specialties.map((s) => (
-            <View key={s} style={[styles.tag, { backgroundColor: skin.colors.accent }]}>
-              <Text style={styles.tagText}>{s}</Text>
+      {!hasContent ? (
+        <Text style={styles.emptyHint}>Your page is ready. Editing your bio, schedule, and more is coming soon.</Text>
+      ) : null}
+
+      {profile.specialties.length > 0 ? (
+        <Section title="Specialties" titleStyle={headingFont}>
+          <View style={styles.tagRow}>
+            {profile.specialties.map((s) => (
+              <View key={s} style={[styles.tag, { backgroundColor: skin.colors.accent }]}>
+                <Text style={styles.tagText}>{s}</Text>
+              </View>
+            ))}
+          </View>
+        </Section>
+      ) : null}
+
+      {profile.certifications.length > 0 ? (
+        <Section title="Certifications" titleStyle={headingFont}>
+          {profile.certifications.map((c) => (
+            <Text key={c} style={styles.bodyText}>
+              • {c}
+            </Text>
+          ))}
+        </Section>
+      ) : null}
+
+      {profile.service_modalities.length > 0 ? (
+        <Section title="Services" titleStyle={headingFont}>
+          {profile.service_modalities.map((m) => (
+            <View key={m.id} style={{ marginBottom: 10 }}>
+              <Text style={styles.serviceTitle}>{m.title}</Text>
+              <Text style={styles.bodyText}>{m.description}</Text>
             </View>
           ))}
-        </View>
-      </View>
+        </Section>
+      ) : null}
 
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, headingFont]}>Certifications</Text>
-        {profile.certifications.map((c) => (
-          <Text key={c} style={styles.bodyText}>
-            • {c}
-          </Text>
-        ))}
-      </View>
+      {profile.private_session_types.length > 0 ? (
+        <Section title="Privates" titleStyle={headingFont}>
+          {profile.private_session_types.map((p) => (
+            <View key={p.id} style={{ marginBottom: 10 }}>
+              <Text style={styles.serviceTitle}>{p.title}</Text>
+              <Text style={styles.bodyText}>{p.description}</Text>
+            </View>
+          ))}
+        </Section>
+      ) : null}
 
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, headingFont]}>Services</Text>
-        {profile.service_modalities.map((m) => (
-          <View key={m.id} style={{ marginBottom: 10 }}>
-            <Text style={styles.serviceTitle}>{m.title}</Text>
-            <Text style={styles.bodyText}>{m.description}</Text>
+      {profile.testimonials.length > 0 ? (
+        <Section title="Testimonials" titleStyle={headingFont}>
+          {profile.testimonials.map((t) => (
+            <View key={t.id} style={{ marginBottom: 14 }}>
+              <Text style={styles.bodyText}>&ldquo;{t.quote}&rdquo;</Text>
+              <Text style={styles.testimonialAuthor}>
+                — {t.author_name}
+                {t.author_location ? `, ${t.author_location}` : ""}
+              </Text>
+            </View>
+          ))}
+        </Section>
+      ) : null}
+
+      {gallery.length > 0 ? (
+        <Section title="Gallery" titleStyle={headingFont}>
+          <View style={styles.galleryRow}>
+            {gallery.map(({ id, source }) => (
+              <Image key={id} source={source} style={styles.galleryImage} />
+            ))}
           </View>
-        ))}
-      </View>
+        </Section>
+      ) : null}
 
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, headingFont]}>Privates</Text>
-        {profile.private_session_types.map((p) => (
-          <View key={p.id} style={{ marginBottom: 10 }}>
-            <Text style={styles.serviceTitle}>{p.title}</Text>
-            <Text style={styles.bodyText}>{p.description}</Text>
-          </View>
-        ))}
-      </View>
-
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, headingFont]}>Testimonials</Text>
-        {profile.testimonials.map((t) => (
-          <View key={t.id} style={{ marginBottom: 14 }}>
-            <Text style={styles.bodyText}>&ldquo;{t.quote}&rdquo;</Text>
-            <Text style={styles.testimonialAuthor}>
-              — {t.author_name}
-              {t.author_location ? `, ${t.author_location}` : ""}
+      {hasContact ? (
+        <Section title="Contact" titleStyle={headingFont} style={styles.contactSection}>
+          {profile.contact_email ? (
+            <Text style={styles.bodyText} onPress={() => Linking.openURL(`mailto:${profile.contact_email}`)}>
+              {profile.contact_email}
             </Text>
-          </View>
-        ))}
-      </View>
-
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, headingFont]}>Gallery</Text>
-        <View style={styles.galleryRow}>
-          {profile.gallery_images.map((g) => {
-            const source = imageSource(g.url);
-            return source ? <Image key={g.id} source={source} style={styles.galleryImage} /> : null;
-          })}
-        </View>
-      </View>
-
-      <View style={[styles.section, styles.contactSection]}>
-        <Text style={[styles.sectionTitle, headingFont]}>Contact</Text>
-        {profile.contact_email ? (
-          <Text style={styles.bodyText} onPress={() => Linking.openURL(`mailto:${profile.contact_email}`)}>
-            {profile.contact_email}
-          </Text>
-        ) : null}
-        {profile.contact_phone ? <Text style={styles.bodyText}>{profile.contact_phone}</Text> : null}
-        {profile.instagram_handle ? <Text style={styles.bodyText}>{profile.instagram_handle}</Text> : null}
-      </View>
+          ) : null}
+          {profile.contact_phone ? <Text style={styles.bodyText}>{profile.contact_phone}</Text> : null}
+          {profile.instagram_handle ? <Text style={styles.bodyText}>{profile.instagram_handle}</Text> : null}
+        </Section>
+      ) : null}
     </ScrollView>
+  );
+}
+
+function Section({
+  title,
+  titleStyle,
+  style,
+  children,
+}: {
+  title: string;
+  titleStyle: TextStyle | null;
+  style?: ViewStyle;
+  children: React.ReactNode;
+}) {
+  return (
+    <View style={[styles.section, style]}>
+      <Text style={[styles.sectionTitle, titleStyle]}>{title}</Text>
+      {children}
+    </View>
   );
 }
 
@@ -135,4 +175,5 @@ const styles = StyleSheet.create({
   galleryRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   galleryImage: { width: 100, height: 100, borderRadius: 8, marginRight: 8, marginBottom: 8 },
   contactSection: { paddingBottom: 40 },
+  emptyHint: { paddingHorizontal: 20, paddingVertical: 16, fontSize: 14, color: "#666", textAlign: "center" },
 });

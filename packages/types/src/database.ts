@@ -156,7 +156,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "is_reserved_handle":
+            "is_handle_available":
+{ Args: { "h": string }; Returns: boolean
+                           },
+"is_reserved_handle":
 { Args: { "h": string }; Returns: boolean
                            },
 "owns_schedule_entry":

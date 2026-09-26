@@ -26,6 +26,13 @@ A short entry for each working session. Newest first. Decision rationale goes in
   - Supabase settings come from `apps/mobile/.env` (`.env.example` committed with local defaults; `.env` files now gitignored).
   - Removed the TypeScript seed file and the hand-written profile types (replaced by `supabase/seed.sql` and the generated database types). Added `getSkin()` for skins stored as text.
   - The PDF sequence card now HTML-escapes the title, quote, playlist, author, and pose names.
+  - Merged as PR #85.
+- Branch `feature/auth` (#10):
+  - Welcome, Sign up, and Log in screens; Log out on the Profile tab. The session is saved on the device and refreshed in the foreground.
+  - Sign-up checks the handle as you type via a new `is_handle_available` database function (migration `handle_availability`), so format and reserved-word rules live only in the database.
+  - The tabs show the signed-in user's own profile; the hard-coded demo handle is gone. Empty profile sections are hidden, with a "your page is ready" note on new profiles.
+  - Local minimum password length raised to 8.
+  - Decisions logged (email + password first, confirmation off until launch; welcome screen then your own profile). TODO rows added for the hosted dashboard settings and a real email service before launch.
 
 ## 2026-09-24
 

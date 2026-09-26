@@ -1,9 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { getProfilePage, type ProfilePage } from "@skedgelife/data";
 import { supabase } from "../lib/supabase";
-
-// Until sign-in (#10) decides whose profile to show, the app shows this seeded one.
-export const DEMO_HANDLE = "michellescutti";
+import { errorMessage } from "../lib/errors";
 
 type ProfileState =
   | { status: "loading" }
@@ -11,17 +9,10 @@ type ProfileState =
   | { status: "not-found" }
   | { status: "ready"; profile: ProfilePage };
 
-// Supabase errors are plain objects with a message, not Error instances.
-function errorMessage(err: unknown): string {
-  if (err && typeof err === "object" && "message" in err && typeof err.message === "string" && err.message) {
-    return err.message;
-  }
-  return String(err);
-}
-
 const ProfileContext = createContext<{ state: ProfileState; reload: () => void } | null>(null);
 
-export function ProfileProvider({ handle, children }: { handle: string; children: React.ReactNode }) {
+// Loads the signed-in user's own profile page.
+export function ProfileProvider({ userId, children }: { userId: string; children: React.ReactNode }) {
   const [state, setState] = useState<ProfileState>({ status: "loading" });
   const [attempt, setAttempt] = useState(0);
   const reload = useCallback(() => setAttempt((n) => n + 1), []);
@@ -29,7 +20,7 @@ export function ProfileProvider({ handle, children }: { handle: string; children
   useEffect(() => {
     let cancelled = false;
     setState({ status: "loading" });
-    getProfilePage(supabase, handle)
+    getProfilePage(supabase, { id: userId })
       .then((profile) => {
         if (!cancelled) setState(profile ? { status: "ready", profile } : { status: "not-found" });
       })
@@ -39,7 +30,7 @@ export function ProfileProvider({ handle, children }: { handle: string; children
     return () => {
       cancelled = true;
     };
-  }, [handle, attempt]);
+  }, [userId, attempt]);
 
   return <ProfileContext.Provider value={{ state, reload }}>{children}</ProfileContext.Provider>;
 }

@@ -12,7 +12,9 @@ cp apps/mobile/.env.example apps/mobile/.env
 
 The example file points at the local stack, which works for `npm run web` on the laptop. Your phone can't reach `127.0.0.1`, so for Expo Go, set `apps/mobile/.env` to the hosted project instead: its URL, plus the **publishable** key from the dashboard (Project Settings → API Keys). Never use the secret key in the app. Restart `npm start` after changing `.env`.
 
-Until sign-in exists (#10), the app always shows the profile with handle `michellescutti` (`DEMO_HANDLE` in `apps/mobile/src/data/ProfileProvider.tsx`).
+The app shows the signed-in user's own profile. Locally, log in with the seed account below to see a full profile, or sign up to see a brand-new one. Email confirmation is off, so sign-up logs you straight in.
+
+For the hosted project, turn **Confirm email** off in the dashboard (Authentication → Sign In / Providers → Email) and set the minimum password length to 8. Otherwise hosted sign-ups wait for a confirmation email (see `docs/TODO.md`).
 
 ## Everyday commands
 
