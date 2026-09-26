@@ -8,6 +8,17 @@ A short entry for each working session. Newest first. Decision rationale goes in
 - Rewrote the README around what SkedgeLife is, what works today, what's in the works, and how to run it.
 - Added `docs/dev/wsl.md` with WSL2 quirks: phone preview needs `--tunnel`, Windows Node on the PATH, files arriving as executable, 8.3 filenames, `gh` without sudo.
 - Decisions (`docs/DECISIONS.md`): Supabase backend; one profile type for every account, with a free/paid plan open to anyone (replaces separate `StudentProfile` and instructors-only paid tier); single handle namespace with custom domains as the paid perk (replaces `/i/` vs `/u/`); monorepo layout. Plan docs and README updated to match.
+- GitHub: closed #69 and #16 as resolved, retitled issues for the one-profile model, renamed the "Student Free-Tier" milestone to "Free Profile Pages & Page Builder", added #79 (monorepo) and #80 (custom domains).
+- Branch `feature/monorepo` (#79): moved the Expo app to `apps/mobile` (history kept), extracted `packages/types` and `packages/skins`, added an `apps/web` placeholder and an npm workspaces root. The app now starts from `apps/mobile/index.ts`. Run `npm start` / `npm run web` from the root.
+- Branch `feature/supabase-local` (#5, #6, #7):
+  - Supabase CLI as a root dev dependency; `supabase/` initialized, with realtime, edge functions, analytics, and vector storage off for now.
+  - First migration: `profiles` (one per account; handle format and reserved-words checks; `teaches` marker; `plan` not user-editable), created automatically on sign-up. Content tables for schedule entries and times, services, private sessions, testimonials, and gallery. Row-level security everywhere: public read, owner-only writes.
+  - `supabase/seed.sql` with Michelle's profile and a local login.
+  - Generated database types in `packages/types`; `npm run db:start|stop|reset|types` scripts; `docs/dev/supabase.md`.
+  - `docs/dev/wsl.md`: Docker runs inside WSL, not Docker Desktop (keep Desktop closed); Windows tools like DBeaver reach WSL services via `localhost`; Expo can print an unreachable Docker bridge address; React Native DevTools needs `libnss3`.
+- Added #82: create the hosted Supabase project once the local backend work is done.
+- Added `docs/TODO.md`: a running list of things that need a person (accounts, decisions, follow-ups), linked to issues.
+- #81 and #83 merged into their stacked base branches rather than `main`; a catch-up PR from `feature/monorepo` brings that work to `main`.
 
 ## 2026-09-24
 

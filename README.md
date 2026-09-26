@@ -42,9 +42,9 @@ npm run typecheck
 ### Run it on your phone
 
 1. Install **Expo Go** from the App Store or Play Store.
-2. Start the dev server:
+2. Start the dev server from the repo root:
    ```bash
-   npx expo start --tunnel
+   npm start -- --tunnel
    ```
    (`--tunnel` is needed on WSL2; the WSL notes explain why.)
 3. Scan the QR code: on iPhone with the Camera app, on Android from inside Expo Go.
@@ -54,25 +54,35 @@ Saved changes reload on the phone automatically. Shake the phone to open the dev
 ### Run it in a browser
 
 ```bash
-npx expo start --web
+npm run web
 ```
 
 ## Project layout
 
+An npm workspaces monorepo. Run `npm install` once at the root.
+
 ```
-App.tsx                           entry point; loads skin fonts
-src/navigation/RootNavigator.tsx  bottom tabs: Profile / Schedule / Sequence Builder
-src/screens/                      the three screens
-src/data/                         seed content (instructor profile, poses)
-src/theme/skins.ts                skin colors and fonts
-src/types/index.ts                shared data types
-assets/instructor-seed/           seed photos and logo
+apps/
+  mobile/              Expo app (entry: index.ts -> App.tsx)
+    src/navigation/    bottom tabs: Profile / Schedule / Sequence Builder
+    src/screens/       the three screens
+    src/data/          seed content (instructor profile, poses)
+    assets/            seed photos and logo
+  web/                 Next.js public pages (placeholder until the web phase)
+packages/
+  types/               shared data types, incl. generated database types (@skedgelife/types)
+  skins/               skin colors and fonts (@skedgelife/skins)
+supabase/              local Supabase: config, SQL migrations, seed data
+docs/                  plans, decisions, changelog, dev notes
 ```
+
+The backend runs locally in Docker for now: `npm run db:start`. See [`docs/dev/supabase.md`](docs/dev/supabase.md). The shared data client (`packages/data`) comes next, when the app switches from seed files to the database.
 
 ## Docs
 
 - [`docs/plans/`](docs/plans/): plans of approach, one dated file per topic. Start with the general plan.
 - [`docs/DECISIONS.md`](docs/DECISIONS.md): decisions made so far, and why.
 - [`docs/CHANGELOG.md`](docs/CHANGELOG.md): what changed, session by session.
+- [`docs/TODO.md`](docs/TODO.md): things that need a person: accounts, decisions, follow-ups.
 - [`docs/reference/`](docs/reference/): user stories (epics) and the seed-content reference.
 - [`docs/dev/`](docs/dev/): development environment notes.

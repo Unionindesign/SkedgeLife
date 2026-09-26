@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, ScrollView, StyleSheet, Linking } from "react-native";
-import { skins } from "../theme/skins";
+import { skins } from "@skedgelife/skins";
 import {
   seedInstructor,
   seedServiceModalities,

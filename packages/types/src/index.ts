@@ -5,9 +5,10 @@
 //   sequence_items (id, sequence_id, pose_id, order_index, duration_sec, side enum('L','R','N/A'), cue_note)
 //   sequence_class_link (sequence_id, class_instance_id)
 //
-// These are UI-facing TypeScript shapes, not literal DB schemas — the real
-// backend/DB design happens separately. Treat this as the contract the app's
-// screens are built against for now.
+// These are UI-facing TypeScript shapes the screens are built against. The
+// database schema's types are generated into ./database.ts (npm run db:types).
+
+export type { Database, Json } from "./database";
 
 export type Side = "L" | "R" | "N/A";
 

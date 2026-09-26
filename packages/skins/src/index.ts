@@ -3,9 +3,9 @@
 // "classic-yoga" carries forward the palette from Michelle's 2017 site as a
 // candidate first pre-built skin (see docs/reference/WILD-R~1.MD
 // -> "Candidate first skin: Classic Yoga"). Font names here must match the
-// keys passed to useFonts() in App.tsx.
+// keys passed to useFonts() in apps/mobile/App.tsx.
 
-import { SkinId } from "../types";
+import { SkinId } from "@skedgelife/types";
 
 export interface Skin {
   id: SkinId;

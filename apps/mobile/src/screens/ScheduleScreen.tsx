@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, Pressable, Linking } from "react-native";
 import { seedSchedule, seedInstructor } from "../data/seedInstructor";
-import { skins } from "../theme/skins";
+import { skins } from "@skedgelife/skins";
 
 export default function ScheduleScreen() {
   const skin = skins[seedInstructor.skin];

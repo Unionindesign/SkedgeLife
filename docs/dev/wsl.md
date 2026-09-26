@@ -8,9 +8,11 @@ Clone into your Linux home (e.g. `~/Projects/SkedgeLife`), not under `/mnt/c/...
 
 ## Your phone can't reach the dev server directly
 
-WSL2 runs behind its own virtual network, so a phone on the same Wi-Fi can't reach WSL's IP address. Plain `npx expo start` gives a QR code the phone can't open.
+WSL2 runs behind its own virtual network, so a phone on the same Wi-Fi can't reach WSL's IP address. Plain `npm start` gives a QR code the phone can't open.
 
-**What works:** `npx expo start --tunnel`. It routes through an ngrok tunnel. On first run it asks to install `@expo/ngrok`; say yes. The tunnel adds a little reload latency.
+With the local Supabase stack running, Expo may even print a Docker bridge address such as `exp://172.19.0.1:8081` (Docker's network for Supabase), which nothing outside WSL can reach. The web address it prints (`http://localhost:8081`) does work from a Windows browser.
+
+**What works:** `npm start -- --tunnel` from the repo root. It routes through an ngrok tunnel. On first run it asks to install `@expo/ngrok`; say yes. The tunnel adds a little reload latency.
 
 **Faster alternative (not yet tried here):** WSL "mirrored" networking, which puts WSL on the same network as Windows. Create `C:\Users\<you>\.wslconfig` with:
 
@@ -19,7 +21,35 @@ WSL2 runs behind its own virtual network, so a phone on the same Wi-Fi can't rea
 networkingMode=mirrored
 ```
 
-Then run `wsl --shutdown` from PowerShell, reopen WSL, and allow inbound TCP on port 8081 in Windows Firewall. Plain `npx expo start` should then work over Wi-Fi. There's no `.wslconfig` on this machine yet.
+Then run `wsl --shutdown` from PowerShell, reopen WSL, and allow inbound TCP on port 8081 in Windows Firewall. Plain `npm start` should then work over Wi-Fi. There's no `.wslconfig` on this machine yet.
+
+## Docker runs inside WSL, not Docker Desktop
+
+Local Supabase uses a Docker engine installed directly in WSL Ubuntu (a systemd service), not Docker Desktop. Docker Desktop is installed on this machine too (`docker context ls` shows a `desktop-linux` context), but nothing uses it.
+
+- Supabase's containers won't appear in Docker Desktop's window. Use `docker ps` in WSL.
+- Keep Docker Desktop closed while working on SkedgeLife. With its WSL integration on, it can take over the `docker` command and the ports, and Supabase may start in the wrong engine or fail on ports already in use.
+- Only the backend runs in Docker. The Expo dev server (`npm start`) is a normal Node process in WSL.
+
+## Reaching WSL services from Windows
+
+WSL2 forwards `localhost` from Windows to WSL by default, so Windows tools can reach local services directly. For example, DBeaver connects to the local database at `localhost:54322` (user and password `postgres`). If a connection starts timing out after sleep or a network change, run `wsl --shutdown` in PowerShell, reopen WSL, and restart the service.
+
+## React Native DevTools needs extra libraries
+
+Pressing `j` in the Expo terminal opens React Native DevTools, a desktop app that Ubuntu can't start out of the box. Expo logs:
+
+```
+error while loading shared libraries: libnspr4.so: cannot open shared object file
+```
+
+The app still runs; only the debugger is affected. Install the missing libraries (`libnss3` brings `libnspr4` with it):
+
+```bash
+sudo apt update && sudo apt install -y libnss3
+```
+
+The window opens on the Windows desktop through WSLg.
 
 ## Windows `node` and `npm` are on the WSL PATH
 
