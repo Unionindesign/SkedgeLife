@@ -1,11 +1,15 @@
 import React from "react";
-import { View, Text, Image, ScrollView, StyleSheet, Linking, type TextStyle, type ViewStyle } from "react-native";
+import { View, Text, Image, ScrollView, StyleSheet, Linking, Pressable, type TextStyle, type ViewStyle } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getSkin } from "@skedgelife/skins";
+import type { MainStackParamList } from "../navigation/RootNavigator";
 import { useProfile } from "../data/ProfileProvider";
 import ProfileStatus from "../components/ProfileStatus";
 import { imageSource } from "../lib/images";
 
 export default function InstructorProfileScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const { state, reload } = useProfile();
   if (state.status === "error") return <ProfileStatus status="error" message={state.message} onRetry={reload} />;
   if (state.status !== "ready") return <ProfileStatus status={state.status} />;
@@ -25,10 +29,13 @@ export default function InstructorProfileScreen() {
     return source ? [{ id: g.id, source }] : [];
   });
   const hasContact = Boolean(profile.contact_email || profile.contact_phone || profile.instagram_handle);
+  const teachingCount = profile.teaches
+    ? profile.specialties.length + profile.certifications.length + profile.service_modalities.length +
+      profile.private_session_types.length
+    : 0;
   const hasContent =
     Boolean(profile.bio_short || profile.bio_long) ||
-    profile.specialties.length + profile.certifications.length + profile.service_modalities.length +
-      profile.private_session_types.length + profile.testimonials.length + gallery.length > 0 ||
+    teachingCount + profile.interests.length + profile.testimonials.length + gallery.length > 0 ||
     hasContact;
 
   return (
@@ -41,6 +48,12 @@ export default function InstructorProfileScreen() {
         {headshot ? <Image source={headshot} style={styles.headshot} /> : null}
         <Text style={[styles.name, { color: skin.colors.headingText }, accentFont]}>{profile.display_name}</Text>
         {profile.bio_short ? <Text style={styles.bioShort}>{profile.bio_short}</Text> : null}
+        <Pressable
+          onPress={() => navigation.navigate("EditProfile")}
+          style={[styles.editButton, { borderColor: skin.colors.accent }]}
+        >
+          <Text style={[styles.editText, { color: skin.colors.accent }]}>Edit profile</Text>
+        </Pressable>
       </View>
 
       {profile.bio_long ? (
@@ -51,10 +64,22 @@ export default function InstructorProfileScreen() {
       ) : null}
 
       {!hasContent ? (
-        <Text style={styles.emptyHint}>Your page is ready. Editing your bio, schedule, and more is coming soon.</Text>
+        <Text style={styles.emptyHint}>Your page is ready. Tap Edit profile to add your bio, interests, and contact details.</Text>
       ) : null}
 
-      {profile.specialties.length > 0 ? (
+      {profile.interests.length > 0 ? (
+        <Section title="Interests" titleStyle={headingFont}>
+          <View style={styles.tagRow}>
+            {profile.interests.map((i) => (
+              <View key={i} style={[styles.tag, styles.interestTag, { borderColor: skin.colors.accent }]}>
+                <Text style={[styles.interestText, { color: skin.colors.accent }]}>{i}</Text>
+              </View>
+            ))}
+          </View>
+        </Section>
+      ) : null}
+
+      {profile.teaches && profile.specialties.length > 0 ? (
         <Section title="Specialties" titleStyle={headingFont}>
           <View style={styles.tagRow}>
             {profile.specialties.map((s) => (
@@ -66,7 +91,7 @@ export default function InstructorProfileScreen() {
         </Section>
       ) : null}
 
-      {profile.certifications.length > 0 ? (
+      {profile.teaches && profile.certifications.length > 0 ? (
         <Section title="Certifications" titleStyle={headingFont}>
           {profile.certifications.map((c) => (
             <Text key={c} style={styles.bodyText}>
@@ -76,7 +101,7 @@ export default function InstructorProfileScreen() {
         </Section>
       ) : null}
 
-      {profile.service_modalities.length > 0 ? (
+      {profile.teaches && profile.service_modalities.length > 0 ? (
         <Section title="Services" titleStyle={headingFont}>
           {profile.service_modalities.map((m) => (
             <View key={m.id} style={{ marginBottom: 10 }}>
@@ -87,7 +112,7 @@ export default function InstructorProfileScreen() {
         </Section>
       ) : null}
 
-      {profile.private_session_types.length > 0 ? (
+      {profile.teaches && profile.private_session_types.length > 0 ? (
         <Section title="Privates" titleStyle={headingFont}>
           {profile.private_session_types.map((p) => (
             <View key={p.id} style={{ marginBottom: 10 }}>
@@ -175,5 +200,9 @@ const styles = StyleSheet.create({
   galleryRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   galleryImage: { width: 100, height: 100, borderRadius: 8, marginRight: 8, marginBottom: 8 },
   contactSection: { paddingBottom: 40 },
+  editButton: { alignSelf: "center", marginTop: 14, borderWidth: 1, borderRadius: 18, paddingHorizontal: 16, paddingVertical: 6 },
+  editText: { fontSize: 14, fontWeight: "600" },
+  interestTag: { backgroundColor: "transparent", borderWidth: 1 },
+  interestText: { fontSize: 12 },
   emptyHint: { paddingHorizontal: 20, paddingVertical: 16, fontSize: 14, color: "#666", textAlign: "center" },
 });

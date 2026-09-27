@@ -19,7 +19,8 @@ export function ProfileProvider({ userId, children }: { userId: string; children
 
   useEffect(() => {
     let cancelled = false;
-    setState({ status: "loading" });
+    // On a refresh (e.g. after saving edits), keep showing the current profile until the new one arrives.
+    setState((prev) => (prev.status === "ready" ? prev : { status: "loading" }));
     getProfilePage(supabase, { id: userId })
       .then((profile) => {
         if (!cancelled) setState(profile ? { status: "ready", profile } : { status: "not-found" });

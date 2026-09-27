@@ -34,6 +34,14 @@ A short entry for each working session. Newest first. Decision rationale goes in
   - The tabs show the signed-in user's own profile; the hard-coded demo handle is gone. Empty profile sections are hidden, with a "your page is ready" note on new profiles.
   - Local minimum password length raised to 8.
   - Decisions logged (email + password first, confirmation off until launch; welcome screen then your own profile). TODO rows added for the hosted dashboard settings and a real email service before launch.
+  - Merged as PR #86.
+- Hosted project linked and both migrations pushed; closed #82. Closed #26 (done in #85).
+- Branch `feature/profile-editing` (part of #12):
+  - **Edit profile** screen, opened from the profile page as a modal: name, short bio, about, interests, an "I teach" switch revealing specialties and certifications, contact details, and a skin picker. Character counters match the database limits; Save is enabled only when something changed and everything is valid.
+  - Reusable `TagEditor` (add with return or Add, remove with ×, no duplicates, up to 20).
+  - `updateProfile()` in `packages/data`, limited to the columns users may edit.
+  - The profile page shows interests, and only shows teaching sections when "I teach" is on. Saving refreshes the page without a spinner flash.
+  - Photos (headshot, logo, gallery), services/privates/testimonials editors, schedule editing, and rates come in later PRs.
 
 ## 2026-09-24
 
