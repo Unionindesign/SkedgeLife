@@ -156,7 +156,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "is_handle_available":
+            "gallery_limit":
+{ Args: { "plan": string }; Returns: number
+                           },
+"is_handle_available":
 { Args: { "h": string }; Returns: boolean
                            },
 "is_reserved_handle":
