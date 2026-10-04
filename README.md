@@ -8,7 +8,7 @@ Instructors pick a **skin**, a pre-built color and font pairing, so their page f
 
 ## What works today
 
-The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, handle, email, and password (or log in), and the three tabs show your own profile. Editing your profile from the app is next; locally, a seeded account shows what a full instructor profile looks like (see `docs/dev/supabase.md`).
+The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, handle, email, and password (or log in), and the three tabs show your own profile. Tap **Edit profile** to fill in your bio, interests, teaching details, and contact info, and to pick a skin. Locally, a seeded account shows what a full instructor profile looks like (see `docs/dev/supabase.md`).
 
 - **Profile**: your mini-site. Bio, specialties, certifications, services, private sessions, testimonials, photo gallery, and contact links, styled with your skin. Empty sections stay hidden.
 - **Schedule**: class times grouped by studio, with links out to each studio's booking page.

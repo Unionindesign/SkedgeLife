@@ -34,6 +34,28 @@ export async function getProfilePage(client: SkedgeLifeClient, lookup: ProfileLo
 
 export type ProfilePage = NonNullable<Awaited<ReturnType<typeof getProfilePage>>>;
 
+// The profile columns a user may edit; mirrors the column grants in the
+// profiles migration (plan and timestamps are not user-editable).
+export type ProfileEdits = Pick<
+  Database["public"]["Tables"]["profiles"]["Update"],
+  | "display_name"
+  | "bio_short"
+  | "bio_long"
+  | "interests"
+  | "teaches"
+  | "specialties"
+  | "certifications"
+  | "contact_email"
+  | "contact_phone"
+  | "instagram_handle"
+  | "skin"
+>;
+
+export async function updateProfile(client: SkedgeLifeClient, id: string, edits: ProfileEdits) {
+  const { error } = await client.from("profiles").update(edits).eq("id", id);
+  if (error) throw error;
+}
+
 // Checks format, reserved words, and whether the handle is taken.
 export async function isHandleAvailable(client: SkedgeLifeClient, handle: string) {
   const { data, error } = await client.rpc("is_handle_available", { h: handle });
