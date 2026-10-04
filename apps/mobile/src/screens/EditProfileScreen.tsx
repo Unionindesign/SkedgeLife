@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { updateProfile, type ProfileEdits, type ProfilePage } from "@skedgelife/data";
-import { getSkin, skins } from "@skedgelife/skins";
+import { getSkin } from "@skedgelife/skins";
 import type { MainStackParamList } from "../navigation/RootNavigator";
 import { useProfile } from "../data/ProfileProvider";
 import ProfileStatus from "../components/ProfileStatus";
 import TagEditor from "../components/TagEditor";
+import Field, { formStyles } from "../components/Field";
+import ImageField from "../components/ImageField";
 import { supabase } from "../lib/supabase";
 import { errorMessage } from "../lib/errors";
 
@@ -34,7 +36,6 @@ function toForm(p: ProfilePage) {
     contact_email: p.contact_email ?? "",
     contact_phone: p.contact_phone ?? "",
     instagram_handle: p.instagram_handle ?? "",
-    skin: p.skin,
   };
 }
 
@@ -54,7 +55,6 @@ function toEdits(f: Form): ProfileEdits {
     contact_email: text(f.contact_email),
     contact_phone: text(f.contact_phone),
     instagram_handle: text(f.instagram_handle),
-    skin: f.skin,
   };
 }
 
@@ -65,7 +65,7 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
   const [error, setError] = useState<string | null>(null);
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) => setForm((f) => ({ ...f, [key]: value }));
-  const accent = getSkin(form.skin).colors.accent;
+  const accent = getSkin(profile.skin).colors.accent;
 
   const changed = JSON.stringify(form) !== JSON.stringify(initial);
   const valid =
@@ -89,14 +89,25 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={formStyles.container} keyboardShouldPersistTaps="handled">
+      <ImageField
+        userId={profile.id}
+        kind="avatar"
+        path={profile.avatar_url}
+        onSave={async (avatar_url) => {
+          await updateProfile(supabase, profile.id, { avatar_url });
+          onSaved();
+        }}
+      />
+      <Text style={styles.photoHint}>Photo changes save right away.</Text>
+
       <Field label="Name" count={form.display_name.length} max={LIMITS.displayName}>
-        <TextInput style={styles.input} value={form.display_name} onChangeText={(v) => set("display_name", v)} />
+        <TextInput style={formStyles.input} value={form.display_name} onChangeText={(v) => set("display_name", v)} />
       </Field>
 
       <Field label="Short bio" hint="One or two lines under your name." count={form.bio_short.length} max={LIMITS.bioShort}>
         <TextInput
-          style={[styles.input, styles.multiline]}
+          style={[formStyles.input, formStyles.multiline]}
           value={form.bio_short}
           onChangeText={(v) => set("bio_short", v)}
           multiline
@@ -105,7 +116,7 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
 
       <Field label="About you" count={form.bio_long.length} max={LIMITS.bioLong}>
         <TextInput
-          style={[styles.input, styles.multilineTall]}
+          style={[formStyles.input, formStyles.multilineTall]}
           value={form.bio_long}
           onChangeText={(v) => set("bio_long", v)}
           multiline
@@ -118,8 +129,8 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
 
       <View style={styles.switchRow}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.label}>I teach classes or sessions</Text>
-          <Text style={styles.hint}>Shows your specialties, certifications, and services on your page.</Text>
+          <Text style={formStyles.label}>I teach classes or sessions</Text>
+          <Text style={formStyles.hint}>Shows your specialties, certifications, and services on your page.</Text>
         </View>
         <Switch value={form.teaches} onValueChange={(v) => set("teaches", v)} />
       </View>
@@ -140,10 +151,10 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
         </>
       ) : null}
 
-      <Text style={styles.sectionHeading}>Contact</Text>
+      <Text style={formStyles.sectionHeading}>Contact</Text>
       <Field label="Email">
         <TextInput
-          style={styles.input}
+          style={formStyles.input}
           value={form.contact_email}
           onChangeText={(v) => set("contact_email", v)}
           autoCapitalize="none"
@@ -151,11 +162,11 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
         />
       </Field>
       <Field label="Phone">
-        <TextInput style={styles.input} value={form.contact_phone} onChangeText={(v) => set("contact_phone", v)} keyboardType="phone-pad" />
+        <TextInput style={formStyles.input} value={form.contact_phone} onChangeText={(v) => set("contact_phone", v)} keyboardType="phone-pad" />
       </Field>
       <Field label="Instagram">
         <TextInput
-          style={styles.input}
+          style={formStyles.input}
           value={form.instagram_handle}
           onChangeText={(v) => set("instagram_handle", v)}
           autoCapitalize="none"
@@ -163,83 +174,15 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
         />
       </Field>
 
-      <Text style={styles.sectionHeading}>Look</Text>
-      <View style={styles.skinRow}>
-        {Object.values(skins).map((skin) => {
-          const selected = skin.id === form.skin;
-          return (
-            <Pressable
-              key={skin.id}
-              onPress={() => set("skin", skin.id)}
-              style={[styles.skinCard, selected && { borderColor: skin.colors.accent, borderWidth: 2 }]}
-              accessibilityRole="radio"
-              accessibilityState={{ selected }}
-            >
-              <View style={styles.swatches}>
-                {[skin.colors.header, skin.colors.accent, skin.colors.cardBackground].map((c) => (
-                  <View key={c} style={[styles.swatch, { backgroundColor: c }]} />
-                ))}
-              </View>
-              <Text style={styles.skinLabel}>{skin.label}</Text>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Pressable style={[styles.saveButton, !canSave && styles.disabled]} disabled={!canSave} onPress={save}>
-        <Text style={styles.saveText}>{saving ? "Saving…" : "Save"}</Text>
+      {error ? <Text style={formStyles.error}>{error}</Text> : null}
+      <Pressable style={[formStyles.primaryButton, !canSave && formStyles.disabled]} disabled={!canSave} onPress={save}>
+        <Text style={formStyles.primaryText}>{saving ? "Saving…" : "Save"}</Text>
       </Pressable>
     </ScrollView>
   );
 }
 
-function Field({
-  label,
-  hint,
-  count,
-  max,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  count?: number;
-  max?: number;
-  children: React.ReactNode;
-}) {
-  const over = count !== undefined && max !== undefined && count > max;
-  return (
-    <View style={styles.field}>
-      <View style={styles.labelRow}>
-        <Text style={styles.label}>{label}</Text>
-        {max !== undefined ? <Text style={[styles.count, over && styles.over]}>{`${count}/${max}`}</Text> : null}
-      </View>
-      {hint ? <Text style={styles.hint}>{hint}</Text> : null}
-      {children}
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  container: { padding: 20, paddingBottom: 48, backgroundColor: "#fff" },
-  field: { marginBottom: 18 },
-  labelRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 },
-  label: { fontSize: 14, fontWeight: "600", color: "#333" },
-  hint: { fontSize: 12, color: "#777", marginBottom: 6 },
-  count: { fontSize: 12, color: "#999" },
-  over: { color: "#b3261e", fontWeight: "600" },
-  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 8, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16 },
-  multiline: { minHeight: 64, textAlignVertical: "top" },
-  multilineTall: { minHeight: 140, textAlignVertical: "top" },
+  photoHint: { fontSize: 12, color: "#777", textAlign: "center", marginTop: -10, marginBottom: 20 },
   switchRow: { flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 18 },
-  sectionHeading: { fontSize: 18, fontWeight: "700", marginTop: 8, marginBottom: 12, color: "#2f2f2f" },
-  skinRow: { flexDirection: "row", gap: 12, flexWrap: "wrap" },
-  skinCard: { width: 140, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: "#ddd" },
-  swatches: { flexDirection: "row", gap: 4, marginBottom: 8 },
-  swatch: { width: 32, height: 32, borderRadius: 6 },
-  skinLabel: { fontSize: 14, fontWeight: "600" },
-  error: { color: "#b3261e", fontSize: 14, marginTop: 16 },
-  saveButton: { marginTop: 24, backgroundColor: "#2f2f2f", borderRadius: 8, paddingVertical: 14, alignItems: "center" },
-  saveText: { color: "#fff", fontSize: 16, fontWeight: "600" },
-  disabled: { opacity: 0.4 },
 });
