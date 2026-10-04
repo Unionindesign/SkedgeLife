@@ -2,6 +2,15 @@
 
 A short entry for each working session. Newest first. Decision rationale goes in `docs/DECISIONS.md`; this file just records what changed.
 
+## 2026-10-03
+
+- PR #87 (Edit profile) merged.
+- Phone preview working: Expo Go against the hosted Supabase project. The hosted project had paused after a week idle (free plan) and was restored.
+- Product direction: SkedgeLife is a scheduling app first. Added `docs/plans/2026-10-03-scheduling-events-and-bookings.md`: events with real times and places, discovery by area, time, and interests, RSVPs and paid bookings, Calendly-style appointments on the paid plan, a map provider comparison, and five proposed phases.
+- New rules in `docs/rules/`: `time.md` (UTC `timestamptz`, IANA zones, ISO 8601, local display), `database.md`, `code.md`, `milestones.md`, plus a `README.md` index. `CLAUDE.md` links them.
+- Decisions: scheduling-first direction, the time rule, free-plan caps (3 weekly recurring events, 1 larger group event a month), free RSVPs, optional address hiding for home events, Mapbox.
+- TODO: marked phone preview and hosted `.env` done; added rows for the plan's open questions, Mapbox tokens, an EAS development build, and upgrading Supabase before launch.
+
 ## 2026-09-26
 
 - Added `CLAUDE.md` and `docs/rules/` (`pull-requests.md`, `model-selection.md`) so a new session can pick up the working rules without the prior conversation: where things live, the session-start routine, no-stacked-PRs, never pushing feature work to `main`, pre-push checks, and when to suggest switching models. Pushed straight to `main` (docs-only, user OK'd).

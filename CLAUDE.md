@@ -27,6 +27,10 @@ Check these before starting anything — most "is this decided yet / has this be
 
 - **[docs/rules/pull-requests.md](docs/rules/pull-requests.md)** — branching, no stacked PRs, never pushing feature work to `main`, and what to run before pushing.
 - **[docs/rules/model-selection.md](docs/rules/model-selection.md)** — when to suggest the user switch models.
+- **[docs/rules/time.md](docs/rules/time.md)** — UTC `timestamptz` for moments, an IANA zone on every event, ISO 8601 with `Z` on the wire, local display only at the edge.
+- **[docs/rules/database.md](docs/rules/database.md)** — migrations, row-level security, where queries live, and leaving the hosted project to the user.
+- **[docs/rules/code.md](docs/rules/code.md)** — patterns already used in the mobile app.
+- **[docs/rules/milestones.md](docs/rules/milestones.md)** — how to take on a whole milestone: plan first, one PR at a time, stop on real decisions.
 
 ## Security (non-negotiable)
 
