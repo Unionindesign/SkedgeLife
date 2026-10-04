@@ -8,11 +8,15 @@ Instructors pick a **skin**, a pre-built color and font pairing, so their page f
 
 ## What works today
 
-The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, handle, email, and password (or log in), and the three tabs show your own profile. Tap **Edit profile** to fill in your bio, interests, teaching details, and contact info, and to pick a skin. Locally, a seeded account shows what a full instructor profile looks like (see `docs/dev/supabase.md`).
+The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, handle, email, and password (or log in). The app has three tabs, and opens on Profile. Locally, a seeded account shows what a full instructor page looks like (see `docs/dev/supabase.md`).
 
-- **Profile**: your mini-site. Bio, specialties, certifications, services, private sessions, testimonials, photo gallery, and contact links, styled with your skin. Empty sections stay hidden.
-- **Schedule**: class times grouped by studio, with links out to each studio's booking page.
-- **Sequence Builder**: plan a class by dragging poses into order, setting durations and sides, and adding a quote and playlist link. Export the result as a printable PDF card.
+- **Profile**: your profile in the app: photo, name, bios, interests, teaching details, and contact links. Tap **Edit profile** to change them; photos are compressed on the phone before upload.
+- **Website**: manage your website's content.
+  - **Look:** logo and skin.
+  - **Services, Private sessions, Testimonials:** add, edit, delete, and drag to reorder.
+  - **Gallery:** 3 photos on the free plan, 30 on paid.
+  - **Preview** shows the full page with your skin, as visitors will see it once public pages launch.
+- **Schedule**: class times grouped by studio, with links out to each studio's booking page. If you teach, the **Sequence Builder** opens from here: drag poses into order, set durations and sides, add a quote and playlist link, and export a printable PDF card.
 
 ## In the works
 
@@ -68,14 +72,16 @@ An npm workspaces monorepo. Run `npm install` once at the root.
 ```
 apps/
   mobile/              Expo app (entry: index.ts -> App.tsx)
-    src/navigation/    bottom tabs: Profile / Schedule / Sequence Builder
-    src/screens/       the three screens
+    src/navigation/    bottom tabs (Schedule / Profile / Website) and the screens they open
+    src/screens/       Profile, Schedule, Edit profile, Sequence Builder, website preview
+    src/screens/website/  Website tab and its editors (look, services, privates, testimonials, gallery)
+    src/components/    shared UI: the profile page, form fields, photo picker, tag editor
     src/data/          profile loading (ProfileProvider) and seed poses
-    src/lib/           Supabase client, bundled-image lookup
+    src/lib/           Supabase client, image picking and upload, image lookup
     assets/            seed photos and logo
   web/                 Next.js public pages (placeholder until the web phase)
 packages/
-  data/                shared Supabase queries (@skedgelife/data)
+  data/                shared Supabase queries, auth, and photo uploads (@skedgelife/data)
   types/               shared data types, incl. generated database types (@skedgelife/types)
   skins/               skin colors and fonts (@skedgelife/skins)
 supabase/              local Supabase: config, SQL migrations, seed data

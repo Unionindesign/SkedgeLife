@@ -2,6 +2,20 @@
 
 A short entry for each working session. Newest first. Decision rationale goes in `docs/DECISIONS.md`; this file just records what changed.
 
+## 2026-10-04
+
+- Branch `feature/self-serve-editing` (milestone "Foundation: Auth & Self-Serve Editing"; plan `docs/plans/2026-10-03-foundation-self-serve-editing.md`). The first PR built with the plan-then-one-branch workflow.
+  - **Tabs are now Schedule · Profile · Website**, with icons, opening on Profile. The Sequence Builder moved off the tab bar to a "Sequences" button on Schedule (shown when "I teach" is on).
+  - **Profile vs Website:** the Profile tab shows the ordinary profile. Logo, services, privates, testimonials, and gallery moved to the new Website tab, which lists each section with an editor and has a full-page **Preview** with the skin.
+  - **Photos:** profile photo (Edit profile), logo (Website → Look), and gallery, picked from the library or camera, resized and compressed on the phone (`expo-image-picker`, `expo-image-manipulator`), and uploaded to a new `profile-media` storage bucket. Photo columns store storage paths; replaced or deleted photos remove their files.
+  - **Editors:** one list editor for services, private sessions, and testimonials (add, edit, delete, drag to reorder); gallery editor with captions, reorder, delete, and a "3 of 3 photos" limit with an upgrade note. The skin picker moved from Edit profile to Website → Look.
+  - **Database** (migration `profile_media_and_limits`): storage bucket and owner-only file policies; gallery limit by plan (free 3, paid 30) enforced by a trigger; length limits on services, privates, testimonials, and captions. The seed profile is now on the paid plan.
+  - **`packages/data`:** split into `auth`, `content`, and `media` modules: sign-up, log-in, log-out, content add/update/delete/reorder, photo upload, removal, and URLs.
+  - **#14:** sign-in functions shared in `packages/data`; `docs/dev/auth.md` explains how the web app will share accounts; local auth redirect URLs point at the Next.js dev server.
+  - `expo` patch bump to 57.0.26 so `expo-doctor` passes.
+- Closed #11 (done in #86) and #13 (superseded by #93). Filed milestone "Scheduling 1: Real times" (#90–#95) and created milestones for scheduling phases 2–5. Unblocked #94: a larger group event is capacity over 20 or no cap.
+- Decisions: free-plan photo limits, no caps on text sections, owner-entered testimonials, the new tab layout, the larger-event definition, and photos saving right away.
+
 ## 2026-10-03
 
 - PR #87 (Edit profile) merged.

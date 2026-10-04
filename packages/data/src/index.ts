@@ -1,7 +1,10 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@skedgelife/types";
+import type { SkedgeLifeClient } from "./client";
 
-export type SkedgeLifeClient = SupabaseClient<Database>;
+export type { SkedgeLifeClient } from "./client";
+export * from "./auth";
+export * from "./content";
+export * from "./media";
 
 const PROFILE_PAGE_SELECT = `
   *,
@@ -49,16 +52,11 @@ export type ProfileEdits = Pick<
   | "contact_phone"
   | "instagram_handle"
   | "skin"
+  | "avatar_url"
+  | "logo_url"
 >;
 
 export async function updateProfile(client: SkedgeLifeClient, id: string, edits: ProfileEdits) {
   const { error } = await client.from("profiles").update(edits).eq("id", id);
   if (error) throw error;
-}
-
-// Checks format, reserved words, and whether the handle is taken.
-export async function isHandleAvailable(client: SkedgeLifeClient, handle: string) {
-  const { data, error } = await client.rpc("is_handle_available", { h: handle });
-  if (error) throw error;
-  return data;
 }
