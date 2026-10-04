@@ -2,21 +2,23 @@
 
 Linked from [CLAUDE.md](../../CLAUDE.md).
 
-## No stacked PRs
+## One feature branch per piece of work
 
-Branch each PR from `main`, and only after the previous PR has merged into `main`. Don't branch a new feature off another unmerged feature branch.
+Plans, docs, migrations, backend, and frontend for a feature or milestone all land on **one feature branch and one PR**, so the user reviews the whole thing once. The workflow is in [milestones.md](milestones.md). Split into more than one PR only when it's clearly better (for example, one part is needed sooner, or the PR would be too big to review), and say why.
 
-This is a hard lesson, not a style preference: PRs #81 and #83 were stacked and ended up merging into each other's branches instead of `main`, which needed a catch-up PR (#84) to untangle. One feature branch open at a time avoids it.
+## Stacked PRs are allowed, with care
 
-Practical effect: if a PR is open, that's the work in progress. Don't start the next slice on a new branch until it merges — pick up something else that doesn't touch code (docs, planning, GitHub triage) or wait.
+Stacking (branching from an unmerged feature branch) is fine when it's the best option. Before #84, PRs #81 and #83 were stacked and merged into each other's branches instead of `main`, which took a catch-up PR to untangle. So:
 
-`Closes #N` in a PR description only fires on merge into `main`. It does nothing on merge into another branch, which is one more reason stacking causes silent damage — issues quietly stay open.
+- Say in each PR description what it's stacked on, and the merge order.
+- When the lower PR merges, retarget the upper PR to `main` (`gh pr edit <n> --base main`) before it merges.
+- `Closes #N` only fires on merge into `main`. A stacked PR that merges into another branch leaves its issues open; close them by hand if that happens.
 
 ## Never push feature work straight to `main`
 
 All code changes go through a feature branch and a PR for review, no exceptions.
 
-**Docs-only changes** (this file, `CLAUDE.md`, `docs/*`) may go straight to `main`, but only when the user explicitly says so for that specific change. Default to a PR even for docs unless told otherwise.
+**Docs-only changes** (this file, `CLAUDE.md`, `docs/*`) may go straight to `main` when the user explicitly says so for that change. Plans don't need a PR at all; see [milestones.md](milestones.md).
 
 ## Before opening or updating a PR
 

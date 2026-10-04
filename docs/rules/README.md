@@ -6,9 +6,9 @@ When existing code breaks a rule, the rule lists it under "Known gaps", and an i
 
 | Rule | Summary |
 |---|---|
-| [Pull requests](pull-requests.md) | Branch from `main`, no stacked PRs, checks to run before pushing. |
+| [Pull requests](pull-requests.md) | One feature branch per piece of work, stacking with care, checks to run before pushing. |
 | [Model selection](model-selection.md) | When to suggest a lighter or heavier model. |
 | [Time](time.md) | UTC `timestamptz` for moments, an IANA zone on every event, ISO 8601 on the wire, local display. |
 | [Database](database.md) | Migrations, row-level security, queries in `packages/data`, hosted project left to the user. |
 | [Code](code.md) | Patterns already used in the mobile app. |
-| [Milestones](milestones.md) | Taking on a whole milestone: plan first, one PR at a time. |
+| [Planning and larger tasks](milestones.md) | Uncommitted plan for review, then one branch and one PR with everything. |

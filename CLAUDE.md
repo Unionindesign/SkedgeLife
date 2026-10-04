@@ -19,18 +19,18 @@ Check these before starting anything — most "is this decided yet / has this be
 ## Start of a new session
 
 1. `git status` and `git branch --show-current` — check for uncommitted work or an open feature branch before doing anything else.
-2. `gh pr list` — if a PR is already open, that's the work in progress; don't start something new on top of it (see the pull request rules).
+2. `gh pr list` — if a PR is already open, that's the work in progress. Start something new on top of it only as a deliberate stack (see the pull request rules).
 3. Skim the top of `docs/CHANGELOG.md` and the `Open`/`In progress` rows in `docs/TODO.md`.
 4. Pick up the next issue, or ask the user which one.
 
 ## Working rules
 
-- **[docs/rules/pull-requests.md](docs/rules/pull-requests.md)** — branching, no stacked PRs, never pushing feature work to `main`, and what to run before pushing.
+- **[docs/rules/pull-requests.md](docs/rules/pull-requests.md)** — one feature branch per piece of work, stacking with care, never pushing feature work to `main`, and what to run before pushing.
 - **[docs/rules/model-selection.md](docs/rules/model-selection.md)** — when to suggest the user switch models.
 - **[docs/rules/time.md](docs/rules/time.md)** — UTC `timestamptz` for moments, an IANA zone on every event, ISO 8601 with `Z` on the wire, local display only at the edge.
 - **[docs/rules/database.md](docs/rules/database.md)** — migrations, row-level security, where queries live, and leaving the hosted project to the user.
 - **[docs/rules/code.md](docs/rules/code.md)** — patterns already used in the mobile app.
-- **[docs/rules/milestones.md](docs/rules/milestones.md)** — how to take on a whole milestone: plan first, one PR at a time, stop on real decisions.
+- **[docs/rules/milestones.md](docs/rules/milestones.md)** — the workflow: an uncommitted plan the user reviews, then on greenlight one feature branch and one PR with everything (plan, database, backend, frontend, docs).
 
 ## Security (non-negotiable)
 

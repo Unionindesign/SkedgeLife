@@ -9,6 +9,9 @@ A short entry for each working session. Newest first. Decision rationale goes in
 - Product direction: SkedgeLife is a scheduling app first. Added `docs/plans/2026-10-03-scheduling-events-and-bookings.md`: events with real times and places, discovery by area, time, and interests, RSVPs and paid bookings, Calendly-style appointments on the paid plan, a map provider comparison, and five proposed phases.
 - New rules in `docs/rules/`: `time.md` (UTC `timestamptz`, IANA zones, ISO 8601, local display), `database.md`, `code.md`, `milestones.md`, plus a `README.md` index. `CLAUDE.md` links them.
 - Decisions: scheduling-first direction, the time rule, free-plan caps (3 weekly recurring events, 1 larger group event a month), free RSVPs, optional address hiding for home events, Mapbox.
+- PR #89 (scheduling plan and rules) merged.
+- Workflow rules updated (pushed straight to `main`, user OK'd): plans are reviewed uncommitted, not as PRs; once approved, a feature or milestone lands as one branch and one PR covering plan, database, backend, frontend, and docs; stacked PRs are allowed with care (`docs/rules/milestones.md`, `docs/rules/pull-requests.md`).
+- Hosted Supabase minimum password length confirmed at 8.
 - TODO: marked phone preview and hosted `.env` done; added rows for the plan's open questions, Mapbox tokens, an EAS development build, and upgrading Supabase before launch.
 
 ## 2026-09-26
