@@ -1,6 +1,6 @@
 # Foundation: finish self-serve editing
 
-**Status:** Approved 2026-10-04. Milestone "Foundation: Auth & Self-Serve Editing". The first run of the workflow in `docs/rules/milestones.md`: after approval, everything below lands on one branch (`feature/self-serve-editing`) as one PR.
+**Status:** Approved and built 2026-10-04. Milestone "Foundation: Auth & Self-Serve Editing". The first run of the workflow in `docs/rules/milestones.md`: after approval, everything below lands on one branch (`feature/self-serve-editing`) as one PR.
 
 ## Goal
 
@@ -97,3 +97,10 @@ There's no web app yet (#15), so this is preparation, not wiring (that's #19):
 
 - `npx supabase db push` (creates the bucket, policies, and limits on the hosted project).
 - Restart Expo with `--clear`, and run through the phone checklist against the hosted project.
+
+## Built differently from the plan
+
+- **Photo changes save right away**, rather than with the form's Save button. This avoids orphaned uploads when someone backs out of a form.
+- **Sections are edited from the Website tab**, not from "Edit" links on the profile page. That follows the Profile/Website split agreed on 2026-10-04.
+- **The gallery editor is a list with thumbnails**, not a grid, because the drag-to-reorder library only supports lists.
+- **On the web build, the photo picker doesn't crop to a square**; the image is center-filled instead. Cropping works on the phone.
