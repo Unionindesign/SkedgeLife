@@ -52,6 +52,12 @@ Replace free-text class times ("5:30pm Hot Ra") with events at real times and pl
 6. **A new place's zone** defaults to the device's zone, with a short list to change it. Phase 2 fills it in from the map location.
 7. **Migrated classes default to 60 minutes and `America/Los_Angeles`** (every current host is in Southern California).
 
+## Built differently from the plan
+
+- **Sequences moved to the left of the Schedule header** to make room for the **+** (add event) button on the right.
+- **A free host hears about the weekly cap first:** the form puts that message before any field problems. Small one-offs that would overfill a week are refused by the database, and its message is shown.
+- **Expo SDK patch updates** came along, as in #96, so `expo-doctor` passes.
+
 ## After merging
 
 - `npx supabase db push` (both migrations), then reload the app.
