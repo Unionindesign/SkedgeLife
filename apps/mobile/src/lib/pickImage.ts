@@ -4,7 +4,7 @@ import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 import { uploadProfileImage } from "@skedgelife/data";
 import { supabase } from "./supabase";
 
-export type ImageKind = "avatar" | "logo" | "gallery";
+export type ImageKind = "avatar" | "logo" | "gallery" | "backdrop";
 
 // Originals run 1-17 MB, and Supabase only transforms images on its paid
 // plan, so images are resized and compressed on the phone before upload.
@@ -13,6 +13,8 @@ const SETTINGS: Record<ImageKind, { maxSide: number; square: boolean; format: Sa
   // PNG keeps logo transparency.
   logo: { maxSide: 800, square: false, format: SaveFormat.PNG },
   gallery: { maxSide: 1600, square: false, format: SaveFormat.JPEG },
+  // Section and screen backgrounds, shown full width.
+  backdrop: { maxSide: 1600, square: false, format: SaveFormat.JPEG },
 };
 
 type Source = "library" | "camera";

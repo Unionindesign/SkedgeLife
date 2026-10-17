@@ -23,6 +23,7 @@
     "@skedgelife/data": "*",
     "@skedgelife/skins": "*",
     "@skedgelife/types": "*",
+    "@skedgelife/ui": "*",
     "@supabase/supabase-js": "^2.109.0",
     "expo": "~57.0.30",
     "expo-asset": "~57.0.18",

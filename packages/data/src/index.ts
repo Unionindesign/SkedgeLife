@@ -55,6 +55,7 @@ export type ProfileEdits = Pick<
   | "skin"
   | "avatar_url"
   | "logo_url"
+  | "testimonials_background_url"
 >;
 
 export async function updateProfile(client: SkedgeLifeClient, id: string, edits: ProfileEdits) {

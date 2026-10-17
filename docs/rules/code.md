@@ -5,7 +5,7 @@ Linked from [CLAUDE.md](../../CLAUDE.md). Match the code around you; these are t
 - TypeScript throughout; React function components; `StyleSheet.create` at the bottom of the file.
 - Styling comes from the profile's skin (`getSkin(profile.skin)` from `@skedgelife/skins`). Don't hard-code colors a skin should own.
 - Profile data comes from `useProfile()` (`ProfileProvider`). Screens handle its loading, error, and not-found states with `ProfileStatus`.
-- Shared UI goes in `apps/mobile/src/components/`. Errors shown to users go through `errorMessage()` in `src/lib/errors.ts`.
+- Shared UI goes in `apps/mobile/src/components/`. Building blocks the website will reuse (and the future component library, #98) go in `packages/ui`: plain React Native, no app imports, working on the phone and the web build. A parallax background behind any screen is `<ParallaxScrollView backdrop={image}>`; a band with its own moving background is `<ParallaxSection image={image}>` inside one. Errors shown to users go through `errorMessage()` in `src/lib/errors.ts`.
 - Empty optional text is saved as `null`, and empty profile sections are hidden.
 - Keep editing flows short, in line with "minutes, not months" (see `docs/DECISIONS.md`). When in doubt, leave a field out and note it as a follow-up.
 - Comments are sparse and explain *why*, not *what*.

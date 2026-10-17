@@ -8,19 +8,19 @@ import { errorMessage } from "../lib/errors";
 
 type Props = {
   userId: string;
-  kind: "avatar" | "logo";
+  kind: "avatar" | "logo" | "backdrop";
   path: string | null;
   // Saves the new path (or null to remove) to the profile.
   onSave: (path: string | null) => Promise<void>;
 };
 
-// A profile photo or logo with Change and Remove. Changes save right away,
+// A profile photo, logo, or background photo with Change and Remove. Changes save right away,
 // and the replaced file is deleted once the new one is saved.
 export default function ImageField({ userId, kind, path, onSave }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const source = imageSource(path);
-  const isAvatar = kind === "avatar";
+  const noun = { avatar: "photo", logo: "logo", backdrop: "background" }[kind];
 
   const run = async (task: () => Promise<void>) => {
     setBusy(true);
@@ -55,11 +55,11 @@ export default function ImageField({ userId, kind, path, onSave }: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.frame, isAvatar ? styles.avatar : styles.logo]}>
+      <View style={[styles.frame, styles[kind]]}>
         {source ? (
-          <Image source={source} style={styles.image} resizeMode={isAvatar ? "cover" : "contain"} />
+          <Image source={source} style={styles.image} resizeMode={kind === "logo" ? "contain" : "cover"} />
         ) : (
-          <Text style={styles.placeholder}>{isAvatar ? "No photo" : "No logo"}</Text>
+          <Text style={styles.placeholder}>No {noun}</Text>
         )}
         {busy ? (
           <View style={styles.busy}>
@@ -69,7 +69,7 @@ export default function ImageField({ userId, kind, path, onSave }: Props) {
       </View>
       <View style={styles.actions}>
         <Pressable onPress={change} disabled={busy} style={[styles.button, styles.outlined, busy && styles.disabled]}>
-          <Text style={styles.buttonText}>{source ? "Change" : isAvatar ? "Add photo" : "Add logo"}</Text>
+          <Text style={styles.buttonText}>{source ? "Change" : `Add ${noun}`}</Text>
         </Pressable>
         {path ? (
           <Pressable onPress={remove} disabled={busy} style={[styles.button, busy && styles.disabled]}>
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   frame: { backgroundColor: "#eee", alignItems: "center", justifyContent: "center", overflow: "hidden" },
   avatar: { width: 120, height: 120, borderRadius: 60 },
   logo: { width: 240, height: 90, borderRadius: 8 },
+  backdrop: { width: 280, height: 158, borderRadius: 8 },
   image: { width: "100%", height: "100%" },
   placeholder: { color: "#888", fontSize: 13 },
   busy: { position: "absolute", top: 0, right: 0, bottom: 0, left: 0, backgroundColor: "rgba(0,0,0,0.35)", alignItems: "center", justifyContent: "center" },

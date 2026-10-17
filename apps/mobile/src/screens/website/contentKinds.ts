@@ -5,7 +5,7 @@ export type ContentKind = "services" | "privates" | "testimonials";
 type FieldConfig = {
   key: string;
   label: string;
-  // Matches the length checks in the profile_media_and_limits migration.
+  // Matches the length checks in the profile_media_and_limits and testimonials_background migrations.
   max: number;
   required?: boolean;
   multiline?: boolean;
@@ -57,7 +57,7 @@ export const CONTENT_KINDS: Record<ContentKind, KindConfig> = {
     singular: "testimonial",
     emptyText: "Add kind words from students and clients. You choose which ones show on your page.",
     fields: [
-      { key: "quote", label: "Quote", max: 500, required: true, multiline: true },
+      { key: "quote", label: "Quote", max: 1000, required: true, multiline: true },
       { key: "author_name", label: "Name", max: 80, required: true },
       { key: "author_location", label: "Location", max: 80, nullable: true, placeholder: "Optional, e.g. Costa Mesa" },
     ],

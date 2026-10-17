@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text, Image, ScrollView, StyleSheet, Linking, Pressable, type TextStyle, type ViewStyle } from "react-native";
+import { View, Text, Image, StyleSheet, Linking, Pressable, type TextStyle, type ViewStyle } from "react-native";
 import type { ProfilePage as ProfilePageData } from "@skedgelife/data";
 import { getSkin } from "@skedgelife/skins";
+import { ParallaxScrollView } from "@skedgelife/ui";
 import { imageSource } from "../lib/images";
+import TestimonialsSection from "./TestimonialsSection";
 
 type Props = {
   profile: ProfilePageData;
@@ -43,7 +45,8 @@ export default function ProfilePage({ profile, variant, action, emptyHint }: Pro
     hasContact;
 
   return (
-    <ScrollView style={{ backgroundColor: skin.colors.background }} contentContainerStyle={styles.container}>
+    // A ParallaxScrollView so sections (testimonials, for now) can have moving backgrounds.
+    <ParallaxScrollView style={{ backgroundColor: skin.colors.background }} contentContainerStyle={styles.container}>
       {website ? (
         <View style={[styles.header, { backgroundColor: skin.colors.header }]}>
           {logo ? <Image source={logo} style={styles.logo} resizeMode="contain" /> : null}
@@ -127,17 +130,12 @@ export default function ProfilePage({ profile, variant, action, emptyHint }: Pro
       ) : null}
 
       {testimonials.length > 0 ? (
-        <Section title="Testimonials" titleStyle={headingFont}>
-          {testimonials.map((t) => (
-            <View key={t.id} style={{ marginBottom: 14 }}>
-              <Text style={styles.bodyText}>&ldquo;{t.quote}&rdquo;</Text>
-              <Text style={styles.testimonialAuthor}>
-                — {t.author_name}
-                {t.author_location ? `, ${t.author_location}` : ""}
-              </Text>
-            </View>
-          ))}
-        </Section>
+        <TestimonialsSection
+          testimonials={testimonials}
+          background={imageSource(profile.testimonials_background_url)}
+          skin={skin}
+          headingFont={headingFont}
+        />
       ) : null}
 
       {gallery.length > 0 ? (
@@ -161,7 +159,7 @@ export default function ProfilePage({ profile, variant, action, emptyHint }: Pro
           {profile.instagram_handle ? <Text style={styles.bodyText}>{profile.instagram_handle}</Text> : null}
         </Section>
       ) : null}
-    </ScrollView>
+    </ParallaxScrollView>
   );
 }
 
@@ -196,7 +194,6 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 8 },
   bodyText: { fontSize: 14, lineHeight: 20, color: "#333" },
   serviceTitle: { fontSize: 15, fontWeight: "600", marginBottom: 2 },
-  testimonialAuthor: { fontSize: 12, color: "#666", marginTop: 4 },
   tagRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   tag: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, marginRight: 8, marginBottom: 8 },
   tagText: { color: "#fff", fontSize: 12 },
