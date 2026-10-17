@@ -108,6 +108,47 @@ export function addDaysToDate(date: string, days: number): string {
   return `${t.getUTCFullYear()}-${pad(t.getUTCMonth() + 1)}-${pad(t.getUTCDate())}`;
 }
 
+// 0 = Sunday, for a wall-clock date.
+export function weekdayOf(date: string): number {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+}
+
+// The Sunday that starts the week containing `date`.
+export function startOfWeek(date: string): string {
+  return addDaysToDate(date, -weekdayOf(date));
+}
+
+// "2026-10-01" for any date in October 2026.
+export function startOfMonth(date: string): string {
+  return `${date.slice(0, 7)}-01`;
+}
+
+// The first of the month `months` after the month containing `date`.
+export function addMonths(date: string, months: number): string {
+  const [y, m] = date.split("-").map(Number);
+  const t = new Date(Date.UTC(y, m - 1 + months, 1));
+  return `${t.getUTCFullYear()}-${pad(t.getUTCMonth() + 1)}-01`;
+}
+
+// "Oct 18 – 24", or "Oct 25 – Nov 1" across months, for a week starting on `start`.
+export function formatWeekRange(start: string): string {
+  const end = addDaysToDate(start, 6);
+  const monthDay = (date: string) => {
+    const [y, m, d] = date.split("-").map(Number);
+    return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(y, m - 1, d)));
+  };
+  return start.slice(0, 7) === end.slice(0, 7) ? `${monthDay(start)} – ${Number(end.slice(8))}` : `${monthDay(start)} – ${monthDay(end)}`;
+}
+
+// "October 2026".
+export function formatMonth(date: string): string {
+  const [y, m] = date.split("-").map(Number);
+  return new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" }).format(
+    new Date(Date.UTC(y, m - 1, 1)),
+  );
+}
+
 // Days between two wall-clock dates (b - a).
 export function daysBetween(a: string, b: string): number {
   const toUtc = (s: string) => {
