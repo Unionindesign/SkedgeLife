@@ -15,6 +15,7 @@ import LookScreen from "../screens/website/LookScreen";
 import ContentListScreen from "../screens/website/ContentListScreen";
 import ContentItemScreen from "../screens/website/ContentItemScreen";
 import GalleryScreen from "../screens/website/GalleryScreen";
+import EventFormScreen from "../screens/EventFormScreen";
 import type { ContentKind } from "../screens/website/contentKinds";
 import WelcomeScreen from "../auth/WelcomeScreen";
 import SignUpScreen from "../auth/SignUpScreen";
@@ -44,6 +45,8 @@ export type MainStackParamList = {
   ContentItem: { kind: ContentKind; id?: string };
   Gallery: undefined;
   SequenceBuilder: undefined;
+  // Opened from a date on the Schedule tab, `occurrence` is that date.
+  EventForm: { eventId?: string; occurrence?: { id: string; startsAt: string; status: string } };
 };
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -60,6 +63,15 @@ function LogOutButton() {
   return (
     <Pressable onPress={() => logOut(supabase)} style={{ paddingHorizontal: 16 }}>
       <Text style={{ fontSize: 15 }}>Log out</Text>
+    </Pressable>
+  );
+}
+
+function AddEventButton() {
+  const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+  return (
+    <Pressable onPress={() => navigation.navigate("EventForm", {})} hitSlop={8} accessibilityLabel="Add event" style={{ paddingRight: 16 }}>
+      <Ionicons name="add" size={26} color="#2f2f2f" />
     </Pressable>
   );
 }
@@ -93,7 +105,11 @@ function MainTabs() {
         ),
       })}
     >
-      <Tab.Screen name="Schedule" component={ScheduleScreen} options={{ headerRight: () => <SequencesButton /> }} />
+      <Tab.Screen
+        name="Schedule"
+        component={ScheduleScreen}
+        options={{ headerLeft: () => <SequencesButton />, headerRight: () => <AddEventButton /> }}
+      />
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerRight: () => <LogOutButton /> }} />
       <Tab.Screen name="Website" component={WebsiteScreen} />
     </Tab.Navigator>
@@ -119,6 +135,7 @@ function SignedIn({ userId }: { userId: string }) {
         <MainStack.Screen name="ContentList" component={ContentListScreen} />
         <MainStack.Screen name="ContentItem" component={ContentItemScreen} options={{ presentation: "modal" }} />
         <MainStack.Screen name="Gallery" component={GalleryScreen} />
+        <MainStack.Screen name="EventForm" component={EventFormScreen} options={{ presentation: "modal" }} />
         <MainStack.Screen name="SequenceBuilder" component={SequenceBuilderScreen} options={{ title: "Sequence Builder" }} />
       </MainStack.Navigator>
     </ProfileProvider>

@@ -29,7 +29,8 @@
           "photosPermission": "SkedgeLife uses your photos for your profile picture, logo, and gallery.",
           "cameraPermission": "SkedgeLife uses the camera to take your profile picture and gallery photos."
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ]
   }
 }
