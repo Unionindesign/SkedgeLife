@@ -25,13 +25,13 @@ export type Database = {
           Tables: {
             "event_occurrences": {
                   Row: {
-                    "created_at": string,"ends_at": string,"event_id": string,"id": string,"starts_at": string,"status": string
+                    "area": string | null,"booking_mode": string | null,"booking_url": string | null,"capacity": number | null,"created_at": string,"description": string | null,"ends_at": string,"event_id": string,"format": string | null,"id": string,"is_modified": boolean,"is_private_home": boolean | null,"online_url": string | null,"original_starts_at": string,"starts_at": string,"status": string,"time_zone": string | null,"title": string | null,"updated_at": string,"venue_id": string | null
                   }
                   Insert: {
-                    "created_at"?: string,"ends_at": string,"event_id": string,"id"?: string,"starts_at": string,"status"?: string
+                    "area"?: string | null,"booking_mode"?: string | null,"booking_url"?: string | null,"capacity"?: number | null,"created_at"?: string,"description"?: string | null,"ends_at": string,"event_id": string,"format"?: string | null,"id"?: string,"is_modified"?: boolean,"is_private_home"?: boolean | null,"online_url"?: string | null,"original_starts_at": string,"starts_at": string,"status"?: string,"time_zone"?: string | null,"title"?: string | null,"updated_at"?: string,"venue_id"?: string | null
                   }
                   Update: {
-                    "created_at"?: string,"ends_at"?: string,"event_id"?: string,"id"?: string,"starts_at"?: string,"status"?: string
+                    "area"?: string | null,"booking_mode"?: string | null,"booking_url"?: string | null,"capacity"?: number | null,"created_at"?: string,"description"?: string | null,"ends_at"?: string,"event_id"?: string,"format"?: string | null,"id"?: string,"is_modified"?: boolean,"is_private_home"?: boolean | null,"online_url"?: string | null,"original_starts_at"?: string,"starts_at"?: string,"status"?: string,"time_zone"?: string | null,"title"?: string | null,"updated_at"?: string,"venue_id"?: string | null
                   }
                   Relationships: [
                     {
@@ -39,6 +39,12 @@ export type Database = {
       columns: ["event_id"]
 isOneToOne: false
       referencedRelation: "events"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "event_occurrences_venue_id_fkey"
+      columns: ["venue_id"]
+isOneToOne: false
+      referencedRelation: "venues"
       referencedColumns: ["id"]
     }
                   ]
@@ -204,17 +210,34 @@ isOneToOne: false
 "is_time_zone":
 { Args: { "tz": string }; Returns: boolean
                            },
+"reset_occurrence":
+{ Args: { "p_occurrence_id": string }; Returns: undefined
+                           },
 "sync_event_occurrences":
 { Args: { "p_event_id": string }; Returns: undefined
                            },
 "upcoming_occurrences":
 { Args: { "p_limit"?: number,"p_profile_id": string }; Returns: {
-              "created_at": string,
+              "area": string | null,
+"booking_mode": string | null,
+"booking_url": string | null,
+"capacity": number | null,
+"created_at": string,
+"description": string | null,
 "ends_at": string,
 "event_id": string,
+"format": string | null,
 "id": string,
+"is_modified": boolean,
+"is_private_home": boolean | null,
+"online_url": string | null,
+"original_starts_at": string,
 "starts_at": string,
-"status": string
+"status": string,
+"time_zone": string | null,
+"title": string | null,
+"updated_at": string,
+"venue_id": string | null
             }[]
                           SetofOptions: {
         from: "*"

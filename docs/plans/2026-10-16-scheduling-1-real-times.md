@@ -58,6 +58,8 @@ Replace free-text class times ("5:30pm Hot Ra") with events at real times and pl
 - **A free host hears about the weekly cap first:** the form puts that message before any field problems. Small one-offs that would overfill a week are refused by the database, and its message is shown.
 - **Expo SDK patch updates** came along, as in #96, so `expo-doctor` passes.
 
+- **Single dates are fully editable** (added in review, 2026-10-17). Tapping a weekly date opens "This date only" (with a switch to "Every date"): its time and day, title, description, place or link, capacity, and booking can all change for that date alone, and "Undo changes to this date" puts it back. A changed date stores only what differs from its event (`event_occurrences` detail columns, null meaning "same as the event"); `original_starts_at` records the slot it fills, so schedule edits leave it alone and don't refill its slot. A trigger marks host changes and checks the merged date still has a place or link; `reset_occurrence()` undoes them. Kind and interests stay per event.
+
 ## After merging
 
 - `npx supabase db push` (both migrations), then reload the app.

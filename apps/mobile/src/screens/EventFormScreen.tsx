@@ -9,23 +9,29 @@ import {
   addMinutesToClock,
   createEvent,
   createVenue,
+  dateDetails,
   deviceTimeZone,
   formatDate,
   getEvent,
+  getOccurrence,
   listMyEvents,
   listMyVenues,
   localToUtcIso,
   minutesBetween,
+  resetOccurrence,
   setEventStatus,
   setOccurrenceStatus,
   todayIn,
   updateEvent,
+  updateOccurrence,
   utcToLocal,
   zoneLabel,
   EVENT_CAPS,
   type EventFields,
   type EventRow,
   type EventWithVenue,
+  type OccurrenceFields,
+  type OccurrenceWithEvent,
   type ProfilePage,
   type VenueRow,
 } from "@skedgelife/data";
@@ -49,12 +55,22 @@ const LIMITS = { title: 120, description: 2000, area: 80, venueName: 120, addres
 type Loaded =
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "ready"; event: EventWithVenue | null; venues: VenueRow[]; events: EventRow[] };
+  | {
+      status: "ready";
+      event: EventWithVenue | null;
+      occurrence: OccurrenceWithEvent | null;
+      venues: VenueRow[];
+      events: EventRow[];
+    };
 
-// Create or edit an event; opened from a date on the Schedule tab, it can
-// also cancel or restore just that date.
+// "date" changes one date of a weekly event; "event" changes the event (every date).
+type Scope = "date" | "event";
+
+// Create or edit an event. Opened from a date of a weekly event, it starts on
+// that date alone, with a switch to edit every date instead.
 export default function EventFormScreen(props: Props) {
-  const { eventId } = props.route.params;
+  const { eventId, occurrenceId } = props.route.params;
+  const [scope, setScope] = useState<Scope>(occurrenceId ? "date" : "event");
   const { state, reload } = useProfile();
   const profileId = state.status === "ready" ? state.profile.id : null;
   const [loaded, setLoaded] = useState<Loaded>({ status: "loading" });
@@ -65,11 +81,12 @@ export default function EventFormScreen(props: Props) {
     let cancelled = false;
     Promise.all([
       eventId ? getEvent(supabase, eventId) : Promise.resolve(null),
+      occurrenceId ? getOccurrence(supabase, occurrenceId) : Promise.resolve(null),
       listMyVenues(supabase, profileId),
       listMyEvents(supabase, profileId),
     ])
-      .then(([event, venues, events]) => {
-        if (!cancelled) setLoaded({ status: "ready", event, venues, events });
+      .then(([event, occurrence, venues, events]) => {
+        if (!cancelled) setLoaded({ status: "ready", event, occurrence, venues, events });
       })
       .catch((err: unknown) => {
         if (!cancelled) setLoaded({ status: "error", message: errorMessage(err) });
@@ -77,7 +94,7 @@ export default function EventFormScreen(props: Props) {
     return () => {
       cancelled = true;
     };
-  }, [profileId, eventId, attempt]);
+  }, [profileId, eventId, occurrenceId, attempt]);
 
   if (state.status === "error") return <ProfileStatus status="error" message={state.message} onRetry={reload} />;
   if (state.status !== "ready") return <ProfileStatus status={state.status} />;
@@ -86,7 +103,36 @@ export default function EventFormScreen(props: Props) {
   }
   if (loaded.status === "loading") return <ProfileStatus status="loading" />;
   if (eventId && !loaded.event) return <ProfileStatus status="not-found" />;
-  return <EventForm {...props} profile={state.profile} {...loaded} />;
+
+  // One-off events have a single date, so editing the event is editing the date.
+  const canPickScope = Boolean(loaded.occurrence && loaded.event?.weekly_days && loaded.event.status === "scheduled");
+  const effectiveScope: Scope = canPickScope ? scope : "event";
+  const accent = getSkin(state.profile.skin).colors.accent;
+  return (
+    <EventForm
+      // A fresh form for each scope, since they start from different values.
+      key={effectiveScope}
+      {...props}
+      profile={state.profile}
+      {...loaded}
+      scope={effectiveScope}
+      scopePicker={
+        canPickScope ? (
+          <Field label="Change">
+            <Chips
+              options={[
+                { value: "date", label: "This date only" },
+                { value: "event", label: "Every date" },
+              ]}
+              selected={effectiveScope}
+              onToggle={setScope}
+              accentColor={accent}
+            />
+          </Field>
+        ) : null
+      }
+    />
+  );
 }
 
 type Form = {
@@ -172,6 +218,30 @@ function toForm(event: EventWithVenue | null, venues: VenueRow[]): Form {
   };
 }
 
+// A single date, as it currently is (its own changes over the event's details).
+function dateToForm(occurrence: OccurrenceWithEvent, venues: VenueRow[]): Form {
+  const d = dateDetails(occurrence);
+  const zone = d.time_zone;
+  const base = toForm(occurrence.event, venues);
+  return {
+    ...base,
+    when: "once",
+    date: utcToLocal(occurrence.starts_at, zone).date,
+    start: utcToLocal(occurrence.starts_at, zone).time,
+    end: utcToLocal(occurrence.ends_at, zone).time,
+    title: d.title,
+    format: d.format === "online" ? "online" : "in_person",
+    venueId: d.venue?.id ?? occurrence.event.venue_id,
+    area: d.area ?? "",
+    onlineUrl: d.online_url ?? "",
+    timeZone: zone,
+    description: d.description ?? "",
+    capacity: d.capacity ? String(d.capacity) : "",
+    bookingMode: d.booking_mode === "external_link" ? "external_link" : "rsvp",
+    bookingUrl: d.booking_url ?? "",
+  };
+}
+
 const isUrl = (s: string) => /^https?:\/\/\S+\.\S+/.test(s.trim());
 
 function EventForm({
@@ -179,12 +249,23 @@ function EventForm({
   route,
   profile,
   event,
+  occurrence,
   venues: initialVenues,
   events,
-}: Props & { profile: ProfilePage; event: EventWithVenue | null; venues: VenueRow[]; events: EventRow[] }) {
-  const { occurrence } = route.params;
+  scope,
+  scopePicker,
+}: Props & {
+  profile: ProfilePage;
+  event: EventWithVenue | null;
+  occurrence: OccurrenceWithEvent | null;
+  venues: VenueRow[];
+  events: EventRow[];
+  scope: Scope;
+  scopePicker: React.ReactNode;
+}) {
   const [venues, setVenues] = useState(initialVenues);
-  const [initial] = useState(() => toForm(event, initialVenues));
+  const forDate = scope === "date" && occurrence !== null;
+  const [initial] = useState(() => (forDate ? dateToForm(occurrence, initialVenues) : toForm(event, initialVenues)));
   const [form, setForm] = useState(initial);
   const [showMore, setShowMore] = useState(() => Boolean(event && (event.description || event.capacity || event.interests.length)));
   const [pickZone, setPickZone] = useState(false);
@@ -195,8 +276,8 @@ function EventForm({
   const accent = getSkin(profile.skin).colors.accent;
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: event ? "Edit event" : "New event" });
-  }, [navigation, event]);
+    navigation.setOptions({ title: forDate ? "Edit date" : event ? "Edit event" : "New event" });
+  }, [navigation, event, forDate]);
 
   const venue = form.format === "in_person" ? venues.find((v) => v.id === form.venueId) ?? null : null;
   const zone = venue ? venue.time_zone : form.timeZone;
@@ -207,7 +288,8 @@ function EventForm({
   // The free plan's weekly slots, mirroring public.enforce_event_caps(). The
   // database has the final say (one-offs also use slots in their week).
   const otherWeekly = activeWeeklyEvents(events.filter((e) => e.id !== event?.id));
-  const overWeeklyCap = profile.plan !== "paid" && form.when === "weekly" && otherWeekly.length >= EVENT_CAPS.weeklySlots;
+  const overWeeklyCap =
+    !forDate && profile.plan !== "paid" && form.when === "weekly" && otherWeekly.length >= EVENT_CAPS.weeklySlots;
 
   const capacity = form.capacity.trim() === "" ? null : Number(form.capacity);
   const problem = (() => {
@@ -300,9 +382,37 @@ function EventForm({
         set("venueId", created.id);
         venueId = created.id;
       }
-      if (event) await updateEvent(supabase, event.id, toFields(venueId));
+      if (forDate) await updateOccurrence(supabase, occurrence.id, toDateFields(toFields(venueId)));
+      else if (event) await updateEvent(supabase, event.id, toFields(venueId));
       else await createEvent(supabase, profile.id, toFields(venueId));
     });
+
+  // A date stores only what differs from its event; null means "same as the event".
+  const toDateFields = (f: EventFields): OccurrenceFields => {
+    const e = occurrence!.event;
+    const own = <T,>(value: T, eventValue: T) => (value === eventValue ? null : value);
+    return {
+      starts_at: f.starts_at!,
+      ends_at: f.ends_at!,
+      title: own(f.title, e.title),
+      description: own(f.description ?? null, e.description),
+      format: own(f.format ?? "in_person", e.format),
+      venue_id: f.venue_id ? own(f.venue_id, e.venue_id) : null,
+      online_url: f.online_url ? own(f.online_url, e.online_url) : null,
+      time_zone: own(f.time_zone, e.time_zone),
+      capacity: own(f.capacity ?? null, e.capacity),
+      booking_mode: own(f.booking_mode ?? "rsvp", e.booking_mode),
+      booking_url: f.booking_url ? own(f.booking_url, e.booking_url) : null,
+      is_private_home: own(f.is_private_home ?? false, e.is_private_home),
+      area: f.area ? own(f.area, e.area) : null,
+    };
+  };
+
+  const resetDate = async () => {
+    if (!occurrence) return;
+    if (!(await confirm("Undo changes to this date?", "It goes back to the event's usual time and details.", "Undo changes"))) return;
+    await run(() => resetOccurrence(supabase, occurrence.id));
+  };
 
   const togglePrivateHome = async (on: boolean) => {
     if (
@@ -338,16 +448,21 @@ function EventForm({
 
   const zoneChoices = Array.from(new Set([deviceTimeZone(), zone, ...COMMON_TIME_ZONES]));
   const now = new Date().toISOString();
-  const occurrenceDate = occurrence ? formatDate(utcToLocal(occurrence.startsAt, zone).date) : null;
+  const occurrenceDate = occurrence ? formatDate(utcToLocal(occurrence.starts_at, zone).date) : null;
 
   return (
     <ScrollView contentContainerStyle={formStyles.container} keyboardShouldPersistTaps="handled">
       {cancelledEvent ? <Text style={styles.banner}>This event is cancelled.</Text> : null}
+      {scopePicker}
+      {forDate && occurrence.is_modified ? (
+        <Text style={styles.note}>This date has its own changes. They stay when you edit every date; anything else still follows the series.</Text>
+      ) : null}
 
       <Field label="Title" count={form.title.length} max={LIMITS.title}>
         <TextInput style={formStyles.input} value={form.title} onChangeText={(v) => set("title", v)} placeholder="e.g. Sunrise Vinyasa" />
       </Field>
 
+      {!forDate ? (
       <Field label="When">
         <Chips
           options={[
@@ -359,6 +474,7 @@ function EventForm({
           accentColor={accent}
         />
       </Field>
+      ) : null}
 
       {form.when === "once" ? (
         <Field label="Date">
@@ -510,6 +626,7 @@ function EventForm({
               multiline
             />
           </Field>
+          {!forDate ? (
           <Field label="Kind">
             <Chips
               options={[
@@ -522,6 +639,7 @@ function EventForm({
               accentColor={accent}
             />
           </Field>
+          ) : null}
           <Field
             label="Capacity"
             hint={`Optional. On the free plan, a one-time event for more than ${EVENT_CAPS.largerOver} people (or no limit) counts as your larger event for the month.`}
@@ -561,31 +679,38 @@ function EventForm({
               />
             </Field>
           ) : null}
-          <Field label="Interests" hint="Helps people find it once search arrives.">
-            <TagEditor tags={form.interests} onChange={(v) => set("interests", v)} placeholder="e.g. Yin yoga" accentColor={accent} />
-          </Field>
+          {!forDate ? (
+            <Field label="Interests" hint="Helps people find it once search arrives.">
+              <TagEditor tags={form.interests} onChange={(v) => set("interests", v)} placeholder="e.g. Yin yoga" accentColor={accent} />
+            </Field>
+          ) : null}
         </>
       ) : null}
 
       {error ? <Text style={formStyles.error}>{error}</Text> : null}
       {problem && (changed || event) && !cancelledEvent ? <Text style={styles.problem}>{problem}</Text> : null}
       <Pressable style={[formStyles.primaryButton, !canSave && formStyles.disabled]} disabled={!canSave} onPress={save}>
-        <Text style={formStyles.primaryText}>{saving ? "Saving…" : event ? "Save" : "Add event"}</Text>
+        <Text style={formStyles.primaryText}>{saving ? "Saving…" : forDate ? "Save this date" : event ? "Save every date" : "Add event"}</Text>
       </Pressable>
 
-      {event && !cancelledEvent ? (
+      {forDate && !cancelledEvent ? (
         <>
-          {occurrence && event.weekly_days ? (
-            <Pressable style={formStyles.secondaryButton} disabled={saving} onPress={cancelDate}>
-              <Text style={occurrence.status === "cancelled" ? styles.restoreText : formStyles.dangerText}>
-                {occurrence.status === "cancelled" ? `Restore ${occurrenceDate}` : `Cancel ${occurrenceDate} only`}
-              </Text>
+          {occurrence.is_modified ? (
+            <Pressable style={formStyles.secondaryButton} disabled={saving} onPress={resetDate}>
+              <Text style={styles.restoreText}>Undo changes to this date</Text>
             </Pressable>
           ) : null}
-          <Pressable style={formStyles.secondaryButton} disabled={saving} onPress={cancelEvent}>
-            <Text style={formStyles.dangerText}>{event.weekly_days ? "Cancel all dates" : "Cancel event"}</Text>
+          <Pressable style={formStyles.secondaryButton} disabled={saving} onPress={cancelDate}>
+            <Text style={occurrence.status === "cancelled" ? styles.restoreText : formStyles.dangerText}>
+              {occurrence.status === "cancelled" ? `Restore ${occurrenceDate}` : `Cancel ${occurrenceDate} only`}
+            </Text>
           </Pressable>
         </>
+      ) : null}
+      {event && !forDate && !cancelledEvent ? (
+        <Pressable style={formStyles.secondaryButton} disabled={saving} onPress={cancelEvent}>
+          <Text style={formStyles.dangerText}>{event.weekly_days ? "Cancel all dates" : "Cancel event"}</Text>
+        </Pressable>
       ) : null}
     </ScrollView>
   );
@@ -601,5 +726,6 @@ const styles = StyleSheet.create({
   link: { fontSize: 14, fontWeight: "600" },
   moreToggle: { marginVertical: 12 },
   problem: { color: "#777", fontSize: 13, marginTop: 16 },
+  note: { backgroundColor: "#f4f4f4", color: "#555", padding: 12, borderRadius: 8, marginBottom: 16, fontSize: 13 },
   restoreText: { color: "#2f2f2f", fontSize: 16, fontWeight: "600" },
 });

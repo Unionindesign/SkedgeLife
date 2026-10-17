@@ -10,8 +10,9 @@ A short entry for each working session. Newest first. Decision rationale goes in
   - **`packages/data`:** `events` (queries, create/update/cancel, `EVENT_CAPS` mirror) and `time` (`@date-fns/tz` conversions, `Intl` display helpers).
   - **Schedule tab:** upcoming dates by day, in the venue's zone (with the zone name when it differs from the device) or the device's zone for online events; "Book →" link-outs; cancelled dates struck through. **+** in the header adds an event; Sequences moved to the header's left.
   - **Event form:** title, one time or weekly, start and end, in person (saved place or new place, private-home toggle with a confirmation) or online link, zone, and "More options" (description, kind, capacity, booking link, interests). Edit, cancel one date or restore it, or cancel the event. Native date/time pickers (`@react-native-community/datetimepicker`), browser inputs on the web build.
+  - **Single dates are editable** (review follow-up): tap a weekly date to change just that date (time, day, title, description, place or link, capacity, booking) or switch to every date; "Changed" shows on the Schedule tab; "Undo changes to this date" resets it. Changed dates survive schedule edits.
   - Expo SDK patch updates so `expo-doctor` passes.
-- Decisions: cap details, private homes and online links before bookings, the time-zone library. `docs/rules/time.md` records the library and clears the known gap.
+- Decisions: per-date changes store only what differs, cap details, private homes and online links before bookings, the time-zone library. `docs/rules/time.md` records the library and clears the known gap.
 
 ## 2026-10-16
 

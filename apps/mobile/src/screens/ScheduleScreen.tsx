@@ -3,6 +3,7 @@ import { Linking, Pressable, RefreshControl, SectionList, StyleSheet, Text, View
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
+  dateDetails,
   deviceTimeZone,
   displayTimeZone,
   formatDate,
@@ -13,6 +14,7 @@ import {
   utcToLocal,
   addDaysToDate,
   zoneLabel,
+  type DateDetails,
   type OccurrenceWithEvent,
 } from "@skedgelife/data";
 import { getSkin } from "@skedgelife/skins";
@@ -29,7 +31,7 @@ type Section = { title: string; data: OccurrenceWithEvent[] };
 function toSections(items: OccurrenceWithEvent[]): Section[] {
   const sections: Section[] = [];
   for (const item of items) {
-    const zone = displayTimeZone(item.event);
+    const zone = displayTimeZone(dateDetails(item));
     const day = utcToLocal(item.starts_at, zone).date;
     const today = todayIn(zone);
     const title = day === today ? "Today" : day === addDaysToDate(today, 1) ? "Tomorrow" : formatDate(day, "long");
@@ -40,10 +42,10 @@ function toSections(items: OccurrenceWithEvent[]): Section[] {
   return sections;
 }
 
-function placeLabel(event: OccurrenceWithEvent["event"]) {
-  if (event.format === "online") return "Online";
-  if (event.is_private_home) return `${event.venue?.name ?? event.area ?? "Private home"} · private home`;
-  return event.venue?.name ?? "";
+function placeLabel(d: DateDetails) {
+  if (d.format === "online") return "Online";
+  if (d.is_private_home) return `${d.venue?.name ?? d.area ?? "Private home"} · private home`;
+  return d.venue?.name ?? "";
 }
 
 // The signed-in host's upcoming dates. Tap one to edit it or cancel that date.
@@ -115,17 +117,16 @@ export default function ScheduleScreen() {
       stickySectionHeadersEnabled={false}
       renderItem={({ item }) => {
         const { event } = item;
-        const zone = displayTimeZone(event);
+        // The date's own changes (if any) over its event's details.
+        const d = dateDetails(item);
+        const zone = displayTimeZone(d);
         const cancelled = item.status === "cancelled" || event.status === "cancelled";
         const zoneSuffix = sameWallClock(item.starts_at, zone, device) ? "" : ` ${zoneLabel(item.starts_at, zone)}`;
         return (
           <Pressable
             style={styles.row}
             onPress={() =>
-              navigation.navigate("EventForm", {
-                eventId: event.id,
-                occurrence: { id: item.id, startsAt: item.starts_at, status: item.status },
-              })
+              navigation.navigate("EventForm", { eventId: event.id, occurrenceId: item.id })
             }
           >
             <View style={[styles.timeCol, { borderColor: accent }]}>
@@ -136,15 +137,15 @@ export default function ScheduleScreen() {
               </Text>
             </View>
             <View style={styles.details}>
-              <Text style={[styles.title, cancelled && styles.struck]}>{event.title}</Text>
+              <Text style={[styles.title, cancelled && styles.struck]}>{d.title}</Text>
               <Text style={styles.place} numberOfLines={1}>
-                {cancelled ? "Cancelled · " : ""}
-                {placeLabel(event)}
+                {cancelled ? "Cancelled · " : item.is_modified ? "Changed · " : ""}
+                {placeLabel(d)}
                 {event.weekly_days ? " · Weekly" : ""}
               </Text>
             </View>
-            {!cancelled && event.booking_mode === "external_link" && event.booking_url ? (
-              <Pressable onPress={() => Linking.openURL(event.booking_url!)} hitSlop={8}>
+            {!cancelled && d.booking_mode === "external_link" && d.booking_url ? (
+              <Pressable onPress={() => Linking.openURL(d.booking_url!)} hitSlop={8}>
                 <Text style={[styles.book, { color: accent }]}>Book →</Text>
               </Pressable>
             ) : null}

@@ -45,8 +45,8 @@ export type MainStackParamList = {
   ContentItem: { kind: ContentKind; id?: string };
   Gallery: undefined;
   SequenceBuilder: undefined;
-  // Opened from a date on the Schedule tab, `occurrence` is that date.
-  EventForm: { eventId?: string; occurrence?: { id: string; startsAt: string; status: string } };
+  // Opened from a date on the Schedule tab, `occurrenceId` is that date.
+  EventForm: { eventId?: string; occurrenceId?: string };
 };
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
