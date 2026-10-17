@@ -53,15 +53,45 @@ Now back in Orange County Michelle is offering public and private classes in the
   skin = 'classic-yoga'
 where id = '11111111-1111-4111-8111-111111111111';
 
-insert into public.schedule_entries (id, profile_id, venue_name, booking_url, sort_order) values
+-- Schedule: her weekly studio classes (booked on the studio's site), plus two
+-- one-offs dated from today so there's always something upcoming: an online
+-- workshop and a small workshop at home (a private venue). Inserting events
+-- generates their occurrences.
+insert into public.venues (id, created_by, name, time_zone, booking_url) values
   ('22222222-2222-4222-8222-222222222222', '11111111-1111-4111-8111-111111111111',
-   'Ra Yoga — Mission Viejo Studio', 'https://rayoga.com/locations/Mission-Viejo/', 0);
+   'Ra Yoga — Mission Viejo Studio', 'America/Los_Angeles', 'https://rayoga.com/locations/Mission-Viejo/');
 
-insert into public.schedule_times (schedule_entry_id, day_of_week, label, sort_order) values
-  ('22222222-2222-4222-8222-222222222222', 5, '5:30pm Intro to Level 2', 0),
-  ('22222222-2222-4222-8222-222222222222', 5, '7:30pm Hot Ra - Candlelit', 1),
-  ('22222222-2222-4222-8222-222222222222', 6, '8:30am Hot Ra', 2),
-  ('22222222-2222-4222-8222-222222222222', 6, '10:00am Intro to Level 2', 3);
+insert into public.venues (id, created_by, name, address, time_zone, is_private) values
+  ('33333333-3333-4333-8333-333333333333', '11111111-1111-4111-8111-111111111111',
+   'Home studio', '100 Example Lane, Laguna Hills, CA 92653', 'America/Los_Angeles', true);
+
+insert into public.events (
+  profile_id, title, kind, venue_id, time_zone, weekly_days, local_start_time, duration_minutes,
+  booking_mode, booking_url, interests
+) values
+  ('11111111-1111-4111-8111-111111111111', 'Intro to Level 2', 'class', '22222222-2222-4222-8222-222222222222',
+   'America/Los_Angeles', '{5}', '17:30', 60, 'external_link', 'https://rayoga.com/locations/Mission-Viejo/', '{Hot yoga}'),
+  ('11111111-1111-4111-8111-111111111111', 'Hot Ra — Candlelit', 'class', '22222222-2222-4222-8222-222222222222',
+   'America/Los_Angeles', '{5}', '19:30', 60, 'external_link', 'https://rayoga.com/locations/Mission-Viejo/', '{Hot yoga}'),
+  ('11111111-1111-4111-8111-111111111111', 'Hot Ra', 'class', '22222222-2222-4222-8222-222222222222',
+   'America/Los_Angeles', '{6}', '08:30', 60, 'external_link', 'https://rayoga.com/locations/Mission-Viejo/', '{Hot yoga}'),
+  ('11111111-1111-4111-8111-111111111111', 'Intro to Level 2', 'class', '22222222-2222-4222-8222-222222222222',
+   'America/Los_Angeles', '{6}', '10:00', 60, 'external_link', 'https://rayoga.com/locations/Mission-Viejo/', '{Hot yoga}');
+
+insert into public.events (
+  profile_id, title, description, kind, format, venue_id, online_url, time_zone, starts_at, ends_at,
+  capacity, is_private_home, area, interests
+) values
+  ('11111111-1111-4111-8111-111111111111', 'Full Moon Yin', 'Slow, deep Yin and a guided Nidra for the full moon. Bring a blanket and two pillows.',
+   'workshop', 'online', null, 'https://meet.example.com/full-moon-yin', 'America/Los_Angeles',
+   ((now() at time zone 'America/Los_Angeles')::date + 12 + time '18:00') at time zone 'America/Los_Angeles',
+   ((now() at time zone 'America/Los_Angeles')::date + 12 + time '19:15') at time zone 'America/Los_Angeles',
+   null, false, null, '{Yin yoga,Meditation}'),
+  ('11111111-1111-4111-8111-111111111111', 'Thai Massage Basics', 'A small hands-on workshop: partner stretches and the basics of Thai yoga massage.',
+   'workshop', 'in_person', '33333333-3333-4333-8333-333333333333', null, 'America/Los_Angeles',
+   ((now() at time zone 'America/Los_Angeles')::date + 5 + time '10:00') at time zone 'America/Los_Angeles',
+   ((now() at time zone 'America/Los_Angeles')::date + 5 + time '12:00') at time zone 'America/Los_Angeles',
+   8, true, 'Laguna Hills', '{Thai massage}');
 
 insert into public.service_modalities (profile_id, title, description, sort_order) values
   ('11111111-1111-4111-8111-111111111111', 'Vinyasa', 'Vinyasa yoga teaches us to cultivate an awareness that links each action to the next — both on the mat and in our lives. This rigorous, flow-style practice links breath to movement.', 0),
