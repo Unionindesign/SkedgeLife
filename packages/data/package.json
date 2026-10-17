@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
+    "@date-fns/tz": "^1.5.0",
     "@skedgelife/types": "*",
     "@supabase/supabase-js": "^2.109.0"
   }

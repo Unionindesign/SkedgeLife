@@ -16,13 +16,13 @@ The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, hand
   - **Services, Private sessions, Testimonials:** add, edit, delete, and drag to reorder.
   - **Gallery:** 3 photos on the free plan, 30 on paid.
   - **Preview** shows the full page with your skin, as visitors will see it once public pages launch.
-- **Schedule**: class times grouped by studio, with links out to each studio's booking page. If you teach, the **Sequence Builder** opens from here: drag poses into order, set durations and sides, add a quote and playlist link, and export a printable PDF card.
+- **Schedule**: your upcoming classes and events by day, in real local time (in-person events in the venue's zone, online ones in yours). Tap **+** to add one: a title, a time (one time or weekly on chosen days), and a place or an online link. Tap a date to edit the event, cancel just that date, or cancel the whole thing. Studio classes keep their "Book" link to the studio's site. The free plan allows 3 weekly events and 1 larger group event a month. If you teach, the **Sequence Builder** opens from here: drag poses into order, set durations and sides, add a quote and playlist link, and export a printable PDF card.
 
 ## In the works
 
 Work is tracked as [GitHub milestones](https://github.com/Unionindesign/SkedgeLife/milestones) and [issues](https://github.com/Unionindesign/SkedgeLife/issues). Roughly in order:
 
-- **Accounts and a real backend**, so instructors can edit their own page from their phone.
+- **Finding events**: a map, search by place, time, and interests (Mapbox), then RSVPs, paid bookings, and appointments.
 - **Public web pages** at `skedgelife.com/<handle>`, so anyone's page is shareable and searchable without the app.
 - **Follow and notifications**: follow the people you like and hear about schedule changes.
 - **A free page for everyone**: one photo, a short bio, interests, and simple small-group events. Teaching features turn on when you need them.
@@ -73,7 +73,7 @@ An npm workspaces monorepo. Run `npm install` once at the root.
 apps/
   mobile/              Expo app (entry: index.ts -> App.tsx)
     src/navigation/    bottom tabs (Schedule / Profile / Website) and the screens they open
-    src/screens/       Profile, Schedule, Edit profile, Sequence Builder, website preview
+    src/screens/       Profile, Schedule, Event form, Edit profile, Sequence Builder, website preview
     src/screens/website/  Website tab and its editors (look, services, privates, testimonials, gallery)
     src/components/    shared UI: the profile page, form fields, photo picker, tag editor
     src/data/          profile loading (ProfileProvider) and seed poses

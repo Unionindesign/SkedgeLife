@@ -6,10 +6,12 @@ export * from "./auth";
 export * from "./content";
 export * from "./media";
 export * from "./validation";
+export * from "./events";
+export * from "./time";
 
+// Events load separately (getUpcomingOccurrences), since they're by date, not sort order.
 const PROFILE_PAGE_SELECT = `
   *,
-  schedule_entries (*, schedule_times (*)),
   service_modalities (*),
   private_session_types (*),
   testimonials (*),
@@ -24,8 +26,6 @@ export async function getProfilePage(client: SkedgeLifeClient, lookup: ProfileLo
   const base = client.from("profiles").select(PROFILE_PAGE_SELECT);
   const filtered = "id" in lookup ? base.eq("id", lookup.id) : base.eq("handle", lookup.handle);
   const { data, error } = await filtered
-    .order("sort_order", { referencedTable: "schedule_entries" })
-    .order("sort_order", { referencedTable: "schedule_entries.schedule_times" })
     .order("sort_order", { referencedTable: "service_modalities" })
     .order("sort_order", { referencedTable: "private_session_types" })
     .order("sort_order", { referencedTable: "testimonials" })

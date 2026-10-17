@@ -23,7 +23,57 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "gallery_images": {
+            "event_occurrences": {
+                  Row: {
+                    "area": string | null,"booking_mode": string | null,"booking_url": string | null,"capacity": number | null,"created_at": string,"description": string | null,"ends_at": string,"event_id": string,"format": string | null,"id": string,"is_modified": boolean,"is_private_home": boolean | null,"online_url": string | null,"original_starts_at": string,"starts_at": string,"status": string,"time_zone": string | null,"title": string | null,"updated_at": string,"venue_id": string | null
+                  }
+                  Insert: {
+                    "area"?: string | null,"booking_mode"?: string | null,"booking_url"?: string | null,"capacity"?: number | null,"created_at"?: string,"description"?: string | null,"ends_at": string,"event_id": string,"format"?: string | null,"id"?: string,"is_modified"?: boolean,"is_private_home"?: boolean | null,"online_url"?: string | null,"original_starts_at": string,"starts_at": string,"status"?: string,"time_zone"?: string | null,"title"?: string | null,"updated_at"?: string,"venue_id"?: string | null
+                  }
+                  Update: {
+                    "area"?: string | null,"booking_mode"?: string | null,"booking_url"?: string | null,"capacity"?: number | null,"created_at"?: string,"description"?: string | null,"ends_at"?: string,"event_id"?: string,"format"?: string | null,"id"?: string,"is_modified"?: boolean,"is_private_home"?: boolean | null,"online_url"?: string | null,"original_starts_at"?: string,"starts_at"?: string,"status"?: string,"time_zone"?: string | null,"title"?: string | null,"updated_at"?: string,"venue_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "event_occurrences_event_id_fkey"
+      columns: ["event_id"]
+isOneToOne: false
+      referencedRelation: "events"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "event_occurrences_venue_id_fkey"
+      columns: ["venue_id"]
+isOneToOne: false
+      referencedRelation: "venues"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"events": {
+                  Row: {
+                    "area": string | null,"booking_mode": string,"booking_url": string | null,"capacity": number | null,"created_at": string,"description": string | null,"duration_minutes": number | null,"ends_at": string | null,"format": string,"id": string,"interests": (string)[],"is_private_home": boolean,"kind": string,"local_start_time": string | null,"online_url": string | null,"profile_id": string,"repeat_until": string | null,"starts_at": string | null,"status": string,"time_zone": string,"title": string,"updated_at": string,"venue_id": string | null,"visibility": string,"weekly_days": (number)[] | null
+                  }
+                  Insert: {
+                    "area"?: string | null,"booking_mode"?: string,"booking_url"?: string | null,"capacity"?: number | null,"created_at"?: string,"description"?: string | null,"duration_minutes"?: number | null,"ends_at"?: string | null,"format"?: string,"id"?: string,"interests"?: (string)[],"is_private_home"?: boolean,"kind"?: string,"local_start_time"?: string | null,"online_url"?: string | null,"profile_id": string,"repeat_until"?: string | null,"starts_at"?: string | null,"status"?: string,"time_zone": string,"title": string,"updated_at"?: string,"venue_id"?: string | null,"visibility"?: string,"weekly_days"?: (number)[] | null
+                  }
+                  Update: {
+                    "area"?: string | null,"booking_mode"?: string,"booking_url"?: string | null,"capacity"?: number | null,"created_at"?: string,"description"?: string | null,"duration_minutes"?: number | null,"ends_at"?: string | null,"format"?: string,"id"?: string,"interests"?: (string)[],"is_private_home"?: boolean,"kind"?: string,"local_start_time"?: string | null,"online_url"?: string | null,"profile_id"?: string,"repeat_until"?: string | null,"starts_at"?: string | null,"status"?: string,"time_zone"?: string,"title"?: string,"updated_at"?: string,"venue_id"?: string | null,"visibility"?: string,"weekly_days"?: (number)[] | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "events_profile_id_fkey"
+      columns: ["profile_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "events_venue_id_fkey"
+      columns: ["venue_id"]
+isOneToOne: false
+      referencedRelation: "venues"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"gallery_images": {
                   Row: {
                     "caption": string | null,"created_at": string,"id": string,"profile_id": string,"sort_order": number,"url": string
                   }
@@ -74,44 +124,6 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
-                },"schedule_entries": {
-                  Row: {
-                    "address": string | null,"booking_url": string | null,"created_at": string,"id": string,"profile_id": string,"sort_order": number,"venue_logo_url": string | null,"venue_name": string
-                  }
-                  Insert: {
-                    "address"?: string | null,"booking_url"?: string | null,"created_at"?: string,"id"?: string,"profile_id": string,"sort_order"?: number,"venue_logo_url"?: string | null,"venue_name": string
-                  }
-                  Update: {
-                    "address"?: string | null,"booking_url"?: string | null,"created_at"?: string,"id"?: string,"profile_id"?: string,"sort_order"?: number,"venue_logo_url"?: string | null,"venue_name"?: string
-                  }
-                  Relationships: [
-                    {
-      foreignKeyName: "schedule_entries_profile_id_fkey"
-      columns: ["profile_id"]
-isOneToOne: false
-      referencedRelation: "profiles"
-      referencedColumns: ["id"]
-    }
-                  ]
-                },"schedule_times": {
-                  Row: {
-                    "day_of_week": number,"id": string,"label": string,"schedule_entry_id": string,"sort_order": number
-                  }
-                  Insert: {
-                    "day_of_week": number,"id"?: string,"label": string,"schedule_entry_id": string,"sort_order"?: number
-                  }
-                  Update: {
-                    "day_of_week"?: number,"id"?: string,"label"?: string,"schedule_entry_id"?: string,"sort_order"?: number
-                  }
-                  Relationships: [
-                    {
-      foreignKeyName: "schedule_times_schedule_entry_id_fkey"
-      columns: ["schedule_entry_id"]
-isOneToOne: false
-      referencedRelation: "schedule_entries"
-      referencedColumns: ["id"]
-    }
-                  ]
                 },"service_modalities": {
                   Row: {
                     "created_at": string,"description": string,"id": string,"profile_id": string,"sort_order": number,"title": string
@@ -150,24 +162,89 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"venues": {
+                  Row: {
+                    "address": string | null,"booking_url": string | null,"created_at": string,"created_by": string | null,"id": string,"is_private": boolean,"location": unknown,"logo_url": string | null,"name": string,"time_zone": string,"updated_at": string
+                  }
+                  Insert: {
+                    "address"?: string | null,"booking_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_private"?: boolean,"location"?: unknown,"logo_url"?: string | null,"name": string,"time_zone": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "address"?: string | null,"booking_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_private"?: boolean,"location"?: unknown,"logo_url"?: string | null,"name"?: string,"time_zone"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "venues_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
             [_ in never]: never
           }
           Functions: {
-            "gallery_limit":
+            "event_desired_occurrences":
+{ Args: { "e": Database["public"]['Tables']["events"]['Row'],"horizon": string }; Returns: {
+              "ends_at": string,"starts_at": string
+            }[]
+                           },
+"extend_occurrence_windows":
+{ Args: Record<PropertyKey, never>; Returns: undefined
+                           },
+"gallery_limit":
 { Args: { "plan": string }; Returns: number
                            },
 "is_handle_available":
 { Args: { "h": string }; Returns: boolean
                            },
+"is_larger_event":
+{ Args: { "capacity": number }; Returns: boolean
+                           },
 "is_reserved_handle":
 { Args: { "h": string }; Returns: boolean
                            },
-"owns_schedule_entry":
-{ Args: { "entry_id": string }; Returns: boolean
-                           }
+"is_time_zone":
+{ Args: { "tz": string }; Returns: boolean
+                           },
+"reset_occurrence":
+{ Args: { "p_occurrence_id": string }; Returns: undefined
+                           },
+"sync_event_occurrences":
+{ Args: { "p_event_id": string }; Returns: undefined
+                           },
+"upcoming_occurrences":
+{ Args: { "p_limit"?: number,"p_profile_id": string }; Returns: {
+              "area": string | null,
+"booking_mode": string | null,
+"booking_url": string | null,
+"capacity": number | null,
+"created_at": string,
+"description": string | null,
+"ends_at": string,
+"event_id": string,
+"format": string | null,
+"id": string,
+"is_modified": boolean,
+"is_private_home": boolean | null,
+"online_url": string | null,
+"original_starts_at": string,
+"starts_at": string,
+"status": string,
+"time_zone": string | null,
+"title": string | null,
+"updated_at": string,
+"venue_id": string | null
+            }[]
+                          SetofOptions: {
+        from: "*"
+        to: "event_occurrences"
+        isOneToOne: false
+        isSetofReturn: true
+      } }
           }
           Enums: {
             [_ in never]: never
