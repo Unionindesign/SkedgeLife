@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { updateProfile, type ProfileEdits, type ProfilePage } from "@skedgelife/data";
+import { formatPhone, isValidEmail, isValidPhone, updateProfile, type ProfileEdits, type ProfilePage } from "@skedgelife/data";
 import { getSkin } from "@skedgelife/skins";
 import type { MainStackParamList } from "../navigation/RootNavigator";
 import { useProfile } from "../data/ProfileProvider";
@@ -34,7 +34,8 @@ function toForm(p: ProfilePage) {
     specialties: p.specialties,
     certifications: p.certifications,
     contact_email: p.contact_email ?? "",
-    contact_phone: p.contact_phone ?? "",
+    // A number saved before validation existed is left as-is for the user to fix.
+    contact_phone: p.contact_phone && isValidPhone(p.contact_phone) ? formatPhone(p.contact_phone) : (p.contact_phone ?? ""),
     instagram_handle: p.instagram_handle ?? "",
   };
 }
@@ -63,9 +64,14 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
   const [form, setForm] = useState(initial);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Contact errors show once the user leaves the field, not while typing.
+  const [touched, setTouched] = useState({ email: false, phone: false });
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) => setForm((f) => ({ ...f, [key]: value }));
   const accent = getSkin(profile.skin).colors.accent;
+
+  const emailOk = form.contact_email.trim() === "" || isValidEmail(form.contact_email);
+  const phoneOk = form.contact_phone.trim() === "" || isValidPhone(form.contact_phone);
 
   const changed = JSON.stringify(form) !== JSON.stringify(initial);
   const valid =
@@ -76,6 +82,11 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
   const canSave = changed && valid && !saving;
 
   const save = async () => {
+    // Save stays enabled for contact errors so tapping it explains what's wrong.
+    if (!emailOk || !phoneOk) {
+      setTouched({ email: true, phone: true });
+      return;
+    }
     setSaving(true);
     setError(null);
     try {
@@ -152,17 +163,26 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
       ) : null}
 
       <Text style={formStyles.sectionHeading}>Contact</Text>
-      <Field label="Email">
+      <Field label="Email" error={touched.email && !emailOk ? "Enter a valid email, like name@example.com." : null}>
         <TextInput
           style={formStyles.input}
           value={form.contact_email}
           onChangeText={(v) => set("contact_email", v)}
+          onBlur={() => setTouched((t) => ({ ...t, email: true }))}
           autoCapitalize="none"
+          autoCorrect={false}
           keyboardType="email-address"
         />
       </Field>
-      <Field label="Phone">
-        <TextInput style={formStyles.input} value={form.contact_phone} onChangeText={(v) => set("contact_phone", v)} keyboardType="phone-pad" />
+      <Field label="Phone" error={touched.phone && !phoneOk ? "Enter a 10-digit phone number." : null}>
+        <TextInput
+          style={formStyles.input}
+          value={form.contact_phone}
+          onChangeText={(v) => set("contact_phone", formatPhone(v))}
+          onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
+          keyboardType="phone-pad"
+          placeholder="(555) 123-4567"
+        />
       </Field>
       <Field label="Instagram">
         <TextInput

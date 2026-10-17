@@ -1,18 +1,20 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-// A labelled form field with an optional hint and character counter.
+// A labelled form field with an optional hint, character counter, and error.
 export default function Field({
   label,
   hint,
   count,
   max,
+  error,
   children,
 }: {
   label: string;
   hint?: string;
   count?: number;
   max?: number;
+  error?: string | null;
   children: React.ReactNode;
 }) {
   const over = count !== undefined && max !== undefined && count > max;
@@ -24,6 +26,7 @@ export default function Field({
       </View>
       {hint ? <Text style={formStyles.hint}>{hint}</Text> : null}
       {children}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 }
@@ -33,6 +36,7 @@ const styles = StyleSheet.create({
   labelRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 },
   count: { fontSize: 12, color: "#999" },
   over: { color: "#b3261e", fontWeight: "600" },
+  error: { color: "#b3261e", fontSize: 12, marginTop: 4 },
 });
 
 // Shared by the editing screens.

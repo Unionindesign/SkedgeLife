@@ -5,6 +5,7 @@ export type { SkedgeLifeClient } from "./client";
 export * from "./auth";
 export * from "./content";
 export * from "./media";
+export * from "./validation";
 
 const PROFILE_PAGE_SELECT = `
   *,

@@ -2,6 +2,15 @@
 
 A short entry for each working session. Newest first. Decision rationale goes in `docs/DECISIONS.md`; this file just records what changed.
 
+## 2026-10-16
+
+- Phone testing of PR #96 against the hosted project (restored again after pausing during the two-week gap; the photo bucket needs `npx supabase db push`).
+  - **Contact validation on Edit profile:** email checked with a regex; phone must be 10 digits and is formatted as `(555) 123-4567` while typing. Errors show when you leave the field or tap Save. Shared helpers in `packages/data/src/validation.ts`.
+  - **Follow-up noted** in the self-serve editing plan: look into a validation library or tooling (e.g. Zod, `libphonenumber-js`) and matching database constraints so malicious input can't skip the app's checks.
+  - "Add photo" / "Add logo" / "Change" is now an outlined button.
+  - Schedule empty state now reads "No scheduled classes or upcoming events."
+- New milestone "Feature: AI Website Builder": #97 AI website assistant (arranges library components from plain-language requests, never writes free-form code), #98 component library with browse and search, #99 rebuild the parallax testimonial section from Michelle's original site.
+
 ## 2026-10-04
 
 - Branch `feature/self-serve-editing` (milestone "Foundation: Auth & Self-Serve Editing"; plan `docs/plans/2026-10-03-foundation-self-serve-editing.md`). The first PR built with the plan-then-one-branch workflow.

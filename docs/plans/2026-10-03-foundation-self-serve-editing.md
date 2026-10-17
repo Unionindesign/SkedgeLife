@@ -104,3 +104,14 @@ There's no web app yet (#15), so this is preparation, not wiring (that's #19):
 - **Sections are edited from the Website tab**, not from "Edit" links on the profile page. That follows the Profile/Website split agreed on 2026-10-04.
 - **The gallery editor is a list with thumbnails**, not a grid, because the drag-to-reorder library only supports lists.
 - **On the web build, the photo picker doesn't crop to a square**; the image is center-filled instead. Cropping works on the phone.
+- **Contact email and phone are validated** (added during phone testing). See Validation below.
+
+## Validation
+
+Edit profile now checks the contact email with a regex and requires a 10-digit US/Canada phone number, formatted as `(555) 123-4567` while typing. The checks live in `packages/data/src/validation.ts` so the website can share them.
+
+These are format checks in the app only, a convenience for honest users, not a security boundary: anyone with the publishable key can write to the database directly. Follow-ups:
+
+- **Look into a validation library or tooling** (for example Zod schemas shared by app and website, plus `libphonenumber-js` for international numbers), so every field that users can write is checked the same way.
+- **Enforce it in the database too**, with check constraints on `profiles.contact_email` and `contact_phone`, so bad or malicious input can't get in by skipping the app.
+- **Escape on output**: when the Next.js site renders user text, it must go through React's escaping, never `dangerouslySetInnerHTML`, so no stored text can run as code.

@@ -68,7 +68,7 @@ export default function ImageField({ userId, kind, path, onSave }: Props) {
         ) : null}
       </View>
       <View style={styles.actions}>
-        <Pressable onPress={change} disabled={busy} style={[styles.button, busy && styles.disabled]}>
+        <Pressable onPress={change} disabled={busy} style={[styles.button, styles.outlined, busy && styles.disabled]}>
           <Text style={styles.buttonText}>{source ? "Change" : isAvatar ? "Add photo" : "Add logo"}</Text>
         </Pressable>
         {path ? (
@@ -90,8 +90,9 @@ const styles = StyleSheet.create({
   image: { width: "100%", height: "100%" },
   placeholder: { color: "#888", fontSize: 13 },
   busy: { position: "absolute", top: 0, right: 0, bottom: 0, left: 0, backgroundColor: "rgba(0,0,0,0.35)", alignItems: "center", justifyContent: "center" },
-  actions: { flexDirection: "row", gap: 16, marginTop: 10 },
+  actions: { flexDirection: "row", alignItems: "center", gap: 16, marginTop: 10 },
   button: { paddingHorizontal: 8, paddingVertical: 4 },
+  outlined: { borderWidth: 1, borderColor: "#2f2f2f", borderRadius: 8, paddingHorizontal: 16, paddingVertical: 8 },
   buttonText: { fontSize: 15, fontWeight: "600", color: "#2f2f2f" },
   removeText: { fontSize: 15, color: "#b3261e" },
   disabled: { opacity: 0.4 },
