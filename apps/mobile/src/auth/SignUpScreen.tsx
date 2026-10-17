@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, TextInput } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { isHandleAvailable } from "@skedgelife/data";
+import { isHandleAvailable, signUp as createAccount } from "@skedgelife/data";
 import type { AuthStackParamList } from "../navigation/RootNavigator";
 import { supabase } from "../lib/supabase";
 import { errorMessage } from "../lib/errors";
@@ -49,15 +49,13 @@ export default function SignUpScreen({ navigation }: NativeStackScreenProps<Auth
   const signUp = async () => {
     setBusy(true);
     setError(null);
-    // The on_auth_user_created trigger creates the profile from this metadata.
-    const { data, error } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: { data: { handle, display_name: displayName.trim() } },
-    });
-    if (error) setError(errorMessage(error));
-    else if (!data.session) setNotice("Check your email to confirm your account, then log in.");
-    // With a session, AuthProvider switches the app to the tabs.
+    try {
+      const { signedIn } = await createAccount(supabase, { email, password, handle, displayName });
+      if (!signedIn) setNotice("Check your email to confirm your account, then log in.");
+      // When signed in, AuthProvider switches the app to the tabs.
+    } catch (err) {
+      setError(errorMessage(err));
+    }
     setBusy(false);
   };
 

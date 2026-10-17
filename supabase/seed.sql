@@ -39,6 +39,8 @@ Now back in Orange County Michelle is offering public and private classes in the
   avatar_url = 'instructor-seed/bio-sqSmile.png',
   logo_url = 'instructor-seed/logo-MichelleRose.png',
   teaches = true,
+  -- Paid, so the seed shows a full gallery (the free plan allows 3 photos).
+  plan = 'paid',
   certifications = array[
     'RYT-200 (Hot Yoga / Hot Power Fusion)',
     'RYT-200 (Power Vinyasa)',

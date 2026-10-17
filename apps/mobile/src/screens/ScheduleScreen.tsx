@@ -17,7 +17,7 @@ export default function ScheduleScreen() {
   if (entries.length === 0) {
     return (
       <View style={styles.emptyState}>
-        <Text style={styles.emptyText}>No public classes available at this time.</Text>
+        <Text style={styles.emptyText}>No scheduled classes or upcoming events.</Text>
       </View>
     );
   }

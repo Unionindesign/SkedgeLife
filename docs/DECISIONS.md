@@ -23,10 +23,15 @@ Running record of decisions made on open questions raised in `docs/plans/`. Each
 | 2026-10-03 | **Free RSVPs are available on the free plan.** Taking payment is the paid perk. | Free hosts still need to know who's coming. | Final | scheduling plan |
 | 2026-10-03 | **Home-hosted events can hide their exact address until booked.** It's optional per event, behind a confirmation in the app; others see only the neighborhood. | Safety for people hosting at home. | Final | scheduling plan |
 | 2026-10-03 | **Maps: Mapbox**, with map code written against the shared Mapbox/MapLibre style format. Venue coordinates are geocoded with Mapbox's permanent geocoding, the version whose results may be stored. | Free at our size, and the user knows it well. MapLibre + OpenFreeMap is the fallback if pricing changes. Comparison in the scheduling plan. | Final (revisit if the bill passes ~$50/month) | scheduling plan |
+| 2026-10-04 | **Free plan photos: profile photo, logo, and up to 3 gallery photos. Paid: up to 30 gallery photos.** Enforced in the database. | A part-time teacher looks more credible with a logo and a few photos, and 3 still leaves a reason to upgrade. Refines the 2026-09-26 "one profile photo" wording. | Final | foundation self-serve editing plan |
+| 2026-10-04 | **No caps on services, private sessions, or testimonials** for now. | Text is cheap; revisit with #66 if needed. | Final | foundation self-serve editing plan |
+| 2026-10-04 | **The page owner enters testimonials.** Later, other users may submit reviews (or a form may collect them), and the owner chooses which ones show. | Keeps spam out and the owner in control. | Final | foundation self-serve editing plan |
+| 2026-10-04 | **Tabs: Schedule · Profile · Website.** Profile is the ordinary app profile; Website manages website content and presentation (logo, skin, services, privates, testimonials, gallery). The Sequence Builder leaves the tab bar (it's a paid teaching tool) and opens from the Schedule tab for people who teach. | Separates "who I am in the app" from "what my website shows", and makes room for the website builder. | Final | foundation self-serve editing plan |
+| 2026-10-04 | **A "larger group event" is any event with capacity over 20, or with no capacity limit.** Smaller one-offs count toward the free plan's 3 weekly slots. | Settles the open question from the scheduling plan. | Final | scheduling plan, #94 |
+| 2026-10-04 | **Photo changes save right away** (profile photo, logo, gallery), separately from the Save button on text forms. | Avoids orphaned uploads when someone backs out of a form, and matches how most apps handle photos. | Final | — |
 
 ## Open questions
 
-- **What counts as a "larger group event"** for the free plan's monthly allowance. Proposal in the scheduling plan: capacity over 20.
 - **Platform fee** on paid bookings: percentage, and whether the host or attendee pays.
 
 - **Inactive-handle reclaim policy**: how long before a dormant account's handle can be released, and how the owner is warned.

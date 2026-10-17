@@ -1,20 +1,22 @@
 import React from "react";
 import { View, Text, Image, ScrollView, StyleSheet, Linking, Pressable, type TextStyle, type ViewStyle } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { ProfilePage as ProfilePageData } from "@skedgelife/data";
 import { getSkin } from "@skedgelife/skins";
-import type { MainStackParamList } from "../navigation/RootNavigator";
-import { useProfile } from "../data/ProfileProvider";
-import ProfileStatus from "../components/ProfileStatus";
 import { imageSource } from "../lib/images";
 
-export default function InstructorProfileScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
-  const { state, reload } = useProfile();
-  if (state.status === "error") return <ProfileStatus status="error" message={state.message} onRetry={reload} />;
-  if (state.status !== "ready") return <ProfileStatus status={state.status} />;
+type Props = {
+  profile: ProfilePageData;
+  // "profile" is the app profile (photo, bios, interests, teaching details,
+  // contact). "website" adds the website content: logo, services, privates,
+  // testimonials, and gallery.
+  variant: "profile" | "website";
+  // Shown under the name, e.g. the Edit profile button.
+  action?: { label: string; onPress: () => void };
+  emptyHint?: string;
+};
 
-  const profile = state.profile;
+export default function ProfilePage({ profile, variant, action, emptyHint }: Props) {
+  const website = variant === "website";
   const skin = getSkin(profile.skin);
   const logo = imageSource(profile.logo_url);
   const headshot = imageSource(profile.avatar_url);
@@ -24,36 +26,39 @@ export default function InstructorProfileScreen() {
     ? { fontFamily: skin.fonts.accent, fontWeight: "normal" as const, fontSize: 34 }
     : null;
 
-  const gallery = profile.gallery_images.flatMap((g) => {
+  const gallery = (website ? profile.gallery_images : []).flatMap((g) => {
     const source = imageSource(g.url);
     return source ? [{ id: g.id, source }] : [];
   });
   const hasContact = Boolean(profile.contact_email || profile.contact_phone || profile.instagram_handle);
+  const services = website && profile.teaches ? profile.service_modalities : [];
+  const privates = website && profile.teaches ? profile.private_session_types : [];
+  const testimonials = website ? profile.testimonials : [];
   const teachingCount = profile.teaches
-    ? profile.specialties.length + profile.certifications.length + profile.service_modalities.length +
-      profile.private_session_types.length
+    ? profile.specialties.length + profile.certifications.length + services.length + privates.length
     : 0;
   const hasContent =
     Boolean(profile.bio_short || profile.bio_long) ||
-    teachingCount + profile.interests.length + profile.testimonials.length + gallery.length > 0 ||
+    teachingCount + profile.interests.length + testimonials.length + gallery.length > 0 ||
     hasContact;
 
   return (
     <ScrollView style={{ backgroundColor: skin.colors.background }} contentContainerStyle={styles.container}>
-      <View style={[styles.header, { backgroundColor: skin.colors.header }]}>
-        {logo ? <Image source={logo} style={styles.logo} resizeMode="contain" /> : null}
-      </View>
+      {website ? (
+        <View style={[styles.header, { backgroundColor: skin.colors.header }]}>
+          {logo ? <Image source={logo} style={styles.logo} resizeMode="contain" /> : null}
+        </View>
+      ) : null}
 
       <View style={styles.section}>
         {headshot ? <Image source={headshot} style={styles.headshot} /> : null}
         <Text style={[styles.name, { color: skin.colors.headingText }, accentFont]}>{profile.display_name}</Text>
         {profile.bio_short ? <Text style={styles.bioShort}>{profile.bio_short}</Text> : null}
-        <Pressable
-          onPress={() => navigation.navigate("EditProfile")}
-          style={[styles.editButton, { borderColor: skin.colors.accent }]}
-        >
-          <Text style={[styles.editText, { color: skin.colors.accent }]}>Edit profile</Text>
-        </Pressable>
+        {action ? (
+          <Pressable onPress={action.onPress} style={[styles.editButton, { borderColor: skin.colors.accent }]}>
+            <Text style={[styles.editText, { color: skin.colors.accent }]}>{action.label}</Text>
+          </Pressable>
+        ) : null}
       </View>
 
       {profile.bio_long ? (
@@ -63,9 +68,7 @@ export default function InstructorProfileScreen() {
         </View>
       ) : null}
 
-      {!hasContent ? (
-        <Text style={styles.emptyHint}>Your page is ready. Tap Edit profile to add your bio, interests, and contact details.</Text>
-      ) : null}
+      {!hasContent && emptyHint ? <Text style={styles.emptyHint}>{emptyHint}</Text> : null}
 
       {profile.interests.length > 0 ? (
         <Section title="Interests" titleStyle={headingFont}>
@@ -101,31 +104,31 @@ export default function InstructorProfileScreen() {
         </Section>
       ) : null}
 
-      {profile.teaches && profile.service_modalities.length > 0 ? (
+      {services.length > 0 ? (
         <Section title="Services" titleStyle={headingFont}>
-          {profile.service_modalities.map((m) => (
+          {services.map((m) => (
             <View key={m.id} style={{ marginBottom: 10 }}>
               <Text style={styles.serviceTitle}>{m.title}</Text>
-              <Text style={styles.bodyText}>{m.description}</Text>
+              {m.description ? <Text style={styles.bodyText}>{m.description}</Text> : null}
             </View>
           ))}
         </Section>
       ) : null}
 
-      {profile.teaches && profile.private_session_types.length > 0 ? (
-        <Section title="Privates" titleStyle={headingFont}>
-          {profile.private_session_types.map((p) => (
+      {privates.length > 0 ? (
+        <Section title="Private sessions" titleStyle={headingFont}>
+          {privates.map((p) => (
             <View key={p.id} style={{ marginBottom: 10 }}>
               <Text style={styles.serviceTitle}>{p.title}</Text>
-              <Text style={styles.bodyText}>{p.description}</Text>
+              {p.description ? <Text style={styles.bodyText}>{p.description}</Text> : null}
             </View>
           ))}
         </Section>
       ) : null}
 
-      {profile.testimonials.length > 0 ? (
+      {testimonials.length > 0 ? (
         <Section title="Testimonials" titleStyle={headingFont}>
-          {profile.testimonials.map((t) => (
+          {testimonials.map((t) => (
             <View key={t.id} style={{ marginBottom: 14 }}>
               <Text style={styles.bodyText}>&ldquo;{t.quote}&rdquo;</Text>
               <Text style={styles.testimonialAuthor}>
@@ -182,7 +185,7 @@ function Section({
 }
 
 const styles = StyleSheet.create({
-  container: { paddingBottom: 40 },
+  container: { paddingBottom: 40, paddingTop: 8 },
   header: { alignItems: "center", paddingVertical: 24 },
   logo: { width: 220, height: 80 },
   section: { paddingHorizontal: 20, paddingVertical: 16 },

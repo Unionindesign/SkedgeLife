@@ -22,7 +22,14 @@
       "expo-font",
       "expo-asset",
       "expo-sharing",
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "SkedgeLife uses your photos for your profile picture, logo, and gallery.",
+          "cameraPermission": "SkedgeLife uses the camera to take your profile picture and gallery photos."
+        }
+      ]
     ]
   }
 }

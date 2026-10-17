@@ -23,7 +23,10 @@ Statuses: **Open** (ready to do), **In progress**, **Waiting** (blocked on somet
 | 2026-09-24 | Open | Market research: which professions beyond yoga want this? | #74 | Informs skins and profession-specific features. |
 | 2026-09-26 | Open | Decide the inactive-handle reclaim policy (how long, how owners are warned) | | Open question in `docs/DECISIONS.md`. Needed before launch, not now. |
 | 2026-09-26 | Open | Before launch: review the `npm audit` warnings | | Don't run `npm audit fix --force`; it downgrades Expo packages. |
-| 2026-10-03 | Open | Review the scheduling plan and answer its open questions: what counts as a "larger group event", and the platform fee | | `docs/plans/2026-10-03-scheduling-events-and-bookings.md`. Fee question goes with #20. |
+| 2026-10-03 | Open | Review the scheduling plan and answer its open question: the platform fee | | `docs/plans/2026-10-03-scheduling-events-and-bookings.md`. Fee question goes with #20. |
 | 2026-10-03 | Waiting | Create a Mapbox account and tokens (a public token for the app, a secret download token for builds) | | Needed at the start of the Discovery phase, not before. |
 | 2026-10-03 | Waiting | Set up an EAS development build on the iPhone (replaces Expo Go once the app uses Mapbox) | | Discovery phase. Free EAS tier is enough. |
 | 2026-10-03 | Open | Before launch: upgrade Supabase to Pro (or similar) so the hosted project stops pausing | | The free plan pauses after about a week of inactivity; restore it from the dashboard until then. |
+| 2026-10-04 | Open | After merging the self-serve editing PR: `npx supabase db push` (photo storage bucket, gallery limits, length limits), then restart Expo with `--clear` and run the PR's phone checklist against the hosted project | | |
+| 2026-10-04 | Open | When the website has an address: add it to the hosted dashboard (Authentication → URL Configuration: site URL and redirect URLs) | #19 | See `docs/dev/auth.md`. |
+| 2026-10-04 | Open | Later: a cleanup job for orphaned photo files (uploads whose delete failed) | | Small storage cost only; not urgent. |

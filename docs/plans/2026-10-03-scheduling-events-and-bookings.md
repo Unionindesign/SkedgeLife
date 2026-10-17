@@ -80,6 +80,6 @@ Our needs are small: a set of points (venues and events), tap for details, and b
 
 ## Open questions
 
-1. **What counts as a "larger group event"?** *Proposal:* any one-off event with capacity over 20 (or no cap). Smaller one-offs, like a single hike for 8 people, count toward the 3 weekly slots for that week.
+1. ~~What counts as a "larger group event"?~~ **Decided 2026-10-04:** any event with capacity over 20, or with no capacity limit. Smaller one-offs, like a single hike for 8 people, count toward the 3 weekly slots for that week.
 2. **The platform fee:** what percentage, and does the host or the attendee pay it? (With your brother, #20.)
 3. **Interests and recommendations:** discovery needs more UI. Users set their interests, get recommended classes and events, and can turn recommendations and notifications on or off. This is search and suggestions people opt into, not a feed. It's scoped into Phase 2; the details come when we plan that phase.

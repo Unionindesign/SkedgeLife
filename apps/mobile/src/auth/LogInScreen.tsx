@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, ScrollView, Text, TextInput } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { logIn as signIn } from "@skedgelife/data";
 import type { AuthStackParamList } from "../navigation/RootNavigator";
 import { supabase } from "../lib/supabase";
 import { errorMessage } from "../lib/errors";
@@ -18,8 +19,11 @@ export default function LogInScreen({ navigation }: NativeStackScreenProps<AuthS
     setBusy(true);
     setError(null);
     // On success, AuthProvider sees the new session and the app switches to the tabs.
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-    if (error) setError(errorMessage(error));
+    try {
+      await signIn(supabase, email, password);
+    } catch (err) {
+      setError(errorMessage(err));
+    }
     setBusy(false);
   };
 
