@@ -50,7 +50,8 @@ Now back in Orange County Michelle is offering public and private classes in the
   contact_email = 'michellescutti@gmail.com',
   contact_phone = '720-291-1930',
   instagram_handle = '@Michelle84Mabelle',
-  skin = 'classic-yoga'
+  skin = 'classic-yoga',
+  testimonials_background_url = 'instructor-seed/italy.jpg'
 where id = '11111111-1111-4111-8111-111111111111';
 
 -- Schedule: her weekly studio classes (booked on the studio's site), plus two
@@ -107,10 +108,11 @@ insert into public.private_session_types (profile_id, title, description, sort_o
   ('11111111-1111-4111-8111-111111111111', 'Kids Yoga', 'Small groups and classes with parent. Custom yoga mats for kids available on request.', 3),
   ('11111111-1111-4111-8111-111111111111', 'Weddings', 'Custom series for the Bride, Groom, or Wedding party.', 4);
 
+-- Verbatim from the original site's testimonial carousel (2017).
 insert into public.testimonials (profile_id, quote, author_name, author_location, sort_order) values
-  ('11111111-1111-4111-8111-111111111111', 'Yoga has been a part of my life for the past seven years. I truly appreciate the method and elegance that Michelle brings to each class.', 'Michelle W.', 'Denver, CO', 0),
-  ('11111111-1111-4111-8111-111111111111', 'I met Michelle as a studio cleaner doing yoga for trade. I couldn''t believe what a sweet soul she had — I started taking her Hot Power Fusion class and after every class I felt amazing!', 'Crystal C.', null, 1),
-  ('11111111-1111-4111-8111-111111111111', 'Michelle is a natural healer who truly lives her yoga. I met her in Costa Rica and instantly felt welcomed and inspired by her lifestyle.', 'McKenzie', 'Winter Park, CO', 2);
+  ('11111111-1111-4111-8111-111111111111', 'Yoga has been a part of my life for the past seven years. I truly appreciate the method and elegance that Michelle brings to each class. She brings in her experience from all over the world to make each class unique and enlightening. I feel spiritually connected to myself and the yogic practice. She has a grace and patience that allows for those she is guiding to weave in the intentions offered. Michelle encourages in each class an awakened mindfulness that integrates the mind, body, and spirit to become aligned.', 'Michelle W.', 'Denver, CO', 0),
+  ('11111111-1111-4111-8111-111111111111', 'I met Michelle as a studio cleaner doing yoga for trade. I couldn''t believe what a sweet soul she had... every time she was in the room, I could feel this calming energy. I started taking her Hot Power Fusion class and after every class I felt amazing! Her sweet, soft voice helped me get to a calm state and focus my attention internally. She is kind and encouraging - so much so that when she left to teach at a new studio, I drove across town to continue taking her classes.', 'Crystal C.', null, 1),
+  ('11111111-1111-4111-8111-111111111111', 'Michelle is a natural healer who truly lives her yoga. I met her in Costa Rica and instantly felt welcomed and inspired by her lifestyle. I consistently attended classes with her and my body, mind and spirit found clarity and rejuvenation. I was even fortunate enough to get a Thai massage from her, which was incredible. Her knowledge of the body, yoga, and massage are interwoven in a beautiful way.', 'McKenzie', 'Winter Park, CO', 2);
 
 insert into public.gallery_images (profile_id, url, sort_order) values
   ('11111111-1111-4111-8111-111111111111', 'instructor-seed/gal-headStand.png', 0),

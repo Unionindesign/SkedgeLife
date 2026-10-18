@@ -13,7 +13,7 @@ The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, hand
 - **Profile**: your profile in the app: photo, name, bios, interests, teaching details, and contact links. Tap **Edit profile** to change them; photos are compressed on the phone before upload.
 - **Website**: manage your website's content.
   - **Look:** logo and skin.
-  - **Services, Private sessions, Testimonials:** add, edit, delete, and drag to reorder.
+  - **Services, Private sessions, Testimonials:** add, edit, delete, and drag to reorder. Testimonials show as a carousel, over a background photo with a parallax effect if you add one.
   - **Gallery:** 3 photos on the free plan, 30 on paid.
   - **Preview** shows the full page with your skin, as visitors will see it once public pages launch.
 - **Schedule**: your classes and events as a **list** of upcoming dates, a **week**, or a **month** calendar (it remembers your choice), in real local time (in-person events in the venue's zone, online ones in yours). Tap **+** to add one: a title, a time (one time or weekly on chosen days), and a place or an online link. Tap a date to edit the event, cancel just that date, or cancel the whole thing. Studio classes keep their "Book" link to the studio's site. The free plan allows 3 weekly events and 1 larger group event a month. If you teach, the **Sequence Builder** opens from here: drag poses into order, set durations and sides, add a quote and playlist link, and export a printable PDF card.
@@ -84,6 +84,7 @@ packages/
   data/                shared Supabase queries, auth, and photo uploads (@skedgelife/data)
   types/               shared data types, incl. generated database types (@skedgelife/types)
   skins/               skin colors and fonts (@skedgelife/skins)
+  ui/                  shared React Native components for app and web: parallax backgrounds, carousel (@skedgelife/ui)
 supabase/              local Supabase: config, SQL migrations, seed data
 docs/                  plans, decisions, changelog, TODO, dev notes
 ```

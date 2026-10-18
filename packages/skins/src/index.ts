@@ -17,6 +17,11 @@ export interface Skin {
     headingText: string;
     badgeBackground: string;
     background: string;
+    // A light tint behind alternating page sections, so the page isn't all white.
+    band: string;
+    // The dark footer at the bottom of the website, picked from the skin's own colors.
+    footer: string;
+    footerText: string;
   };
   // Omit a font to use the platform system font.
   fonts: {
@@ -36,6 +41,9 @@ export const skins: Record<SkinId, Skin> = {
       headingText: "#afafaf",
       badgeBackground: "#585858",
       background: "#ffffff",
+      band: "#eef6f5",
+      footer: "#00695c",
+      footerText: "#ffffff",
     },
     fonts: {
       heading: "Arvo",
@@ -52,6 +60,9 @@ export const skins: Record<SkinId, Skin> = {
       headingText: "#2f2f2f",
       badgeBackground: "#e5e5e5",
       background: "#ffffff",
+      band: "#f4f6f9",
+      footer: "#2f2f2f",
+      footerText: "#ffffff",
     },
     fonts: {},
   },

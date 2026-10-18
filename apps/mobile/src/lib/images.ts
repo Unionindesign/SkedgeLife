@@ -10,6 +10,7 @@ const bundled: Record<string, ImageSourcePropType> = {
   "instructor-seed/gal-headStand.png": require("../../assets/instructor-seed/gal-headStand.png"),
   "instructor-seed/CamelGroup.jpeg": require("../../assets/instructor-seed/CamelGroup.jpeg"),
   "instructor-seed/gal-treePool.png": require("../../assets/instructor-seed/gal-treePool.png"),
+  "instructor-seed/italy.jpg": require("../../assets/instructor-seed/italy.jpg"),
 };
 
 export function imageSource(path: string | null | undefined): ImageSourcePropType | undefined {

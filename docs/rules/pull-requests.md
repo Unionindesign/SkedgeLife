@@ -36,3 +36,7 @@ Include: what changed, how it was tested (which of the checks above, and what yo
 ## Commits
 
 End commit messages with the `Co-Authored-By` line from the current session's system reminder — it names whichever model is active, and changes between sessions.
+
+## After a PR merges
+
+- **Purge the Playwright screenshot cache.** Browser checks through the Playwright tool leave screenshots, page snapshots, and console logs in its output folder, currently `~/Work/SkyFireAI/.playwright-mcp/` (outside this repo). Once a PR merges, delete the `page-*` and `console-*` files there: `rm -f ~/Work/SkyFireAI/.playwright-mcp/page-* ~/Work/SkyFireAI/.playwright-mcp/console-*`. They're only for checking work in progress; nothing refers to them afterwards.

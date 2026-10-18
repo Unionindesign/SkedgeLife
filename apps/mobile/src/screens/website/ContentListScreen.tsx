@@ -4,10 +4,11 @@ import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import { reorderItems } from "@skedgelife/data";
+import { reorderItems, updateProfile } from "@skedgelife/data";
 import type { MainStackParamList } from "../../navigation/RootNavigator";
 import { useProfile } from "../../data/ProfileProvider";
 import ProfileStatus from "../../components/ProfileStatus";
+import ImageField from "../../components/ImageField";
 import { supabase } from "../../lib/supabase";
 import { errorMessage } from "../../lib/errors";
 import { CONTENT_KINDS, type ContentItem } from "./contentKinds";
@@ -76,6 +77,23 @@ export default function ContentListScreen({ navigation, route }: Props) {
         keyExtractor={(i) => i.id}
         renderItem={renderItem}
         onDragEnd={({ data }) => saveOrder(data)}
+        ListHeaderComponent={
+          kind === "testimonials" ? (
+            <View style={styles.background}>
+              <Text style={styles.backgroundLabel}>Background photo</Text>
+              <Text style={styles.backgroundHint}>Shown behind your testimonials, moving gently as people scroll. Saves right away.</Text>
+              <ImageField
+                userId={state.profile.id}
+                kind="backdrop"
+                path={state.profile.testimonials_background_url}
+                onSave={async (testimonials_background_url) => {
+                  await updateProfile(supabase, state.profile.id, { testimonials_background_url });
+                  reload();
+                }}
+              />
+            </View>
+          ) : null
+        }
         ListEmptyComponent={<Text style={styles.empty}>{config.emptyText}</Text>}
         ListFooterComponent={
           <Pressable style={styles.addButton} onPress={() => navigation.navigate("ContentItem", { kind })}>
@@ -102,6 +120,9 @@ const styles = StyleSheet.create({
   rowActive: { backgroundColor: "#f4f4f4" },
   rowText: { flex: 1 },
   summary: { fontSize: 15, color: "#2f2f2f" },
+  background: { paddingHorizontal: 20, paddingTop: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: "#ddd" },
+  backgroundLabel: { fontSize: 14, fontWeight: "600", color: "#333" },
+  backgroundHint: { fontSize: 12, color: "#777", marginTop: 2, marginBottom: 12 },
   empty: { padding: 20, fontSize: 14, color: "#666", lineHeight: 20 },
   addButton: { margin: 20, borderWidth: 1, borderColor: "#2f2f2f", borderRadius: 8, paddingVertical: 12, alignItems: "center" },
   addText: { fontSize: 15, fontWeight: "600", color: "#2f2f2f" },
