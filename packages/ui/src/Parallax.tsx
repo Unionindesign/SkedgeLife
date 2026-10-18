@@ -12,6 +12,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import { useReducedMotion } from "./useReducedMotion";
+import { parallaxTravel } from "./shared/logic";
 
 // Parallax backgrounds for any screen, on the phone and on the web.
 //
@@ -153,7 +154,7 @@ export function ParallaxSection({
   // until its bottom leaves at the top), the image slides down by `travel`
   // inside it, so it appears to move up more slowly than the content.
   const viewport = parallax?.viewportHeight ?? 0;
-  const travel = !parallax || top === null || reduced || viewport === 0 ? 0 : (viewport + height) * speed;
+  const travel = !parallax || top === null || reduced || viewport === 0 ? 0 : parallaxTravel(viewport, height, speed);
   const translateY =
     travel > 0 && parallax && top !== null
       ? parallax.scrollY.interpolate({

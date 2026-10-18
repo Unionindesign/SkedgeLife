@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   checks:
-    name: Typecheck, lint, format, unit tests
+    name: Typecheck, lint, format, unit tests, web build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -38,6 +38,13 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm test
+      # The website's production build. It renders nothing ahead of time, so
+      # the local Supabase values below are never contacted.
+      - run: npm run build:web
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_KEY: sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH
+          NEXT_TELEMETRY_DISABLED: "1"
 
   database:
     name: Database tests

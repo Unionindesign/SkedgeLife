@@ -17,7 +17,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "npm run test --workspaces --if-present",
-    "test:db": "supabase test db"
+    "test:db": "supabase test db",
+    "dev:web": "npm run dev -w @skedgelife/web",
+    "build:web": "npm run build -w @skedgelife/web"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

@@ -1,11 +1,18 @@
 // One ESLint config for the monorepo: Expo's recommended rules for React
-// Native code (the app and packages/ui), plain typescript-eslint for the
-// logic-only packages. Formatting is Prettier's job, not ESLint's.
+// Native code (the app and packages/ui), Next.js's rules for the website and
+// the web components, plain typescript-eslint for the logic-only packages.
+// Formatting is Prettier's job, not ESLint's.
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import expoConfig from "eslint-config-expo/flat.js";
+import nextConfig from "eslint-config-next/core-web-vitals";
 
-const REACT_NATIVE = ["apps/mobile/**/*.{js,jsx,ts,tsx}", "packages/ui/**/*.{ts,tsx}"];
+const REACT_NATIVE = [
+  "apps/mobile/**/*.{js,jsx,ts,tsx}",
+  "packages/ui/src/*.{ts,tsx}",
+  "packages/ui/src/shared/**/*.ts",
+];
+const WEB = ["apps/web/**/*.{js,jsx,ts,tsx}", "packages/ui/src/web/**/*.{ts,tsx}"];
 
 export default [
   {
@@ -20,6 +27,9 @@ export default [
     ],
   },
   ...expoConfig.map((config) => ({ ...config, files: REACT_NATIVE })),
+  ...nextConfig
+    .filter((config) => !config.ignores || config.files)
+    .map((config) => ({ ...config, files: WEB, settings: { ...config.settings, next: { rootDir: "apps/web" } } })),
   {
     files: REACT_NATIVE,
     rules: {

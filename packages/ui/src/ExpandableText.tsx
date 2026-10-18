@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Text, type StyleProp, type TextStyle } from "react-native";
-
-// Without a paragraph break, text this long is cut to `collapsedLines`.
-const LONG_TEXT = 400;
+import { collapseText } from "./shared/logic";
 
 // Long text cut short with "… more"; tap to show it all ("less" folds it
 // back). Cuts at the first paragraph break when there is one, otherwise
@@ -19,11 +17,10 @@ export function ExpandableText({
   collapsedLines?: number;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const paragraphs = text.trim().split(/\n\s*\n/);
-  const byParagraph = paragraphs.length > 1;
+  const collapse = collapseText(text);
   const link = { color: linkColor, fontWeight: "600" as const };
 
-  if (!byParagraph && text.length <= LONG_TEXT) return <Text style={style}>{text}</Text>;
+  if (collapse.mode === "none") return <Text style={style}>{text}</Text>;
   if (expanded) {
     return (
       <Text style={style}>
@@ -34,10 +31,10 @@ export function ExpandableText({
       </Text>
     );
   }
-  if (byParagraph) {
+  if (collapse.mode === "paragraph") {
     return (
       <Text style={style}>
-        {paragraphs[0]}{" "}
+        {collapse.first}{" "}
         <Text style={link} onPress={() => setExpanded(true)} accessibilityRole="button">
           … more
         </Text>
