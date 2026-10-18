@@ -91,6 +91,8 @@ docs/                  plans, decisions, changelog, TODO, dev notes
 
 The backend runs locally in Docker: `npm run db:start`. See [`docs/dev/supabase.md`](docs/dev/supabase.md).
 
+Checks: `npm run typecheck`, `npm run lint`, `npm run format:check`, `npm test`, and `npm run test:db`. CI runs them on every PR. See [`docs/dev/testing.md`](docs/dev/testing.md).
+
 ## Docs
 
 - [`docs/plans/`](docs/plans/): plans of approach, one dated file per topic. Start with the general plan.
