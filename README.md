@@ -16,7 +16,7 @@ The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, hand
   - **Services, Private sessions, Testimonials:** add, edit, delete, and drag to reorder. Testimonials show as a carousel, over a background photo with a parallax effect if you add one.
   - **Gallery:** 3 photos on the free plan, 30 on paid.
   - **Preview** shows the full page with your skin, as visitors will see it once public pages launch.
-- **Schedule**: your upcoming classes and events by day, in real local time (in-person events in the venue's zone, online ones in yours). Tap **+** to add one: a title, a time (one time or weekly on chosen days), and a place or an online link. Tap a date to edit the event, cancel just that date, or cancel the whole thing. Studio classes keep their "Book" link to the studio's site. The free plan allows 3 weekly events and 1 larger group event a month. If you teach, the **Sequence Builder** opens from here: drag poses into order, set durations and sides, add a quote and playlist link, and export a printable PDF card.
+- **Schedule**: your classes and events as a **list** of upcoming dates, a **week**, or a **month** calendar (it remembers your choice), in real local time (in-person events in the venue's zone, online ones in yours). Tap **+** to add one: a title, a time (one time or weekly on chosen days), and a place or an online link. Tap a date to edit the event, cancel just that date, or cancel the whole thing. Studio classes keep their "Book" link to the studio's site. The free plan allows 3 weekly events and 1 larger group event a month. If you teach, the **Sequence Builder** opens from here: drag poses into order, set durations and sides, add a quote and playlist link, and export a printable PDF card.
 
 ## In the works
 

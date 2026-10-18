@@ -4,7 +4,12 @@ A short entry for each working session. Newest first. Decision rationale goes in
 
 ## 2026-10-17
 
-- Branch `feature/parallax-testimonials` (#99, #36):
+- PR #100 merged. Branch `feature/schedule-calendar-views`:
+  - **Schedule tab views:** List · Week · Month switch, remembered on the phone. Week: seven days with ‹ › and Today, empty days on one line. Month: a grid with a dot per date (grey when cancelled); tap a day to list its dates below. Tapping a date opens it for editing, as in the list.
+  - Calendar views include past dates (`getOccurrencesBetween` in `packages/data`); days follow the phone's calendar, with each date on the day it happens in its own zone. A note says weekly classes show up to 12 weeks ahead.
+  - The Schedule screen split into `screens/schedule/` (list, calendar, shared date row, a focus-aware loading hook).
+
+- PR #101 merged. Branch `feature/parallax-testimonials` (#99, #36):
   - **`packages/ui`** (new): `ParallaxScrollView` (any screen can have a parallax backdrop), `ParallaxSection` (a band with its own moving background), `Carousel` (swipe, dots, autoplay that restarts after a tap), and `useReducedMotion`. Plain React Native, so they work on the phone and the web build; motion and autoplay stop with "reduce motion" on.
   - **Testimonials** on the website preview are a carousel; with a background photo they float over it in a translucent box with the parallax effect, rebuilt from Michelle's 2017 site. Website → Testimonials has a "Background photo" picker (saves right away).
   - **Database** (migration `testimonials_background`): `profiles.testimonials_background_url`; testimonial quotes can be up to 1000 characters (was 500).
