@@ -39,6 +39,8 @@ export default [
   {
     // Tests and config files run under Node and Jest.
     files: ["**/*.test.{ts,tsx}", "**/jest.config.js", "**/babel.config.js", "**/metro.config.js"],
-    languageOptions: { globals: { require: "readonly", module: "writable", __dirname: "readonly", process: "readonly" } },
+    languageOptions: {
+      globals: { require: "readonly", module: "writable", __dirname: "readonly", process: "readonly" },
+    },
   },
 ];

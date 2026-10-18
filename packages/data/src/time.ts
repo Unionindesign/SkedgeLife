@@ -136,9 +136,13 @@ export function formatWeekRange(start: string): string {
   const end = addDaysToDate(start, 6);
   const monthDay = (date: string) => {
     const [y, m, d] = date.split("-").map(Number);
-    return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(y, m - 1, d)));
+    return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(
+      new Date(Date.UTC(y, m - 1, d)),
+    );
   };
-  return start.slice(0, 7) === end.slice(0, 7) ? `${monthDay(start)} – ${Number(end.slice(8))}` : `${monthDay(start)} – ${monthDay(end)}`;
+  return start.slice(0, 7) === end.slice(0, 7)
+    ? `${monthDay(start)} – ${Number(end.slice(8))}`
+    : `${monthDay(start)} – ${monthDay(end)}`;
 }
 
 // "October 2026".

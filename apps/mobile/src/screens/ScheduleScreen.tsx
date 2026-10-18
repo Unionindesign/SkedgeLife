@@ -39,7 +39,8 @@ export default function ScheduleScreen() {
   if (state.status !== "ready") return <ProfileStatus status={state.status} />;
 
   const accent = getSkin(state.profile.skin).colors.accent;
-  const open = (item: OccurrenceWithEvent) => navigation.navigate("EventForm", { eventId: item.event.id, occurrenceId: item.id });
+  const open = (item: OccurrenceWithEvent) =>
+    navigation.navigate("EventForm", { eventId: item.event.id, occurrenceId: item.id });
   const add = () => navigation.navigate("EventForm", {});
 
   return (

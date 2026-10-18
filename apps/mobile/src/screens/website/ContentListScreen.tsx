@@ -33,7 +33,11 @@ export default function ContentListScreen({ navigation, route }: Props) {
     navigation.setOptions({
       title: config.title,
       headerRight: () => (
-        <Pressable onPress={() => navigation.navigate("ContentItem", { kind })} hitSlop={8} accessibilityLabel={`Add ${config.singular}`}>
+        <Pressable
+          onPress={() => navigation.navigate("ContentItem", { kind })}
+          hitSlop={8}
+          accessibilityLabel={`Add ${config.singular}`}
+        >
           <Ionicons name="add" size={26} color="#2f2f2f" />
         </Pressable>
       ),
@@ -47,7 +51,11 @@ export default function ContentListScreen({ navigation, route }: Props) {
     setItems(next);
     setError(null);
     try {
-      await reorderItems(supabase, config.table, next.map((i) => i.id));
+      await reorderItems(
+        supabase,
+        config.table,
+        next.map((i) => i.id),
+      );
     } catch (err) {
       setError(errorMessage(err));
     }
@@ -81,7 +89,9 @@ export default function ContentListScreen({ navigation, route }: Props) {
           kind === "testimonials" ? (
             <View style={styles.background}>
               <Text style={styles.backgroundLabel}>Background photo</Text>
-              <Text style={styles.backgroundHint}>Shown behind your testimonials, moving gently as people scroll. Saves right away.</Text>
+              <Text style={styles.backgroundHint}>
+                Shown behind your testimonials, moving gently as people scroll. Saves right away.
+              </Text>
               <ImageField
                 userId={state.profile.id}
                 kind="backdrop"
@@ -120,11 +130,23 @@ const styles = StyleSheet.create({
   rowActive: { backgroundColor: "#f4f4f4" },
   rowText: { flex: 1 },
   summary: { fontSize: 15, color: "#2f2f2f" },
-  background: { paddingHorizontal: 20, paddingTop: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: "#ddd" },
+  background: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#ddd",
+  },
   backgroundLabel: { fontSize: 14, fontWeight: "600", color: "#333" },
   backgroundHint: { fontSize: 12, color: "#777", marginTop: 2, marginBottom: 12 },
   empty: { padding: 20, fontSize: 14, color: "#666", lineHeight: 20 },
-  addButton: { margin: 20, borderWidth: 1, borderColor: "#2f2f2f", borderRadius: 8, paddingVertical: 12, alignItems: "center" },
+  addButton: {
+    margin: 20,
+    borderWidth: 1,
+    borderColor: "#2f2f2f",
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
   addText: { fontSize: 15, fontWeight: "600", color: "#2f2f2f" },
   error: { color: "#b3261e", fontSize: 14, paddingHorizontal: 20, paddingTop: 12 },
 });

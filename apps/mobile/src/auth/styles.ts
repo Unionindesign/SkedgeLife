@@ -3,7 +3,14 @@ import { StyleSheet } from "react-native";
 export const authStyles = StyleSheet.create({
   container: { flexGrow: 1, padding: 24, justifyContent: "center", backgroundColor: "#fff" },
   label: { fontSize: 14, fontWeight: "600", color: "#333", marginBottom: 6, marginTop: 14 },
-  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 8, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16 },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+  },
   hint: { fontSize: 12, color: "#777", marginTop: 4 },
   ok: { fontSize: 12, color: "#0a7d3b", marginTop: 4 },
   bad: { fontSize: 12, color: "#b3261e", marginTop: 4 },

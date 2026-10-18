@@ -2,9 +2,7 @@ import React from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props =
-  | { status: "loading" }
-  | { status: "error"; message: string; onRetry: () => void }
-  | { status: "not-found" };
+  { status: "loading" } | { status: "error"; message: string; onRetry: () => void } | { status: "not-found" };
 
 // Shown in place of a screen until its profile data is ready.
 export default function ProfileStatus(props: Props) {

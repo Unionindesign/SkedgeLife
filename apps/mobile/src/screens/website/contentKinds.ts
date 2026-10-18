@@ -47,7 +47,9 @@ export const CONTENT_KINDS: Record<ContentKind, KindConfig> = {
     title: "Private sessions",
     singular: "private session",
     emptyText: "Describe the one-on-one or small-group sessions people can book with you.",
-    fields: titleAndDescription.map((f) => (f.key === "title" ? { ...f, placeholder: "e.g. Private yoga at home" } : f)),
+    fields: titleAndDescription.map((f) =>
+      f.key === "title" ? { ...f, placeholder: "e.g. Private yoga at home" } : f,
+    ),
     items: (p) => p.private_session_types,
     summary: (i) => String(i.title),
   },

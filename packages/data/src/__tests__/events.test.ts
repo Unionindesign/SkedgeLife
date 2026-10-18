@@ -1,4 +1,11 @@
-import { activeWeeklyEvents, dateDetails, isLargerEvent, type EventRow, type OccurrenceWithEvent, type VenueRow } from "../events";
+import {
+  activeWeeklyEvents,
+  dateDetails,
+  isLargerEvent,
+  type EventRow,
+  type OccurrenceWithEvent,
+  type VenueRow,
+} from "../events";
 
 const venue = (id: string, time_zone = "America/Los_Angeles") =>
   ({ id, name: `Venue ${id}`, time_zone, is_private: false }) as VenueRow;
@@ -54,7 +61,12 @@ describe("dateDetails", () => {
 
   it("lets a date's own changes win, field by field", () => {
     const d = dateDetails(
-      occurrence({ title: "Hot Ra (sub: Jen)", venue_id: "other", venue: venue("other", "America/Denver"), time_zone: "America/Denver" }),
+      occurrence({
+        title: "Hot Ra (sub: Jen)",
+        venue_id: "other",
+        venue: venue("other", "America/Denver"),
+        time_zone: "America/Denver",
+      }),
     );
     expect(d.title).toBe("Hot Ra (sub: Jen)");
     expect(d.venue?.id).toBe("other");

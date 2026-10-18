@@ -71,7 +71,9 @@ export default function WebsiteScreen({ navigation }: Props) {
         onPress={() => navigation.navigate("Gallery")}
       />
       {!profile.teaches ? (
-        <Text style={styles.hint}>Turn on "I teach classes or sessions" in Edit profile to add services and private sessions.</Text>
+        <Text style={styles.hint}>
+          Turn on "I teach classes or sessions" in Edit profile to add services and private sessions.
+        </Text>
       ) : null}
     </ScrollView>
   );
@@ -117,7 +119,14 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   previewText: { color: "#fff", fontWeight: "600", fontSize: 14 },
-  heading: { fontSize: 13, fontWeight: "600", color: "#888", textTransform: "uppercase", marginHorizontal: 20, marginBottom: 4 },
+  heading: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#888",
+    textTransform: "uppercase",
+    marginHorizontal: 20,
+    marginBottom: 4,
+  },
   row: {
     flexDirection: "row",
     alignItems: "center",

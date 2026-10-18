@@ -47,15 +47,23 @@ export default function CalendarView({
   const monthStart = startOfMonth(anchor);
   const gridStart = mode === "week" ? startOfWeek(anchor) : startOfWeek(monthStart);
   const gridDays =
-    mode === "week" ? 7 : Math.ceil((daysBetween(gridStart, monthStart) + daysBetween(monthStart, addMonths(monthStart, 1))) / 7) * 7;
+    mode === "week"
+      ? 7
+      : Math.ceil((daysBetween(gridStart, monthStart) + daysBetween(monthStart, addMonths(monthStart, 1))) / 7) * 7;
   const gridEnd = addDaysToDate(gridStart, gridDays);
-  const days = useMemo(() => Array.from({ length: gridDays }, (_, i) => addDaysToDate(gridStart, i)), [gridStart, gridDays]);
+  const days = useMemo(
+    () => Array.from({ length: gridDays }, (_, i) => addDaysToDate(gridStart, i)),
+    [gridStart, gridDays],
+  );
 
   // A day either side, since an event's own zone can put it on a different day than the phone's.
   const device = deviceTimeZone();
   const from = localToUtcIso(addDaysToDate(gridStart, -1), "00:00", device);
   const to = localToUtcIso(addDaysToDate(gridEnd, 1), "00:00", device);
-  const { state, reload } = useFocusedLoad(() => getOccurrencesBetween(supabase, profileId, from, to), `${profileId}:${from}`);
+  const { state, reload } = useFocusedLoad(
+    () => getOccurrencesBetween(supabase, profileId, from, to),
+    `${profileId}:${from}`,
+  );
 
   const byDay = useMemo(() => {
     const map = new Map<string, OccurrenceWithEvent[]>();
@@ -96,17 +104,27 @@ export default function CalendarView({
   const rowsFor = (day: string, emptyText: string) => {
     const items = byDay.get(day) ?? [];
     if (items.length === 0) return <Text style={styles.nothing}>{emptyText}</Text>;
-    return items.map((item) => <OccurrenceRow key={item.id} item={item} accent={accent} onPress={() => onOpen(item)} />);
+    return items.map((item) => (
+      <OccurrenceRow key={item.id} item={item} accent={accent} onPress={() => onOpen(item)} />
+    ));
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Pressable onPress={() => move(-1)} hitSlop={10} accessibilityLabel={mode === "week" ? "Previous week" : "Previous month"}>
+        <Pressable
+          onPress={() => move(-1)}
+          hitSlop={10}
+          accessibilityLabel={mode === "week" ? "Previous week" : "Previous month"}
+        >
           <Ionicons name="chevron-back" size={22} color="#2f2f2f" />
         </Pressable>
         <Text style={styles.label}>{label}</Text>
-        <Pressable onPress={() => move(1)} hitSlop={10} accessibilityLabel={mode === "week" ? "Next week" : "Next month"}>
+        <Pressable
+          onPress={() => move(1)}
+          hitSlop={10}
+          accessibilityLabel={mode === "week" ? "Next week" : "Next month"}
+        >
           <Ionicons name="chevron-forward" size={22} color="#2f2f2f" />
         </Pressable>
         <View style={{ flex: 1 }} />
@@ -157,18 +175,25 @@ export default function CalendarView({
                           isSelected && { backgroundColor: accent, borderColor: accent },
                         ]}
                       >
-                        <Text style={[styles.dayText, isSelected && styles.dayTextSelected]}>{Number(day.slice(8))}</Text>
+                        <Text style={[styles.dayText, isSelected && styles.dayTextSelected]}>
+                          {Number(day.slice(8))}
+                        </Text>
                       </View>
                       <View style={styles.dots}>
                         {items.slice(0, 3).map((item) => (
-                          <View key={item.id} style={[styles.dot, { backgroundColor: isCancelled(item) ? "#ccc" : accent }]} />
+                          <View
+                            key={item.id}
+                            style={[styles.dot, { backgroundColor: isCancelled(item) ? "#ccc" : accent }]}
+                          />
                         ))}
                       </View>
                     </Pressable>
                   );
                 })}
               </View>
-              <Text style={scheduleStyles.dayHeading}>{selected === today ? "Today" : formatDate(selected, "long")}</Text>
+              <Text style={scheduleStyles.dayHeading}>
+                {selected === today ? "Today" : formatDate(selected, "long")}
+              </Text>
               {rowsFor(selected, "Nothing on this day.")}
             </>
           ) : (
@@ -215,7 +240,15 @@ const styles = StyleSheet.create({
   grid: { flexDirection: "row", flexWrap: "wrap", paddingHorizontal: 12 },
   cell: { width: `${100 / 7}%`, alignItems: "center", paddingVertical: 4, height: 52 },
   outside: { opacity: 0.35 },
-  dayNumber: { width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center", borderWidth: 1.5, borderColor: "transparent" },
+  dayNumber: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1.5,
+    borderColor: "transparent",
+  },
   dayText: { fontSize: 15, color: "#2f2f2f" },
   dayTextSelected: { color: "#fff", fontWeight: "700" },
   dots: { flexDirection: "row", gap: 3, marginTop: 3, height: 6 },

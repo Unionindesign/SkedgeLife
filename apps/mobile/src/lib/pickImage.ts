@@ -49,7 +49,9 @@ export async function pickAndUploadImage(userId: string, kind: ImageKind): Promi
     if (!permission.granted) throw new Error("Camera access is off. Turn it on in Settings to take a photo.");
   }
   const result =
-    source === "camera" ? await ImagePicker.launchCameraAsync(options) : await ImagePicker.launchImageLibraryAsync(options);
+    source === "camera"
+      ? await ImagePicker.launchCameraAsync(options)
+      : await ImagePicker.launchImageLibraryAsync(options);
   if (result.canceled || result.assets.length === 0) return null;
 
   const asset = result.assets[0];

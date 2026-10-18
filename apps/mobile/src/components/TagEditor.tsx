@@ -65,11 +65,26 @@ export default function TagEditor({ tags, onChange, placeholder, accentColor }: 
 
 const styles = StyleSheet.create({
   tagRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 8 },
-  tag: { flexDirection: "row", alignItems: "center", paddingLeft: 10, paddingRight: 8, paddingVertical: 6, borderRadius: 16 },
+  tag: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 10,
+    paddingRight: 8,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
   tagText: { color: "#fff", fontSize: 13 },
   remove: { color: "#fff", fontSize: 16, marginLeft: 6, lineHeight: 18 },
   inputRow: { flexDirection: "row", gap: 8 },
-  input: { flex: 1, borderWidth: 1, borderColor: "#ccc", borderRadius: 8, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16 },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+  },
   addButton: { justifyContent: "center", paddingHorizontal: 16, borderRadius: 8, backgroundColor: "#2f2f2f" },
   addText: { color: "#fff", fontWeight: "600" },
   disabled: { opacity: 0.4 },

@@ -11,7 +11,10 @@ export type EventWithVenue = EventRow & { venue: VenueRow | null };
 export type OccurrenceWithEvent = OccurrenceRow & { venue: VenueRow | null; event: EventWithVenue };
 
 // The event columns a host fills in; status changes go through setEventStatus.
-export type EventFields = Omit<Tables["events"]["Insert"], "id" | "profile_id" | "status" | "created_at" | "updated_at">;
+export type EventFields = Omit<
+  Tables["events"]["Insert"],
+  "id" | "profile_id" | "status" | "created_at" | "updated_at"
+>;
 // What a host can change on a single date. Null means "same as the event".
 export type OccurrenceFields = Pick<
   Tables["event_occurrences"]["Update"],
@@ -29,7 +32,10 @@ export type OccurrenceFields = Pick<
   | "is_private_home"
   | "area"
 >;
-export type VenueFields = Pick<Tables["venues"]["Insert"], "name" | "address" | "time_zone" | "booking_url" | "is_private">;
+export type VenueFields = Pick<
+  Tables["venues"]["Insert"],
+  "name" | "address" | "time_zone" | "booking_url" | "is_private"
+>;
 
 // Matches public.enforce_event_caps() in the scheduling_real_times migration.
 export const EVENT_CAPS = { weeklySlots: 3, largerPerMonth: 1, largerOver: 20 } as const;
@@ -77,7 +83,10 @@ const EVENT_SELECT = "*, venue:venues(*)" as const;
 const OCCURRENCE_SELECT = `*, venue:venues(*), event:events(${EVENT_SELECT})` as const;
 
 // A profile's upcoming dates, soonest first ("upcoming" by the server's clock).
-export async function getUpcomingOccurrences(client: SkedgeLifeClient, profileId: string): Promise<OccurrenceWithEvent[]> {
+export async function getUpcomingOccurrences(
+  client: SkedgeLifeClient,
+  profileId: string,
+): Promise<OccurrenceWithEvent[]> {
   const { data, error } = await client
     .rpc("upcoming_occurrences", { p_profile_id: profileId })
     .select(OCCURRENCE_SELECT);

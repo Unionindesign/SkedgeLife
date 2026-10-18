@@ -1,7 +1,13 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Pressable, ScrollView, Text, TextInput } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { addContentItem, deleteContentItem, updateContentItem, type ContentFields, type ContentTable } from "@skedgelife/data";
+import {
+  addContentItem,
+  deleteContentItem,
+  updateContentItem,
+  type ContentFields,
+  type ContentTable,
+} from "@skedgelife/data";
 import type { MainStackParamList } from "../../navigation/RootNavigator";
 import { useProfile } from "../../data/ProfileProvider";
 import ProfileStatus from "../../components/ProfileStatus";
@@ -41,7 +47,9 @@ export default function ContentItemScreen({ navigation, route }: Props) {
   const profile = state.profile;
 
   const changed = JSON.stringify(form) !== JSON.stringify(initial);
-  const valid = config.fields.every((f) => form[f.key].length <= f.max && (!f.required || form[f.key].trim().length > 0));
+  const valid = config.fields.every(
+    (f) => form[f.key].length <= f.max && (!f.required || form[f.key].trim().length > 0),
+  );
   const canSave = changed && valid && !saving;
 
   const run = async (task: () => Promise<void>) => {
