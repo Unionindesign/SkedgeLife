@@ -26,5 +26,8 @@
     "supabase": "^2.118.0",
     "ts-jest": "^29.4.15",
     "typescript-eslint": "^8.71.2"
+  },
+  "engines": {
+    "node": ">=20.19.4"
   }
 }

@@ -8,6 +8,7 @@
     "@skedgelife/types": "*"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   }
 }
