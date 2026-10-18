@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, useWindowDimensions, View, type TextStyle } from "react-native";
+import { WIDE_SCREEN } from "./shared/logic";
+
+export { WIDE_SCREEN };
 
 export type DisclosureItem = { key: string; title: string; content: React.ReactNode };
 
@@ -8,9 +11,6 @@ type Props = {
   accentColor: string;
   titleStyle?: TextStyle | null;
 };
-
-// Screens at least this wide show tabs; narrower ones (phones) show an accordion.
-export const WIDE_SCREEN = 768;
 
 // Titled items, one open at a time: tabs across the top, the open one's
 // content below.

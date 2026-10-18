@@ -55,7 +55,8 @@ export const skins: Record<SkinId, Skin> = {
     label: "Default",
     colors: {
       header: "#2f2f2f",
-      accent: "#4a90d9",
+      // Dark enough for text on white (5.4:1, WCAG AA); the old #4a90d9 was 3.3:1.
+      accent: "#2b6cb0",
       cardBackground: "#f2f2f2",
       headingText: "#2f2f2f",
       badgeBackground: "#e5e5e5",

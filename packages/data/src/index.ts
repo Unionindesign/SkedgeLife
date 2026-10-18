@@ -8,6 +8,7 @@ export * from "./media";
 export * from "./validation";
 export * from "./events";
 export * from "./time";
+export * from "./timetable";
 
 // Events load separately (getUpcomingOccurrences), since they're by date, not sort order.
 const PROFILE_PAGE_SELECT = `

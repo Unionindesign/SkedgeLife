@@ -1,0 +1,29 @@
+.parallax {
+  padding: 64px 0;
+}
+.inner,
+.plain {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.box,
+.card {
+  margin: 0 4px;
+  border-radius: 10px;
+  padding: 28px 30px;
+}
+/* The original site's translucent grey box, a little darker for contrast on any photo. */
+.box {
+  background: rgba(60, 60, 60, 0.74);
+  color: #fff;
+}
+.quote {
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+.author {
+  font-style: italic;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}

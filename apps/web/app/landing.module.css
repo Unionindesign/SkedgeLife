@@ -1,0 +1,17 @@
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+.landing h1 {
+  font-size: 2.6rem;
+  margin: 0 0 8px;
+}
+.landing p {
+  color: #555;
+  max-width: 28rem;
+}

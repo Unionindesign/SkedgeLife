@@ -8,3 +8,13 @@ web-build/
 # Local env files (may contain hosted project keys or secrets)
 .env
 .env*.local
+
+# Next.js build output and generated types
+.next/
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+
+# Lighthouse run from WSL can create its Chrome profile here, named after the
+# Windows TEMP path (C:\Users\...\lighthouse.XXXX); never commit it.
+C:*
