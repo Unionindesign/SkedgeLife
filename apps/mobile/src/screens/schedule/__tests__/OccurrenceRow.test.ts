@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from "@jest/globals";
 import type { OccurrenceWithEvent } from "@skedgelife/data";
 import { dayOf, isCancelled } from "../OccurrenceRow";
 
