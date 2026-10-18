@@ -85,6 +85,25 @@ export async function getUpcomingOccurrences(client: SkedgeLifeClient, profileId
   return (data ?? []) as unknown as OccurrenceWithEvent[];
 }
 
+// A profile's dates starting in [from, to) (ISO 8601 UTC), past ones
+// included, for calendar views. Weekly events have dates up to 12 weeks ahead.
+export async function getOccurrencesBetween(
+  client: SkedgeLifeClient,
+  profileId: string,
+  from: string,
+  to: string,
+): Promise<OccurrenceWithEvent[]> {
+  const { data, error } = await client
+    .from("event_occurrences")
+    .select(`*, venue:venues(*), event:events!inner(${EVENT_SELECT})`)
+    .eq("event.profile_id", profileId)
+    .gte("starts_at", from)
+    .lt("starts_at", to)
+    .order("starts_at");
+  if (error) throw error;
+  return data as unknown as OccurrenceWithEvent[];
+}
+
 export async function getOccurrence(client: SkedgeLifeClient, id: string): Promise<OccurrenceWithEvent | null> {
   const { data, error } = await client.from("event_occurrences").select(OCCURRENCE_SELECT).eq("id", id).maybeSingle();
   if (error) throw error;
