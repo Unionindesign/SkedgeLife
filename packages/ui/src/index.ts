@@ -3,3 +3,5 @@
 export { ParallaxScrollView, ParallaxSection } from "./Parallax";
 export { Carousel } from "./Carousel";
 export { useReducedMotion } from "./useReducedMotion";
+export { ExpandableText } from "./ExpandableText";
+export { Tabs, Accordion, TabsOrAccordion, WIDE_SCREEN, type DisclosureItem } from "./Disclosure";
