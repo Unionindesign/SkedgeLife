@@ -1,0 +1,20 @@
+# Opt-in pre-commit hooks, run by prek (https://github.com/j178/prek); the
+# original pre-commit reads this file too. Install: see docs/dev/testing.md.
+# Kept fast: staged files only. Typecheck and tests run in CI.
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: npx prettier --write --ignore-unknown
+        language: system
+        types_or: [ts, tsx, javascript, json, yaml]
+      - id: eslint
+        name: eslint
+        entry: npx eslint --fix --no-warn-ignored
+        language: system
+        types_or: [ts, tsx, javascript]

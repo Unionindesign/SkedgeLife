@@ -64,7 +64,8 @@ export function ParallaxScrollView({
   children,
   ...scrollProps
 }: ParallaxScrollViewProps) {
-  const scrollY = useRef(new Animated.Value(0)).current;
+  // Kept in state, not a ref, so it can be read while rendering.
+  const [scrollY] = useState(() => new Animated.Value(0));
   const content = useRef<View>(null);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
