@@ -55,6 +55,13 @@ The app's page is React Native. A website wants plain HTML: real headings, links
 2. **A weekly timetable** for the schedule, with one-off events and this fortnight's changes listed below it.
 3. **"Made with SkedgeLife" shows on the free plan**; paid sites can remove it (when billing exists).
 
+## Built differently from the plan
+
+- **On-demand caching needs `generateStaticParams`.** Without it, Next.js renders `/[handle]` on every request. An empty list keeps "nothing built ahead of time" and turns caching on (`x-nextjs-cache` goes MISS, then HIT).
+- **Plain `<img>`, not `next/image`.** Photos are resized when uploaded, and this stays clear of Vercel's image-optimization quota.
+- **Lighthouse found the Default skin's accent too light** (3.3:1); it's now `#2b6cb0` (5.4:1), in the app too. Carousel dots got 24px tap areas.
+- **The online-event time** switches to the visitor's zone with `useSyncExternalStore`, React's tool for values that differ between server and browser, rather than an effect.
+
 ## After this, the deployment PR
 
 Vercel project (root `apps/web`), hosted Supabase env vars, `skedgelife.com`, and pointing `michellescutti.com` at Michelle's page. That last part needs a host-to-handle lookup in Next.js middleware and is the start of custom domains (#80). Details are in the chat summary for 2026-10-18 and will go in that PR's plan.

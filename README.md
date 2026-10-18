@@ -18,12 +18,14 @@ The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, hand
   - **Preview** shows the full page with your skin, as visitors will see it once public pages launch.
 - **Schedule**: your classes and events as a **list** of upcoming dates, a **week**, or a **month** calendar (it remembers your choice), in real local time (in-person events in the venue's zone, online ones in yours). Tap **+** to add one: a title, a time (one time or weekly on chosen days), and a place or an online link. Tap a date to edit the event, cancel just that date, or cancel the whole thing. Studio classes keep their "Book" link to the studio's site. The free plan allows 3 weekly events and 1 larger group event a month. If you teach, the **Sequence Builder** opens from here: drag poses into order, set durations and sides, add a quote and playlist link, and export a printable PDF card.
 
+**The website** (Next.js, `apps/web`): every profile's public site at `skedgelife.com/<handle>`, server-rendered from the same data. Header and logo, intro and bio, specialties, services and private sessions (tabs on wide screens, accordions on phones), a weekly timetable with what's coming up, parallax testimonials, a gallery, and a dark footer, in the profile's skin, with a section nav. Runs locally for now (`npm run dev:web`, see [`docs/dev/web.md`](docs/dev/web.md)); going online is the next step.
+
 ## In the works
 
 Work is tracked as [GitHub milestones](https://github.com/Unionindesign/SkedgeLife/milestones) and [issues](https://github.com/Unionindesign/SkedgeLife/issues). Roughly in order:
 
 - **Finding events**: a map, search by place, time, and interests (Mapbox), then RSVPs, paid bookings, and appointments.
-- **Public web pages** at `skedgelife.com/<handle>`, so anyone's page is shareable and searchable without the app.
+- **The website online:** deploy to Vercel, `skedgelife.com`, and custom domains (Michelle's `michellescutti.com` first).
 - **Follow and notifications**: follow the people you like and hear about schedule changes.
 - **A free page for everyone**: one photo, a short bio, interests, and simple small-group events. Teaching features turn on when you need them.
 - **A paid plan** (via Stripe), open to anyone: a hosted website with your own domain, full photo gallery, payments, and marketing blasts to followers.
@@ -79,12 +81,12 @@ apps/
     src/data/          profile loading (ProfileProvider) and seed poses
     src/lib/           Supabase client, image picking and upload, image lookup
     assets/            seed photos and logo
-  web/                 Next.js public pages (placeholder until the web phase)
+  web/                 Next.js website: public profile pages at /<handle> (see docs/dev/web.md)
 packages/
   data/                shared Supabase queries, auth, and photo uploads (@skedgelife/data)
   types/               shared data types, incl. generated database types (@skedgelife/types)
   skins/               skin colors and fonts (@skedgelife/skins)
-  ui/                  shared React Native components for app and web: parallax backgrounds, carousel (@skedgelife/ui)
+  ui/                  shared components: React Native (@skedgelife/ui) and web (@skedgelife/ui/web), same names and props
 supabase/              local Supabase: config, SQL migrations, seed data
 docs/                  plans, decisions, changelog, TODO, dev notes
 ```

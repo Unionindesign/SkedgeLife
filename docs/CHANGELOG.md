@@ -4,6 +4,15 @@ A short entry for each working session. Newest first. Decision rationale goes in
 
 ## 2026-10-18
 
+- Branch `feature/public-web-pages` (#15, #17, #68, #42; stacked on #103), plan `docs/plans/2026-10-18-public-web-pages.md`:
+  - **`apps/web`** (Next.js 16, App Router): `/[handle]` server-renders a profile's website, cached and refreshed at most once a minute; mixed case redirects to lowercase; unknown and reserved handles get a 404 page; `/` is a placeholder.
+  - **The page:** logo header, sticky section nav (#42), intro beside the bio ("… more"), specialties and certifications side by side, services and private sessions (tabs on wide screens, accordions on phones), a **weekly timetable** with "Coming up" (one-offs, and this fortnight's cancellations and changes), parallax testimonials, a gallery with a full-size view, and a dark footer with contact links and "Made with SkedgeLife" on the free plan. Page titles, share previews, and schema.org data (person and upcoming events).
+  - **`@skedgelife/ui/web`:** web versions of `ParallaxSection`, `Carousel`, `TabsOrAccordion`, and `ExpandableText`, sharing logic with the React Native versions (`packages/ui/src/shared`).
+  - **`packages/data`:** `getPublicWeeklyEvents`, `buildTimetable`, `comingUp`, `describeChange`.
+  - **Safety:** user links limited to http(s), JSON-LD escaped against `</script>`, and private home addresses never published (checked in the HTML).
+  - Lighthouse (local production build): accessibility, best practices, and SEO 100; performance 94 desktop, 74 mobile (seed images, no CDN; re-measure on Vercel). Default skin accent darkened for contrast.
+  - CI builds the website; lint covers it with Next.js's rules.
+
 - PR #102 merged (parallax testimonials plus the website preview feedback). Branch `feature/ci-lint-tests` (#88):
   - **ESLint** (`eslint.config.mjs`): Expo's config for the app and `packages/ui`, typescript-eslint for the logic packages. HTML-only `no-unescaped-entities` is off; two React Compiler checks are warnings until a few screens are reworked (`docs/dev/testing.md`).
   - **Prettier** for code (TS, JS, JSON, YAML; Markdown stays hand-formatted), applied in one mechanical commit.
