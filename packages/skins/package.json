@@ -6,5 +6,9 @@
   "types": "src/index.ts",
   "dependencies": {
     "@skedgelife/types": "*"
+  },
+  "scripts": {
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   }
 }

@@ -74,7 +74,13 @@ export function TabsOrAccordion(props: Props) {
 
 const styles = StyleSheet.create({
   tabBar: { flexDirection: "row", flexWrap: "wrap", borderBottomWidth: 1, borderBottomColor: "#ddd" },
-  tab: { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 3, borderBottomColor: "transparent", marginBottom: -1 },
+  tab: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderBottomWidth: 3,
+    borderBottomColor: "transparent",
+    marginBottom: -1,
+  },
   tabText: { fontSize: 15, fontWeight: "600", color: "#555" },
   panel: { paddingVertical: 16 },
   accordionItem: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: "#ccc" },

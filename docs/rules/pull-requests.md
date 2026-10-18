@@ -26,7 +26,9 @@ Run these locally first — don't rely on CI to catch what a minute of local che
 
 - `npm run typecheck` from the repo root (covers all workspaces).
 - `npx expo-doctor` from `apps/mobile` when Expo config or dependencies changed.
-- Lint, Prettier, and unit tests — **not set up yet in this repo.** Until they exist, this step is a gap, not a pass. When they're added, this line gets replaced with the actual commands (e.g. `npm run lint`, `npm test`) and they become required here.
+- `npm run lint`, `npm run format:check` (or `npm run format` to fix), and `npm test`.
+- `npm run test:db` when migrations or database functions changed (local Supabase running).
+- CI runs all of these on every PR (`.github/workflows/ci.yml`); a red CI run blocks merging. Details in [docs/dev/testing.md](../dev/testing.md).
 - Manual verification appropriate to the change: native/web export, and a browser check against the **local** Supabase instance for anything touching data. Any test build's `.env` must point at local, never hosted — this is a hard security rule, not a convenience default.
 
 ## PR description

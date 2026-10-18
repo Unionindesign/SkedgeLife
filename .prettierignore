@@ -1,0 +1,15 @@
+# Generated or not ours to format.
+node_modules
+package-lock.json
+.expo
+dist
+web-build
+apps/web/.next
+packages/types/src/database.ts
+supabase/.temp
+supabase/.branches
+# SQL and the reference notes keep their hand formatting.
+*.sql
+docs/reference
+# Markdown is hand-formatted: Prettier pads the long DECISIONS/TODO table rows.
+*.md

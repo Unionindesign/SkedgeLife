@@ -2,6 +2,18 @@
 
 A short entry for each working session. Newest first. Decision rationale goes in `docs/DECISIONS.md`; this file just records what changed.
 
+## 2026-10-18
+
+- PR #102 merged (parallax testimonials plus the website preview feedback). Branch `feature/ci-lint-tests` (#88):
+  - **ESLint** (`eslint.config.mjs`): Expo's config for the app and `packages/ui`, typescript-eslint for the logic packages. HTML-only `no-unescaped-entities` is off; two React Compiler checks are warnings until a few screens are reworked (`docs/dev/testing.md`).
+  - **Prettier** for code (TS, JS, JSON, YAML; Markdown stays hand-formatted), applied in one mechanical commit.
+  - **Unit tests** (Jest; `jest-expo` for the app, `ts-jest` for packages): time zones across both DST changes, clock and calendar math, phone and email validation, per-date detail merging, the caps mirror, and skins.
+  - **Database tests** (pgTAP, `npm run test:db`): 28 checks on date generation, regeneration, per-date changes and undo, free-plan caps, time-zone validation, and access rules, written relative to today.
+  - **CI** (GitHub Actions): typecheck, lint, format check, and unit tests; plus the database tests against a throwaway local Postgres.
+  - **Pre-commit hooks** (opt-in, `prek`): Prettier, ESLint, and gitleaks on staged files.
+  - **Hardening after review:** actions pinned to commit SHAs (Dependabot with a two-week cooldown), no token left for install scripts, timeouts, main runs never cancelled, a **gitleaks secret scan in CI**, Node 22 via `.nvmrc`, a lighter database job (Supabase CLI only), and typecheck for every package.
+  - Fixed while linting: the parallax scroll value is kept in state instead of read from a ref during render.
+
 ## 2026-10-17
 
 - PR #100 merged. Branch `feature/schedule-calendar-views`:

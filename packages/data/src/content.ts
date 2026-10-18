@@ -36,7 +36,9 @@ export async function updateContentItem<T extends ContentTable>(
   id: string,
   fields: ContentFields<T>,
 ) {
-  const { error } = await table(client, name).update(fields as never).eq("id", id);
+  const { error } = await table(client, name)
+    .update(fields as never)
+    .eq("id", id);
   if (error) throw error;
 }
 

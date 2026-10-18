@@ -2,7 +2,14 @@ import { StyleSheet } from "react-native";
 
 // Shared by the Schedule tab's list and calendar views.
 export const scheduleStyles = StyleSheet.create({
-  dayHeading: { fontSize: 15, fontWeight: "700", color: "#2f2f2f", paddingHorizontal: 20, paddingTop: 20, paddingBottom: 6 },
+  dayHeading: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#2f2f2f",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 6,
+  },
   emptyState: { flex: 1, alignItems: "center", justifyContent: "center", padding: 24, backgroundColor: "#fff" },
   emptyText: { fontSize: 16, color: "#888", textAlign: "center" },
   errorDetail: { fontSize: 13, color: "#999", textAlign: "center", marginTop: 6 },

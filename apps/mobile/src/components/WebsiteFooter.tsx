@@ -8,16 +8,24 @@ import type { Skin } from "@skedgelife/skins";
 // the skin's footer color.
 export default function WebsiteFooter({ profile, skin }: { profile: ProfilePage; skin: Skin }) {
   const color = skin.colors.footerText;
-  const nameFont = skin.fonts.accent ? { fontFamily: skin.fonts.accent, fontWeight: "normal" as const, fontSize: 30 } : null;
+  const nameFont = skin.fonts.accent
+    ? { fontFamily: skin.fonts.accent, fontWeight: "normal" as const, fontSize: 30 }
+    : null;
   const instagram = profile.instagram_handle?.replace(/^@/, "");
   const links = [
     profile.contact_email
       ? { icon: "mail-outline" as const, label: profile.contact_email, url: `mailto:${profile.contact_email}` }
       : null,
     profile.contact_phone
-      ? { icon: "call-outline" as const, label: profile.contact_phone, url: `tel:${profile.contact_phone.replace(/[^0-9+]/g, "")}` }
+      ? {
+          icon: "call-outline" as const,
+          label: profile.contact_phone,
+          url: `tel:${profile.contact_phone.replace(/[^0-9+]/g, "")}`,
+        }
       : null,
-    instagram ? { icon: "logo-instagram" as const, label: `@${instagram}`, url: `https://instagram.com/${instagram}` } : null,
+    instagram
+      ? { icon: "logo-instagram" as const, label: `@${instagram}`, url: `https://instagram.com/${instagram}` }
+      : null,
   ].filter((l) => l !== null);
 
   return (
@@ -27,7 +35,12 @@ export default function WebsiteFooter({ profile, skin }: { profile: ProfilePage;
       {links.length > 0 ? (
         <View style={styles.links}>
           {links.map((link) => (
-            <Pressable key={link.url} style={styles.link} onPress={() => Linking.openURL(link.url)} accessibilityRole="link">
+            <Pressable
+              key={link.url}
+              style={styles.link}
+              onPress={() => Linking.openURL(link.url)}
+              accessibilityRole="link"
+            >
               <Ionicons name={link.icon} size={18} color={color} />
               <Text style={[styles.linkText, { color }]}>{link.label}</Text>
             </Pressable>

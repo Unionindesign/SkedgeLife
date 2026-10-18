@@ -40,7 +40,7 @@ export default function SequenceBuilderScreen() {
 
   const updateDuration = (id: string, deltaSec: number) => {
     setItems((prev) =>
-      prev.map((it) => (it.id === id ? { ...it, durationSec: Math.max(5, it.durationSec + deltaSec) } : it))
+      prev.map((it) => (it.id === id ? { ...it, durationSec: Math.max(5, it.durationSec + deltaSec) } : it)),
     );
   };
 
@@ -51,7 +51,7 @@ export default function SequenceBuilderScreen() {
         if (it.id !== id) return it;
         const next = order[(order.indexOf(it.side) + 1) % order.length];
         return { ...it, side: next };
-      })
+      }),
     );
   };
 
@@ -100,11 +100,7 @@ export default function SequenceBuilderScreen() {
     const pose = poseById[item.poseId];
     return (
       <ScaleDecorator>
-        <Pressable
-          onLongPress={drag}
-          disabled={isActive}
-          style={[styles.row, isActive && styles.rowActive]}
-        >
+        <Pressable onLongPress={drag} disabled={isActive} style={[styles.row, isActive && styles.rowActive]}>
           <View style={{ flex: 1 }}>
             <Text style={styles.poseName}>{pose?.nameEn ?? "Unknown pose"}</Text>
             {pose?.nameSanskrit ? <Text style={styles.poseSanskrit}>{pose.nameSanskrit}</Text> : null}
@@ -128,12 +124,7 @@ export default function SequenceBuilderScreen() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.header}>
         <TextInput style={styles.titleInput} value={title} onChangeText={setTitle} placeholder="Sequence title" />
-        <TextInput
-          style={styles.input}
-          value={quote}
-          onChangeText={setQuote}
-          placeholder="Opening quote (optional)"
-        />
+        <TextInput style={styles.input} value={quote} onChangeText={setQuote} placeholder="Opening quote (optional)" />
         <TextInput
           style={styles.input}
           value={playlistUrl}

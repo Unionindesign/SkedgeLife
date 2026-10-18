@@ -68,7 +68,13 @@ function GalleryEditor({ profile, reload }: { profile: ProfilePage; reload: () =
 
   const saveOrder = (next: GalleryImage[]) => {
     setImages(next);
-    run(() => reorderItems(supabase, "gallery_images", next.map((i) => i.id)));
+    run(() =>
+      reorderItems(
+        supabase,
+        "gallery_images",
+        next.map((i) => i.id),
+      ),
+    );
   };
 
   const renderItem = ({ item, drag, isActive }: RenderItemParams<GalleryImage>) => (
@@ -106,7 +112,11 @@ function GalleryEditor({ profile, reload }: { profile: ProfilePage; reload: () =
         }
         ListEmptyComponent={<Text style={styles.empty}>Add photos of your classes, your space, or your practice.</Text>}
         ListFooterComponent={
-          <Pressable style={[styles.addButton, (atLimit || busy) && styles.disabled]} disabled={atLimit || busy} onPress={add}>
+          <Pressable
+            style={[styles.addButton, (atLimit || busy) && styles.disabled]}
+            disabled={atLimit || busy}
+            onPress={add}
+          >
             {busy ? <ActivityIndicator color="#2f2f2f" /> : <Text style={styles.addText}>Add photo</Text>}
           </Pressable>
         }
@@ -168,9 +178,22 @@ const styles = StyleSheet.create({
   },
   rowActive: { backgroundColor: "#f4f4f4" },
   thumb: { width: 64, height: 64, borderRadius: 6, backgroundColor: "#eee" },
-  caption: { flex: 1, fontSize: 14, paddingVertical: 6, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: "#ccc" },
+  caption: {
+    flex: 1,
+    fontSize: 14,
+    paddingVertical: 6,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#ccc",
+  },
   empty: { paddingHorizontal: 20, paddingVertical: 8, fontSize: 14, color: "#666" },
-  addButton: { margin: 20, borderWidth: 1, borderColor: "#2f2f2f", borderRadius: 8, paddingVertical: 12, alignItems: "center" },
+  addButton: {
+    margin: 20,
+    borderWidth: 1,
+    borderColor: "#2f2f2f",
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
   addText: { fontSize: 15, fontWeight: "600", color: "#2f2f2f" },
   disabled: { opacity: 0.4 },
 });

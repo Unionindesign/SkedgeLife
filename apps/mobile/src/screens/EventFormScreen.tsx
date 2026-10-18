@@ -267,7 +267,9 @@ function EventForm({
   const forDate = scope === "date" && occurrence !== null;
   const [initial] = useState(() => (forDate ? dateToForm(occurrence, initialVenues) : toForm(event, initialVenues)));
   const [form, setForm] = useState(initial);
-  const [showMore, setShowMore] = useState(() => Boolean(event && (event.description || event.capacity || event.interests.length)));
+  const [showMore, setShowMore] = useState(() =>
+    Boolean(event && (event.description || event.capacity || event.interests.length)),
+  );
   const [pickZone, setPickZone] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -279,7 +281,7 @@ function EventForm({
     navigation.setOptions({ title: forDate ? "Edit date" : event ? "Edit event" : "New event" });
   }, [navigation, event, forDate]);
 
-  const venue = form.format === "in_person" ? venues.find((v) => v.id === form.venueId) ?? null : null;
+  const venue = form.format === "in_person" ? (venues.find((v) => v.id === form.venueId) ?? null) : null;
   const zone = venue ? venue.time_zone : form.timeZone;
   const isPrivateHome = form.format === "in_person" && (venue ? venue.is_private : form.newVenuePrivate);
   const today = todayIn(zone);
@@ -301,13 +303,18 @@ function EventForm({
     if (form.start === form.end) return "The end time needs to be after the start.";
     if (form.when === "weekly" && form.repeatUntil && form.repeatUntil < today) return "The end date has passed.";
     if (form.format === "in_person" && !venue && !form.newVenueName.trim()) return "Add the place's name.";
-    if (form.newVenueName.length > LIMITS.venueName || form.newVenueAddress.length > LIMITS.address) return "The place's name or address is too long.";
+    if (form.newVenueName.length > LIMITS.venueName || form.newVenueAddress.length > LIMITS.address)
+      return "The place's name or address is too long.";
     if (isPrivateHome && !form.area.trim()) return "Add an area to show instead of your address.";
     if (form.area.length > LIMITS.area) return `Keep the area under ${LIMITS.area} characters.`;
-    if (form.format === "online" && !isUrl(form.onlineUrl)) return "Add the link people join with (starting with https://).";
-    if (form.bookingMode === "external_link" && !isUrl(form.bookingUrl)) return "Add the booking link (starting with https://).";
-    if (capacity !== null && !(Number.isInteger(capacity) && capacity > 0)) return "Capacity needs to be a whole number.";
-    if (form.description.length > LIMITS.description) return `Keep the description under ${LIMITS.description} characters.`;
+    if (form.format === "online" && !isUrl(form.onlineUrl))
+      return "Add the link people join with (starting with https://).";
+    if (form.bookingMode === "external_link" && !isUrl(form.bookingUrl))
+      return "Add the booking link (starting with https://).";
+    if (capacity !== null && !(Number.isInteger(capacity) && capacity > 0))
+      return "Capacity needs to be a whole number.";
+    if (form.description.length > LIMITS.description)
+      return `Keep the description under ${LIMITS.description} characters.`;
     return null;
   })();
 
@@ -410,7 +417,14 @@ function EventForm({
 
   const resetDate = async () => {
     if (!occurrence) return;
-    if (!(await confirm("Undo changes to this date?", "It goes back to the event's usual time and details.", "Undo changes"))) return;
+    if (
+      !(await confirm(
+        "Undo changes to this date?",
+        "It goes back to the event's usual time and details.",
+        "Undo changes",
+      ))
+    )
+      return;
     await run(() => resetOccurrence(supabase, occurrence.id));
   };
 
@@ -431,7 +445,11 @@ function EventForm({
   const cancelDate = async () => {
     if (!occurrence) return;
     const restoring = occurrence.status === "cancelled";
-    if (!restoring && !(await confirm("Cancel this date?", "Only this date is cancelled. The rest of the series stays.", "Cancel date"))) return;
+    if (
+      !restoring &&
+      !(await confirm("Cancel this date?", "Only this date is cancelled. The rest of the series stays.", "Cancel date"))
+    )
+      return;
     await run(() => setOccurrenceStatus(supabase, occurrence.id, restoring ? "scheduled" : "cancelled"));
   };
 
@@ -455,25 +473,32 @@ function EventForm({
       {cancelledEvent ? <Text style={styles.banner}>This event is cancelled.</Text> : null}
       {scopePicker}
       {forDate && occurrence.is_modified ? (
-        <Text style={styles.note}>This date has its own changes. They stay when you edit every date; anything else still follows the series.</Text>
+        <Text style={styles.note}>
+          This date has its own changes. They stay when you edit every date; anything else still follows the series.
+        </Text>
       ) : null}
 
       <Field label="Title" count={form.title.length} max={LIMITS.title}>
-        <TextInput style={formStyles.input} value={form.title} onChangeText={(v) => set("title", v)} placeholder="e.g. Sunrise Vinyasa" />
+        <TextInput
+          style={formStyles.input}
+          value={form.title}
+          onChangeText={(v) => set("title", v)}
+          placeholder="e.g. Sunrise Vinyasa"
+        />
       </Field>
 
       {!forDate ? (
-      <Field label="When">
-        <Chips
-          options={[
-            { value: "once", label: "One time" },
-            { value: "weekly", label: "Weekly" },
-          ]}
-          selected={form.when}
-          onToggle={(v) => set("when", v)}
-          accentColor={accent}
-        />
-      </Field>
+        <Field label="When">
+          <Chips
+            options={[
+              { value: "once", label: "One time" },
+              { value: "weekly", label: "Weekly" },
+            ]}
+            selected={form.when}
+            onToggle={(v) => set("when", v)}
+            accentColor={accent}
+          />
+        </Field>
       ) : null}
 
       {form.when === "once" ? (
@@ -523,7 +548,12 @@ function EventForm({
       ) : null}
       {form.when === "weekly" && form.repeatUntil ? (
         <Field label="Last date">
-          <DateTimeField mode="date" value={form.repeatUntil} minimumDate={today} onChange={(v) => set("repeatUntil", v)} />
+          <DateTimeField
+            mode="date"
+            value={form.repeatUntil}
+            minimumDate={today}
+            onChange={(v) => set("repeatUntil", v)}
+          />
         </Field>
       ) : null}
 
@@ -560,7 +590,11 @@ function EventForm({
                 />
               </Field>
               <Field label="Address" hint="Optional. A map comes in a later update.">
-                <TextInput style={formStyles.input} value={form.newVenueAddress} onChangeText={(v) => set("newVenueAddress", v)} />
+                <TextInput
+                  style={formStyles.input}
+                  value={form.newVenueAddress}
+                  onChangeText={(v) => set("newVenueAddress", v)}
+                />
               </Field>
               <View style={styles.switchRow}>
                 <View style={{ flex: 1 }}>
@@ -572,8 +606,18 @@ function EventForm({
             </>
           ) : null}
           {isPrivateHome ? (
-            <Field label="Area shown instead of the address" hint="A neighborhood or city." count={form.area.length} max={LIMITS.area}>
-              <TextInput style={formStyles.input} value={form.area} onChangeText={(v) => set("area", v)} placeholder="e.g. Laguna Hills" />
+            <Field
+              label="Area shown instead of the address"
+              hint="A neighborhood or city."
+              count={form.area.length}
+              max={LIMITS.area}
+            >
+              <TextInput
+                style={formStyles.input}
+                value={form.area}
+                onChangeText={(v) => set("area", v)}
+                placeholder="e.g. Laguna Hills"
+              />
             </Field>
           ) : null}
         </>
@@ -627,18 +671,18 @@ function EventForm({
             />
           </Field>
           {!forDate ? (
-          <Field label="Kind">
-            <Chips
-              options={[
-                { value: "class", label: "Class" },
-                { value: "workshop", label: "Workshop" },
-                { value: "meetup", label: "Meetup" },
-              ]}
-              selected={form.kind}
-              onToggle={(v) => set("kind", v)}
-              accentColor={accent}
-            />
-          </Field>
+            <Field label="Kind">
+              <Chips
+                options={[
+                  { value: "class", label: "Class" },
+                  { value: "workshop", label: "Workshop" },
+                  { value: "meetup", label: "Meetup" },
+                ]}
+                selected={form.kind}
+                onToggle={(v) => set("kind", v)}
+                accentColor={accent}
+              />
+            </Field>
           ) : null}
           <Field
             label="Capacity"
@@ -661,7 +705,8 @@ function EventForm({
               selected={form.bookingMode}
               onToggle={(v) => {
                 set("bookingMode", v);
-                if (v === "external_link" && !form.bookingUrl && venue?.booking_url) set("bookingUrl", venue.booking_url);
+                if (v === "external_link" && !form.bookingUrl && venue?.booking_url)
+                  set("bookingUrl", venue.booking_url);
               }}
               accentColor={accent}
             />
@@ -681,7 +726,12 @@ function EventForm({
           ) : null}
           {!forDate ? (
             <Field label="Interests" hint="Helps people find it once search arrives.">
-              <TagEditor tags={form.interests} onChange={(v) => set("interests", v)} placeholder="e.g. Yin yoga" accentColor={accent} />
+              <TagEditor
+                tags={form.interests}
+                onChange={(v) => set("interests", v)}
+                placeholder="e.g. Yin yoga"
+                accentColor={accent}
+              />
             </Field>
           ) : null}
         </>
@@ -690,7 +740,9 @@ function EventForm({
       {error ? <Text style={formStyles.error}>{error}</Text> : null}
       {problem && (changed || event) && !cancelledEvent ? <Text style={styles.problem}>{problem}</Text> : null}
       <Pressable style={[formStyles.primaryButton, !canSave && formStyles.disabled]} disabled={!canSave} onPress={save}>
-        <Text style={formStyles.primaryText}>{saving ? "Saving…" : forDate ? "Save this date" : event ? "Save every date" : "Add event"}</Text>
+        <Text style={formStyles.primaryText}>
+          {saving ? "Saving…" : forDate ? "Save this date" : event ? "Save every date" : "Add event"}
+        </Text>
       </Pressable>
 
       {forDate && !cancelledEvent ? (
@@ -717,11 +769,25 @@ function EventForm({
 }
 
 const styles = StyleSheet.create({
-  banner: { backgroundColor: "#fbeaea", color: "#b3261e", padding: 12, borderRadius: 8, marginBottom: 16, fontWeight: "600" },
+  banner: {
+    backgroundColor: "#fbeaea",
+    color: "#b3261e",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    fontWeight: "600",
+  },
   timeRow: { flexDirection: "row", gap: 16 },
   timeCell: { flex: 1 },
   switchRow: { flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 18 },
-  zoneRow: { flexDirection: "row", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginTop: -6, marginBottom: 12 },
+  zoneRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    justifyContent: "space-between",
+    gap: 12,
+    marginTop: -6,
+    marginBottom: 12,
+  },
   zoneChoices: { marginBottom: 18 },
   link: { fontSize: 14, fontWeight: "600" },
   moreToggle: { marginVertical: 12 },

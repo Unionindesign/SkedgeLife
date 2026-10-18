@@ -64,7 +64,8 @@ export function ParallaxScrollView({
   children,
   ...scrollProps
 }: ParallaxScrollViewProps) {
-  const scrollY = useRef(new Animated.Value(0)).current;
+  // Kept in state, not a ref, so it can be read while rendering.
+  const [scrollY] = useState(() => new Animated.Value(0));
   const content = useRef<View>(null);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
@@ -122,7 +123,14 @@ type ParallaxSectionProps = {
 };
 
 // Outside a ParallaxScrollView it still works, with a background that doesn't move.
-export function ParallaxSection({ image, speed = 0.4, overlayColor, minHeight = 360, style, children }: ParallaxSectionProps) {
+export function ParallaxSection({
+  image,
+  speed = 0.4,
+  overlayColor,
+  minHeight = 360,
+  style,
+  children,
+}: ParallaxSectionProps) {
   const parallax = useContext(ParallaxContext);
   const section = useRef<View>(null);
   const [top, setTop] = useState<number | null>(null);
@@ -133,7 +141,11 @@ export function ParallaxSection({ image, speed = 0.4, overlayColor, minHeight = 
     setHeight(e.nativeEvent.layout.height);
     // Where the section starts within the scrolling content, however deeply it's nested.
     if (parallax?.content.current && section.current) {
-      section.current.measureLayout(parallax.content.current, (_x, y) => setTop(y), () => setTop(null));
+      section.current.measureLayout(
+        parallax.content.current,
+        (_x, y) => setTop(y),
+        () => setTop(null),
+      );
     }
   };
 
@@ -153,7 +165,10 @@ export function ParallaxSection({ image, speed = 0.4, overlayColor, minHeight = 
 
   return (
     <View ref={section} collapsable={false} onLayout={onLayout} style={[styles.section, { minHeight }, style]}>
-      <Animated.View pointerEvents="none" style={[styles.layer, { height: height + travel, transform: [{ translateY }] }]}>
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.layer, { height: height + travel, transform: [{ translateY }] }]}
+      >
         <Backdrop image={image} overlayColor={overlayColor} />
       </Animated.View>
       {children}

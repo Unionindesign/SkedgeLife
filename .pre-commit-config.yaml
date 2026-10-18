@@ -1,0 +1,24 @@
+# Opt-in pre-commit hooks, run by prek (https://github.com/j178/prek); the
+# original pre-commit reads this file too. Install: see docs/dev/testing.md.
+# Kept fast: staged files only. Typecheck and tests run in CI.
+repos:
+  # Frozen to a commit (`prek autoupdate --freeze`), since tags can be moved.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e # frozen: v8.30.1
+    hooks:
+      - id: gitleaks
+        args: [--config, .gitleaks.toml]
+  - repo: local
+    hooks:
+      # --no-install: use the lockfile's version from node_modules, never
+      # download one (run `npm ci` first).
+      - id: prettier
+        name: prettier
+        entry: npx --no-install prettier --write --ignore-unknown
+        language: system
+        types_or: [ts, tsx, javascript, json, yaml]
+      - id: eslint
+        name: eslint
+        entry: npx --no-install eslint --fix --no-warn-ignored
+        language: system
+        types_or: [ts, tsx, javascript]

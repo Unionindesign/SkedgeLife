@@ -70,7 +70,12 @@ function LogOutButton() {
 function AddEventButton() {
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   return (
-    <Pressable onPress={() => navigation.navigate("EventForm", {})} hitSlop={8} accessibilityLabel="Add event" style={{ paddingRight: 16 }}>
+    <Pressable
+      onPress={() => navigation.navigate("EventForm", {})}
+      hitSlop={8}
+      accessibilityLabel="Add event"
+      style={{ paddingRight: 16 }}
+    >
       <Ionicons name="add" size={26} color="#2f2f2f" />
     </Pressable>
   );
@@ -136,7 +141,11 @@ function SignedIn({ userId }: { userId: string }) {
         <MainStack.Screen name="ContentItem" component={ContentItemScreen} options={{ presentation: "modal" }} />
         <MainStack.Screen name="Gallery" component={GalleryScreen} />
         <MainStack.Screen name="EventForm" component={EventFormScreen} options={{ presentation: "modal" }} />
-        <MainStack.Screen name="SequenceBuilder" component={SequenceBuilderScreen} options={{ title: "Sequence Builder" }} />
+        <MainStack.Screen
+          name="SequenceBuilder"
+          component={SequenceBuilderScreen}
+          options={{ title: "Sequence Builder" }}
+        />
       </MainStack.Navigator>
     </ProfileProvider>
   );

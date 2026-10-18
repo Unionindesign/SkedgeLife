@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { formatPhone, isValidEmail, isValidPhone, updateProfile, type ProfileEdits, type ProfilePage } from "@skedgelife/data";
+import {
+  formatPhone,
+  isValidEmail,
+  isValidPhone,
+  updateProfile,
+  type ProfileEdits,
+  type ProfilePage,
+} from "@skedgelife/data";
 import { getSkin } from "@skedgelife/skins";
 import type { MainStackParamList } from "../navigation/RootNavigator";
 import { useProfile } from "../data/ProfileProvider";
@@ -35,7 +42,8 @@ function toForm(p: ProfilePage) {
     certifications: p.certifications,
     contact_email: p.contact_email ?? "",
     // A number saved before validation existed is left as-is for the user to fix.
-    contact_phone: p.contact_phone && isValidPhone(p.contact_phone) ? formatPhone(p.contact_phone) : (p.contact_phone ?? ""),
+    contact_phone:
+      p.contact_phone && isValidPhone(p.contact_phone) ? formatPhone(p.contact_phone) : (p.contact_phone ?? ""),
     instagram_handle: p.instagram_handle ?? "",
   };
 }
@@ -116,7 +124,12 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
         <TextInput style={formStyles.input} value={form.display_name} onChangeText={(v) => set("display_name", v)} />
       </Field>
 
-      <Field label="Short bio" hint="One or two lines under your name." count={form.bio_short.length} max={LIMITS.bioShort}>
+      <Field
+        label="Short bio"
+        hint="One or two lines under your name."
+        count={form.bio_short.length}
+        max={LIMITS.bioShort}
+      >
         <TextInput
           style={[formStyles.input, formStyles.multiline]}
           value={form.bio_short}
@@ -135,7 +148,12 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
       </Field>
 
       <Field label="Interests">
-        <TagEditor tags={form.interests} onChange={(v) => set("interests", v)} placeholder="e.g. Yin yoga" accentColor={accent} />
+        <TagEditor
+          tags={form.interests}
+          onChange={(v) => set("interests", v)}
+          placeholder="e.g. Yin yoga"
+          accentColor={accent}
+        />
       </Field>
 
       <View style={styles.switchRow}>
@@ -149,7 +167,12 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
       {form.teaches ? (
         <>
           <Field label="Specialties">
-            <TagEditor tags={form.specialties} onChange={(v) => set("specialties", v)} placeholder="e.g. Vinyasa" accentColor={accent} />
+            <TagEditor
+              tags={form.specialties}
+              onChange={(v) => set("specialties", v)}
+              placeholder="e.g. Vinyasa"
+              accentColor={accent}
+            />
           </Field>
           <Field label="Certifications">
             <TagEditor

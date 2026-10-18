@@ -1,0 +1,12 @@
+# Keeps the SHA-pinned GitHub Actions current. npm packages are left out:
+# Expo pins its own versions (`npx expo install --fix`), and blanket bumps
+# would fight that.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    # Give a new release two weeks before adopting it, so a bad one has time to be caught.
+    cooldown:
+      default-days: 14
