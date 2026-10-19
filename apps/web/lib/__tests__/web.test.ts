@@ -1,5 +1,7 @@
 import { describe, expect, it } from "@jest/globals";
 import type { OccurrenceWithEvent, ProfilePage } from "@skedgelife/data";
+import { skins } from "@skedgelife/skins";
+import { FAMILIES } from "../fontFamilies";
 import { routeHandle } from "../handles";
 import { pageSections } from "../sections";
 import { jsonLd, structuredData } from "../structuredData";
@@ -103,5 +105,14 @@ describe("structured data", () => {
     );
     expect(json).toContain("Laguna Hills");
     expect(json).not.toContain("Secret");
+  });
+});
+
+describe("fonts", () => {
+  it("has a web font for every skin font", () => {
+    for (const skin of Object.values(skins)) {
+      for (const font of Object.values(skin.fonts))
+        if (font) expect([font, FAMILIES[font]]).toEqual([font, expect.any(String)]);
+    }
   });
 });

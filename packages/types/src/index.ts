@@ -49,4 +49,4 @@ export interface SequenceClassLink {
 }
 
 // Must match the skin check constraint on public.profiles.
-export type SkinId = "classic-yoga" | "default";
+export type SkinId = "classic-yoga" | "default" | "calm" | "bold" | "trail";

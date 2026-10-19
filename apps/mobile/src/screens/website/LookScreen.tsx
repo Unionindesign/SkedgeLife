@@ -42,24 +42,39 @@ export default function LookScreen() {
       />
 
       <Text style={formStyles.sectionHeading}>Skin</Text>
-      <Text style={formStyles.hint}>Colors and fonts for your page.</Text>
+      <Text style={formStyles.hint}>Colors and fonts for your page. Each card is a small preview.</Text>
       <View style={styles.skinRow}>
         {Object.values(skins).map((skin) => {
           const selected = skin.id === profile.skin;
+          const heading = skin.fonts.heading ? { fontFamily: skin.fonts.heading, fontWeight: "normal" as const } : null;
+          const name = skin.fonts.accent ? { fontFamily: skin.fonts.accent, fontWeight: "normal" as const } : heading;
           return (
+            // A miniature of the page: header, name, a section title and tags, footer.
             <Pressable
               key={skin.id}
               onPress={() => pickSkin(skin.id)}
               style={[styles.skinCard, selected && { borderColor: skin.colors.accent, borderWidth: 2 }]}
               accessibilityRole="radio"
+              accessibilityLabel={`${skin.label} skin`}
               accessibilityState={{ selected }}
             >
-              <View style={styles.swatches}>
-                {[skin.colors.header, skin.colors.accent, skin.colors.cardBackground].map((c) => (
-                  <View key={c} style={[styles.swatch, { backgroundColor: c }]} />
-                ))}
+              <View style={[styles.previewHeader, { backgroundColor: skin.colors.header }]} />
+              <View style={[styles.previewBody, { backgroundColor: skin.colors.background }]}>
+                <Text style={[styles.previewName, { color: skin.colors.headingText }, name]} numberOfLines={1}>
+                  {skin.label}
+                </Text>
+                <View style={[styles.previewBand, { backgroundColor: skin.colors.band }]}>
+                  <Text style={[styles.previewTitle, { color: skin.colors.accent }, heading]}>Classes</Text>
+                  <View style={styles.previewTags}>
+                    <View style={[styles.previewTag, { backgroundColor: skin.colors.accent }]} />
+                    <View style={[styles.previewTag, styles.previewTagShort, { borderColor: skin.colors.accent }]} />
+                  </View>
+                </View>
               </View>
-              <Text style={styles.skinLabel}>{skin.label}</Text>
+              <View style={[styles.previewFooter, { backgroundColor: skin.colors.footer }]} />
+              {selected ? (
+                <Text style={[styles.selectedBadge, { backgroundColor: skin.colors.accent }]}>Selected</Text>
+              ) : null}
             </Pressable>
           );
         })}
@@ -71,8 +86,26 @@ export default function LookScreen() {
 
 const styles = StyleSheet.create({
   skinRow: { flexDirection: "row", gap: 12, flexWrap: "wrap", marginTop: 6 },
-  skinCard: { width: 140, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: "#ddd" },
-  swatches: { flexDirection: "row", gap: 4, marginBottom: 8 },
-  swatch: { width: 32, height: 32, borderRadius: 6 },
-  skinLabel: { fontSize: 14, fontWeight: "600" },
+  skinCard: { width: "47%", borderRadius: 10, borderWidth: 1, borderColor: "#ddd", overflow: "hidden" },
+  previewHeader: { height: 18 },
+  previewBody: { paddingTop: 8 },
+  previewName: { fontSize: 20, lineHeight: 30, textAlign: "center", paddingHorizontal: 8 },
+  previewBand: { marginTop: 8, paddingHorizontal: 10, paddingVertical: 8 },
+  previewTitle: { fontSize: 15, fontWeight: "700" },
+  previewTags: { flexDirection: "row", gap: 4, marginTop: 6 },
+  previewTag: { width: 34, height: 10, borderRadius: 5 },
+  previewTagShort: { width: 24, backgroundColor: "transparent", borderWidth: 1 },
+  previewFooter: { height: 14 },
+  selectedBadge: {
+    position: "absolute",
+    top: 3,
+    right: 4,
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "600",
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 8,
+    overflow: "hidden",
+  },
 });

@@ -4,7 +4,7 @@ SkedgeLife gives independent instructors (yoga teachers to start, and later trai
 
 Students follow the instructors they like and get notified when something changes. There's no feed and no endless scrolling, just the people you chose to follow.
 
-Instructors pick a **skin**, a pre-built color and font pairing, so their page feels like their own brand without any design work. The first skin, *Classic Yoga*, is based on a real instructor's site.
+Instructors pick a **skin**, a pre-built color and font pairing, so their page feels like their own brand without any design work. The first skin, *Classic Yoga*, is based on a real instructor's site; *Calm*, *Bold* and *Trail* suit other moods.
 
 ## What works today
 
@@ -30,7 +30,7 @@ Work is tracked as [GitHub milestones](https://github.com/Unionindesign/SkedgeLi
 - **A free page for everyone**: one photo, a short bio, interests, and simple small-group events. Teaching features turn on when you need them.
 - **A paid plan** (via Stripe), open to anyone: a hosted website with your own domain, full photo gallery, payments, and marketing blasts to followers.
 - **Video**: free and premium video libraries, video series, and eventually live-streamed classes.
-- **More skins**, informed by research into which professions want this.
+- **Profession-specific skins**, informed by research into which professions want this.
 
 The thinking behind all of this lives in [`docs/`](docs/) (see below).
 
