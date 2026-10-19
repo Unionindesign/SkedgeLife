@@ -9,7 +9,7 @@ import {
   type ProfileEdits,
   type ProfilePage,
 } from "@skedgelife/data";
-import { getSkin } from "@skedgelife/skins";
+import { skinFor } from "@skedgelife/skins";
 import type { MainStackParamList } from "../navigation/RootNavigator";
 import { useProfile } from "../data/ProfileProvider";
 import ProfileStatus from "../components/ProfileStatus";
@@ -76,7 +76,7 @@ function EditProfileForm({ navigation, profile, onSaved }: Props & { profile: Pr
   const [touched, setTouched] = useState({ email: false, phone: false });
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) => setForm((f) => ({ ...f, [key]: value }));
-  const accent = getSkin(profile.skin).colors.accent;
+  const accent = skinFor(profile).colors.accent;
 
   const emailOk = form.contact_email.trim() === "" || isValidEmail(form.contact_email);
   const phoneOk = form.contact_phone.trim() === "" || isValidPhone(form.contact_phone);

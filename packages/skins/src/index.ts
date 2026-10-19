@@ -6,6 +6,9 @@
 // keys passed to useFonts() in apps/mobile/App.tsx.
 
 import { SkinId } from "@skedgelife/types";
+import { contrastRatio, isHexColor, MIN_TEXT_CONTRAST, tint } from "./color";
+
+export * from "./color";
 
 export interface Skin {
   id: SkinId;
@@ -72,4 +75,53 @@ export const skins: Record<SkinId, Skin> = {
 // Skins are stored as text in the database; unknown values fall back to the default.
 export function getSkin(id: string | null | undefined): Skin {
   return (id && skins[id as SkinId]) || skins.default;
+}
+
+// Light tints of a custom accent: behind alternating sections, and behind cards.
+const BAND_TINT = 0.95;
+const CARD_TINT = 0.9;
+
+// A custom accent must read as text on white and on its own tints.
+export function isReadableAccent(hex: string): boolean {
+  if (!isHexColor(hex)) return false;
+  return ["#ffffff", tint(hex, BAND_TINT), tint(hex, CARD_TINT)].every(
+    (bg) => contrastRatio(hex, bg) >= MIN_TEXT_CONTRAST,
+  );
+}
+
+// Swatches on the Look screen; all pass isReadableAccent.
+export const ACCENT_PRESETS: { label: string; hex: string }[] = [
+  { label: "Teal", hex: "#00695c" },
+  { label: "Ocean", hex: "#245a94" },
+  { label: "Navy", hex: "#1e3a8a" },
+  { label: "Plum", hex: "#6a1b9a" },
+  { label: "Violet", hex: "#5b4b8a" },
+  { label: "Berry", hex: "#9d174d" },
+  { label: "Rose", hex: "#ad1457" },
+  { label: "Terracotta", hex: "#9c3a1a" },
+  { label: "Forest", hex: "#256b29" },
+  { label: "Ochre", hex: "#7a5000" },
+  { label: "Slate", hex: "#455a64" },
+];
+
+// The skin a profile renders with: its skin, plus its own accent color (#43)
+// if it picked one. The footer follows the accent when the skin's footer was
+// its accent, and the section and card tints follow it so they don't clash.
+// Header, text colors and fonts stay with the skin. A stored color that isn't
+// readable is ignored.
+export function skinFor(profile: { skin: string | null; accent_color?: string | null }): Skin {
+  const skin = getSkin(profile.skin);
+  const accent = profile.accent_color;
+  if (!accent || !isReadableAccent(accent)) return skin;
+  const { colors } = skin;
+  return {
+    ...skin,
+    colors: {
+      ...colors,
+      accent,
+      band: tint(accent, BAND_TINT),
+      cardBackground: tint(accent, CARD_TINT),
+      footer: colors.footer === colors.accent ? accent : colors.footer,
+    },
+  };
 }

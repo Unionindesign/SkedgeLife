@@ -4,6 +4,13 @@ A short entry for each working session. Newest first. Decision rationale goes in
 
 ## 2026-10-18
 
+- Branch `feature/accent-color` (#43), plan `docs/plans/2026-10-18-accent-color.md`:
+  - **Your own accent color:** Website → Look offers the skin's color, 11 preset swatches, or a custom hex code. Colors too light to read are refused. The color carries through titles, links, tags, buttons, carousel dots, the footer (where the skin's footer was its accent), and light tints behind sections and cards, in the app and on the website.
+  - **Database:** `profiles.accent_color` (lowercase `#rrggbb`, null for the skin's color); 6 pgTAP checks.
+  - **`packages/skins`:** `skinFor(profile)`, `contrastRatio`, `isReadableAccent`, `tint`, `normalizeHex`, `ACCENT_PRESETS`, with tests.
+  - Logo upload, the other half of #43, shipped earlier with self-serve editing.
+  - Filed #105 (AI-generated custom skins, paid) and #106 (a skin marketplace).
+
 - Branch `feature/public-web-pages` (#15, #17, #68, #42; stacked on #103), plan `docs/plans/2026-10-18-public-web-pages.md`:
   - **`apps/web`** (Next.js 16, App Router): `/[handle]` server-renders a profile's website, cached and refreshed at most once a minute; mixed case redirects to lowercase; unknown and reserved handles get a 404 page; `/` is a placeholder.
   - **The page:** logo header, sticky section nav (#42), intro beside the bio ("… more"), specialties and certifications side by side, services and private sessions (tabs on wide screens, accordions on phones), a **weekly timetable** with "Coming up" (one-offs, and this fortnight's cancellations and changes), parallax testimonials, a gallery with a full-size view, and a dark footer with contact links and "Made with SkedgeLife" on the free plan. Page titles, share previews, and schema.org data (person and upcoming events).

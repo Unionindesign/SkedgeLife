@@ -35,7 +35,7 @@ import {
   type ProfilePage,
   type VenueRow,
 } from "@skedgelife/data";
-import { getSkin } from "@skedgelife/skins";
+import { skinFor } from "@skedgelife/skins";
 import type { MainStackParamList } from "../navigation/RootNavigator";
 import { useProfile } from "../data/ProfileProvider";
 import ProfileStatus from "../components/ProfileStatus";
@@ -107,7 +107,7 @@ export default function EventFormScreen(props: Props) {
   // One-off events have a single date, so editing the event is editing the date.
   const canPickScope = Boolean(loaded.occurrence && loaded.event?.weekly_days && loaded.event.status === "scheduled");
   const effectiveScope: Scope = canPickScope ? scope : "event";
-  const accent = getSkin(state.profile.skin).colors.accent;
+  const accent = skinFor(state.profile).colors.accent;
   return (
     <EventForm
       // A fresh form for each scope, since they start from different values.
@@ -275,7 +275,7 @@ function EventForm({
   const [error, setError] = useState<string | null>(null);
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) => setForm((f) => ({ ...f, [key]: value }));
-  const accent = getSkin(profile.skin).colors.accent;
+  const accent = skinFor(profile).colors.accent;
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: forDate ? "Edit date" : event ? "Edit event" : "New event" });

@@ -39,7 +39,7 @@ export default function WebsiteScreen({ navigation }: Props) {
       <Row
         icon="color-palette-outline"
         title="Look"
-        detail={`${getSkin(profile.skin).label} skin · ${profile.logo_url ? "logo added" : "no logo"}`}
+        detail={`${getSkin(profile.skin).label} skin${profile.accent_color ? " · your color" : ""} · ${profile.logo_url ? "logo added" : "no logo"}`}
         onPress={() => navigation.navigate("Look")}
       />
       {profile.teaches ? (

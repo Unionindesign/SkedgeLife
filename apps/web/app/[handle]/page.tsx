@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
 import { comingUp, getProfilePage, getPublicWeeklyEvents, getUpcomingOccurrences } from "@skedgelife/data";
-import { getSkin } from "@skedgelife/skins";
+import { skinFor } from "@skedgelife/skins";
 import { ExpandableText, TabsOrAccordion } from "@skedgelife/ui/web";
 import { fontFamily } from "@/lib/fonts";
 import { routeHandle } from "@/lib/handles";
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProfileWebsite({ params }: Props) {
   const { client, profile, weekly, oneOffs, changes } = await resolve(params);
-  const skin = getSkin(profile.skin);
+  const skin = skinFor(profile);
   const { colors } = skin;
   const headingFont = fontFamily(skin.fonts.heading);
   const accentFont = fontFamily(skin.fonts.accent);
