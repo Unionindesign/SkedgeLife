@@ -4,7 +4,7 @@ SkedgeLife gives independent instructors (yoga teachers to start, and later trai
 
 Students follow the instructors they like and get notified when something changes. There's no feed and no endless scrolling, just the people you chose to follow.
 
-Instructors pick a **skin**, a pre-built color and font pairing, so their page feels like their own brand without any design work. The first skin, *Classic Yoga*, is based on a real instructor's site.
+Instructors pick a **skin**, a pre-built color and font pairing, and can swap in their own accent color, so their page feels like their own brand without any design work. The first skin, *Classic Yoga*, is based on a real instructor's site.
 
 ## What works today
 
@@ -12,7 +12,7 @@ The mobile app (Expo + React Native) runs on Supabase. Sign up with a name, hand
 
 - **Profile**: your profile in the app: photo, name, bios, interests, teaching details, and contact links. Tap **Edit profile** to change them; photos are compressed on the phone before upload.
 - **Website**: manage your website's content.
-  - **Look:** logo and skin.
+  - **Look:** logo, accent color, and skin.
   - **Services, Private sessions, Testimonials:** add, edit, delete, and drag to reorder. Testimonials show as a carousel, over a background photo with a parallax effect if you add one.
   - **Gallery:** 3 photos on the free plan, 30 on paid.
   - **Preview** shows the full page with your skin, as visitors will see it once public pages launch.

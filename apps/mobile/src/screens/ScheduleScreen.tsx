@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { OccurrenceWithEvent } from "@skedgelife/data";
-import { getSkin } from "@skedgelife/skins";
+import { skinFor } from "@skedgelife/skins";
 import type { MainStackParamList } from "../navigation/RootNavigator";
 import { useProfile } from "../data/ProfileProvider";
 import ProfileStatus from "../components/ProfileStatus";
@@ -38,7 +38,7 @@ export default function ScheduleScreen() {
   if (state.status === "error") return <ProfileStatus status="error" message={state.message} onRetry={reload} />;
   if (state.status !== "ready") return <ProfileStatus status={state.status} />;
 
-  const accent = getSkin(state.profile.skin).colors.accent;
+  const accent = skinFor(state.profile).colors.accent;
   const open = (item: OccurrenceWithEvent) =>
     navigation.navigate("EventForm", { eventId: item.event.id, occurrenceId: item.id });
   const add = () => navigation.navigate("EventForm", {});

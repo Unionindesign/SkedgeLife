@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, Linking, Pressable, type TextStyle, type ViewStyle } from "react-native";
 import type { ProfilePage as ProfilePageData } from "@skedgelife/data";
-import { getSkin } from "@skedgelife/skins";
+import { skinFor } from "@skedgelife/skins";
 import { ExpandableText, ParallaxScrollView, TabsOrAccordion } from "@skedgelife/ui";
 import { imageSource } from "../lib/images";
 import TestimonialsSection from "./TestimonialsSection";
@@ -20,7 +20,7 @@ type Props = {
 
 export default function ProfilePage({ profile, variant, action, emptyHint }: Props) {
   const website = variant === "website";
-  const skin = getSkin(profile.skin);
+  const skin = skinFor(profile);
   const logo = imageSource(profile.logo_url);
   const headshot = imageSource(profile.avatar_url);
   // Custom fonts load as a single weight; a bold fontWeight makes Android fall back to the system font.
