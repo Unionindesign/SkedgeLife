@@ -26,7 +26,7 @@ On WSL, run Lighthouse with `TEMP=/tmp TMP=/tmp` in front. Otherwise it inherits
 ## Building pages
 
 - **Components** are web components built for the web: semantic HTML and CSS modules, server components by default. The interactive ones come from `@skedgelife/ui/web` (`ParallaxSection`, `Carousel`, `TabsOrAccordion`, `ExpandableText`) with the same names and props as the app's `@skedgelife/ui`, sharing their logic through `packages/ui/src/shared`. A client component can't receive functions from a server component, so anything taking a render function (like `Carousel`) goes inside a small client wrapper (`components/Testimonials.tsx`).
-- **Colors and fonts** come from the profile's skin (`packages/skins`). The skin's font names map to `next/font` families in `lib/fonts.ts`.
+- **Colors and fonts** come from the profile's skin (`packages/skins`). The skin's font names map to `next/font` families in `lib/fonts.ts` (loaders) and `lib/fontFamilies.ts` (CSS stacks; a test checks every skin font has one). Fonts aren't preloaded, so a page downloads only its own skin's fonts. A new skin font needs both files plus `useFonts` in `apps/mobile/App.tsx`.
 - **User data in links or scripts:** links from user data go through `safeUrl` (http and https only), and the JSON-LD block goes through `jsonLd`, which escapes `<` so profile text can't close the `<script>` tag. Keep both.
 - **Times** follow `docs/rules/time.md`: in-person classes in their venue's zone, with the zone named; online events switch to the visitor's zone in the browser (`components/LocalTime.tsx`).
 - **Images** are plain `<img>` tags. Photos are resized when uploaded, and this stays clear of Vercel's image-optimization quota. The local seed's photos are copies in `public/instructor-seed/`.

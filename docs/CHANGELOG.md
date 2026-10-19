@@ -4,6 +4,12 @@ A short entry for each working session. Newest first. Decision rationale goes in
 
 ## 2026-10-18
 
+- Branch `feature/more-skins` (#41), plan `docs/plans/2026-10-18-more-skins.md`:
+  - **Three new skins, designed by mood rather than profession** (market research, #74, hasn't happened): **Calm** (sage, Cormorant Garamond), **Bold** (near-black and coral red, Oswald), **Trail** (forest green and terracotta, Bitter with Caveat for the name). All free.
+  - **Look screen:** each skin card is a small preview of the page (header, name in the skin's font, a section title and tags, footer).
+  - **Website fonts:** none are preloaded any more, so a page downloads only its own skin's fonts (one file for Calm, instead of Classic Yoga's three on every page). Lighthouse mobile on Calm: performance 77, accessibility, best practices and SEO 100.
+  - Database: the skin check allows the new skins (5 pgTAP checks). Tests: every skin's accent readable on white and on its section tint, footer text readable, and a web font for every skin font.
+
 - Branch `feature/public-web-pages` (#15, #17, #68, #42; stacked on #103), plan `docs/plans/2026-10-18-public-web-pages.md`:
   - **`apps/web`** (Next.js 16, App Router): `/[handle]` server-renders a profile's website, cached and refreshed at most once a minute; mixed case redirects to lowercase; unknown and reserved handles get a 404 page; `/` is a placeholder.
   - **The page:** logo header, sticky section nav (#42), intro beside the bio ("… more"), specialties and certifications side by side, services and private sessions (tabs on wide screens, accordions on phones), a **weekly timetable** with "Coming up" (one-offs, and this fortnight's cancellations and changes), parallax testimonials, a gallery with a full-size view, and a dark footer with contact links and "Made with SkedgeLife" on the free plan. Page titles, share previews, and schema.org data (person and upcoming events).

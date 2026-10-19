@@ -1,5 +1,8 @@
 // Skin definitions for instructor mini-sites.
 //
+// "calm", "bold" and "trail" (#41) are designed by mood rather than
+// profession, until market research (#74) says who to design for.
+//
 // "classic-yoga" carries forward the palette from Michelle's 2017 site as a
 // candidate first pre-built skin (see docs/reference/WILD-R~1.MD
 // -> "Candidate first skin: Classic Yoga"). Font names here must match the
@@ -66,6 +69,61 @@ export const skins: Record<SkinId, Skin> = {
       footerText: "#ffffff",
     },
     fonts: {},
+  },
+  calm: {
+    id: "calm",
+    label: "Calm",
+    colors: {
+      header: "#8a9a82",
+      accent: "#4a6741",
+      cardBackground: "#eef1ea",
+      headingText: "#3f4a3c",
+      badgeBackground: "#5b6656",
+      background: "#ffffff",
+      band: "#f7f5ef",
+      footer: "#3a3f3a",
+      footerText: "#ffffff",
+    },
+    fonts: {
+      heading: "CormorantGaramond",
+    },
+  },
+  bold: {
+    id: "bold",
+    label: "Bold",
+    colors: {
+      header: "#161616",
+      accent: "#c8372d",
+      cardBackground: "#f4f4f4",
+      headingText: "#161616",
+      badgeBackground: "#161616",
+      background: "#ffffff",
+      band: "#faf3f2",
+      footer: "#161616",
+      footerText: "#ffffff",
+    },
+    fonts: {
+      heading: "Oswald",
+    },
+  },
+  trail: {
+    id: "trail",
+    label: "Trail",
+    colors: {
+      header: "#2f4f3a",
+      accent: "#a5482a",
+      cardBackground: "#f3ebdf",
+      headingText: "#2f4f3a",
+      badgeBackground: "#5a4632",
+      background: "#ffffff",
+      band: "#f9f4ec",
+      footer: "#2f4f3a",
+      footerText: "#fdf8f0",
+    },
+    fonts: {
+      heading: "Bitter",
+      accent: "Caveat",
+    },
   },
 };
 

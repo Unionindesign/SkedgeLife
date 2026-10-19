@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { arvo, greatVibes } from "@/lib/fonts";
+import { fontVariables } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${arvo.variable} ${greatVibes.variable}`}>
+    <html lang="en" className={fontVariables}>
       <body>{children}</body>
     </html>
   );
